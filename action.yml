@@ -19,12 +19,15 @@ inputs:
   createprofile:
     description: 'Create a new profile. Boolean'
     required: true
+    default: false
   include:
     description: 'Modules to include in scan'
     required: false
+    default: ''
   policy:
     description: 'Veracode Policy Name'
     required: false
+    default: ''
   scantimeout:
     description: 'Scan Timeout in minutes'
     required: false

@@ -23360,7 +23360,8 @@ async function run() {
 
   const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, createprofile);
   if (veracodeApp.appId === -1) {
-    core.setFailed('Veracode Profile Not Found');
+    core.setFailed(`Veracode application profile Not Found. Please create a profile on Veracode Platform, \
+      or set "createprofile" to "true" in the pipeline configuration to automatically create profile.`);
     return;
   }
   core.info(`Veracode App Id: ${veracodeApp.appId}`);
