@@ -1,12 +1,8 @@
 const core = require('@actions/core');
-const { 
-  getVeracodeApplicationForPolicyScan,
-  getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationFindings
 } = require('./services/application-service.js');
 const { downloadJar } = require('./api/java-wrapper.js');
-const { 
-  createBuild, uploadFile, beginPreScan, checkPrescanSuccess, 
-  getModules, beginScan, checkScanSuccess
+const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = require('./services/scan-service.js');
 const appConfig = require('./app-cofig.js');
 
@@ -19,8 +15,13 @@ const createprofile = core.getInput('createprofile', { required: true });
 const include = core.getInput('include', { required: false });
 const policy = core.getInput('policy', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
+const failbuild = core.getInput('failbuild', { required: false });
 
 function checkParameters() {
+  if (vid === '' || vkey === '' || appname === '' || version === '' || filepath === '') {
+    core.setFailed('vid, vkey, appname, version, and filepath are required');
+    return false;
+  }
   if (createprofile.toLowerCase() !== 'true' && createprofile.toLowerCase() !== 'false') {
     core.setFailed('createprofile must be set to true or false');
     return false;
@@ -29,8 +30,8 @@ function checkParameters() {
     core.setFailed('scantimeout must be a number');
     return false;
   }
-  if (vid === '' || vkey === '' || appname === '' || version === '' || filepath === '') {
-    core.setFailed('vid, vkey, appname, version, and filepath are required');
+  if (failbuild.toLowerCase() !== 'true' && failbuild.toLowerCase() !== 'false') {
+    core.setFailed('failbuild must be set to true or false');
     return false;
   }
   return true;
@@ -39,6 +40,8 @@ function checkParameters() {
 async function run() {
   if (!checkParameters())
     return;
+
+  core.info(`failbuild: ${failbuild}`);
 
   const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, createprofile);
   if (veracodeApp.appId === -1) {

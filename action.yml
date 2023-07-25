@@ -28,6 +28,10 @@ inputs:
   scantimeout:
     description: 'Scan Timeout in minutes'
     required: false
+  failbuild:
+    description: 'Fail the build if the scan fails'
+    required: false
+    default: true
 
 runs:
   using: 'node16'

@@ -18595,8 +18595,6 @@ module.exports = appConfig;
 
 function appConfig() {
   return {
-    // the app name appears in the list of pull request checks. We make it
-    // configurable so we can deploy multiple versions that can be used side-by-side
     hostName: 'api.veracode.com',
     policyUri: '/appsec/v1/policies',
     applicationUri: '/appsec/v1/applications',
@@ -23316,14 +23314,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(4272);
-const { 
-  getVeracodeApplicationForPolicyScan,
-  getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationFindings
 } = __nccwpck_require__(2137);
 const { downloadJar } = __nccwpck_require__(3487);
-const { 
-  createBuild, uploadFile, beginPreScan, checkPrescanSuccess, 
-  getModules, beginScan, checkScanSuccess
+const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = __nccwpck_require__(8718);
 const appConfig = __nccwpck_require__(3896);
 
@@ -23336,8 +23330,13 @@ const createprofile = core.getInput('createprofile', { required: true });
 const include = core.getInput('include', { required: false });
 const policy = core.getInput('policy', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
+const failbuild = core.getInput('failbuild', { required: false });
 
 function checkParameters() {
+  if (vid === '' || vkey === '' || appname === '' || version === '' || filepath === '') {
+    core.setFailed('vid, vkey, appname, version, and filepath are required');
+    return false;
+  }
   if (createprofile.toLowerCase() !== 'true' && createprofile.toLowerCase() !== 'false') {
     core.setFailed('createprofile must be set to true or false');
     return false;
@@ -23346,8 +23345,8 @@ function checkParameters() {
     core.setFailed('scantimeout must be a number');
     return false;
   }
-  if (vid === '' || vkey === '' || appname === '' || version === '' || filepath === '') {
-    core.setFailed('vid, vkey, appname, version, and filepath are required');
+  if (failbuild.toLowerCase() !== 'true' && failbuild.toLowerCase() !== 'false') {
+    core.setFailed('failbuild must be set to true or false');
     return false;
   }
   return true;
@@ -23356,6 +23355,8 @@ function checkParameters() {
 async function run() {
   if (!checkParameters())
     return;
+
+  core.info(`failbuild: ${failbuild}`);
 
   const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, createprofile);
   if (veracodeApp.appId === -1) {
