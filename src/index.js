@@ -67,8 +67,9 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
-    core.info(`Pre-Scan Submitted: ${prescan}`);
+    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    core.info('Static Scan Submitted, please check Veracode Platform for results');
+    return;
   } else {
     const autoScan = false;
     const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
@@ -81,7 +82,10 @@ async function run() {
         break;
       }
       if (scantimeout !== '' && endTime < new Date()) {
-        core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
+        if (failbuild.toLowerCase() === 'true')
+          core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
+        else
+          core.info(`Veracode Policy Scan Exited: Scan Timeout Exceeded`)
         return;
       }
     }
@@ -92,8 +96,6 @@ async function run() {
     core.info(`Scan Submitted: ${scan}`);
   }
 
-  if (scantimeout === '')
-    return;
   core.info('Waiting for Scan Results...');
   while (true) {
     await sleep(appConfig().pollingInterval);
@@ -102,7 +104,10 @@ async function run() {
     if (scanStatus.scanCompleted) {
       core.info('Results Ready!');
       if (scanStatus.passFail === 'Did Not Pass') {
-        core.setFailed('Veracode Policy Scan Failed');
+        if (failbuild.toLowerCase() === 'true')
+          core.setFailed('Veracode Policy Scan Failed');
+        else
+          core.info('Veracode Policy Scan Failed');
       } 
       break;
     }
