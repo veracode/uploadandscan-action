@@ -1,0 +1,34 @@
+name: 'Veracode Policy Scan'
+description: 'Upload files to Veracode and start a static policy scan.'
+inputs:
+  vid:
+    description: 'Veracode ID'
+    required: true
+  vkey:
+    description: 'Veracode Key'
+    required: true
+  appname:
+    description: 'Veracode Application Name'
+    required: true
+  version:
+    description: 'Veracode Version Number'
+    required: true
+  filepath:
+    description: 'File Path to upload'
+    required: true
+  createprofile:
+    description: 'Create a new profile. Boolean'
+    required: true
+  include:
+    description: 'Modules to include in scan'
+    required: false
+  policy:
+    description: 'Veracode Policy Name'
+    required: false
+  scantimeout:
+    description: 'Scan Timeout in minutes'
+    required: false
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
