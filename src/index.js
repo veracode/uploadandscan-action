@@ -69,8 +69,10 @@ async function run() {
   if (include === '') {
     const autoScan = true;
     await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
-    core.info('Static Scan Submitted, please check Veracode Platform for results');
-    return;
+    if (scantimeout === '') {
+      core.info('Static Scan Submitted, please check Veracode Platform for results');
+      return;
+    }
   } else {
     const autoScan = false;
     const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
