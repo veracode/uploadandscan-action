@@ -65,6 +65,9 @@ async function run() {
     const startTime = new Date();
     endTime = new Date(startTime.getTime() + scantimeout * 1000 * 60);
   }
+
+  core.info(`scantimeout: ${scantimeout}`);
+  core.info(`include: ${include}`)
   
   if (include === '') {
     const autoScan = true;
