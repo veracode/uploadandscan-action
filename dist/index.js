@@ -23380,12 +23380,17 @@ async function run() {
     const startTime = new Date();
     endTime = new Date(startTime.getTime() + scantimeout * 1000 * 60);
   }
+
+  core.info(`scantimeout: ${scantimeout}`);
+  core.info(`include: ${include}`)
   
   if (include === '') {
     const autoScan = true;
     await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
-    core.info('Static Scan Submitted, please check Veracode Platform for results');
-    return;
+    if (scantimeout === '') {
+      core.info('Static Scan Submitted, please check Veracode Platform for results');
+      return;
+    }
   } else {
     const autoScan = false;
     const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
