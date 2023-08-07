@@ -18967,6 +18967,7 @@ module.exports = {
 
 const { runCommand } = __nccwpck_require__(3487);
 const xml2js = __nccwpck_require__(5561);
+const { minimatch } = __nccwpck_require__(8821)
 
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -19020,6 +19021,8 @@ async function getModules(vid, vkey, jarName, appId, include) {
       fileIssues: module.file_issue
     });
   });
+
+  console.log(modules);
 
   const modulesToScan = include.trim().split(',');
   let moduleIds = [];
