@@ -55,8 +55,6 @@ async function getModules(vid, vkey, jarName, appId, include) {
     });
   });
 
-  console.log(modules);
-
   const modulesToScan = include.trim().split(',');
   let moduleIds = [];
   modulesToScan.forEach(moduleName => {
