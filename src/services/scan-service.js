@@ -1,5 +1,6 @@
 const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
+const { minimatch } = require('minimatch')
 
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -54,13 +55,16 @@ async function getModules(vid, vkey, jarName, appId, include) {
     });
   });
 
+  console.log(modules);
+
   const modulesToScan = include.trim().split(',');
   let moduleIds = [];
   modulesToScan.forEach(moduleName => {
-    const module = modules.find(m => minimatch(m.name.toLowerCase(), moduleName.trim().toLowerCase()))
-    if (module) {
-      moduleIds.push(module.id);
-    }
+    modules.forEach(m => {
+      if (m.name && minimatch(m.name.toLowerCase(), moduleName.trim().toLowerCase())) {
+        moduleIds.push(m.id);
+      }
+    });
   });
   return moduleIds;
 }
