@@ -60,10 +60,11 @@ async function getModules(vid, vkey, jarName, appId, include) {
   const modulesToScan = include.trim().split(',');
   let moduleIds = [];
   modulesToScan.forEach(moduleName => {
-    const module = modules.find(m => minimatch(m.name.toLowerCase(), moduleName.trim().toLowerCase()))
-    if (module) {
-      moduleIds.push(module.id);
-    }
+    modules.forEach(m => {
+      if (m.name && minimatch(m.name.toLowerCase(), moduleName.trim().toLowerCase())) {
+        moduleIds.push(m.id);
+      }
+    });
   });
   return moduleIds;
 }
