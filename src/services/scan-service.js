@@ -6,6 +6,7 @@ async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
   const output = await runCommand(command);
   let outputXML;
+  console.log(outputXML);
   try {
     outputXML = output.toString();
   } catch (error) {
