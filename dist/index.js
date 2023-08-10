@@ -18738,7 +18738,7 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    console.log(error);
+    // console.log(error);
   }
 }
 
