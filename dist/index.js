@@ -18738,7 +18738,7 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    // console.log(error);
+    console.log(error);
   }
 }
 
@@ -25439,8 +25439,14 @@ async function run() {
 
   const jarName = await downloadJar();
 
-  const buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);
-  core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+  let buildId;
+  try {
+    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
+    core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+  } catch (error) {
+    core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
+    return;
+  }
 
   const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
   core.info(`Artifact(s) uploaded: ${uploaded}`);
