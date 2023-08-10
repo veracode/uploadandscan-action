@@ -18738,7 +18738,7 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    core.setFailed(error.message);
+    console.error(error.message);
     return 'failed';
   }
 }
@@ -25517,7 +25517,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-run()
+run();
 })();
 
 module.exports = __webpack_exports__;
