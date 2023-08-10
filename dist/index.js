@@ -18738,7 +18738,7 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    console.log(error);
+    console.error(error.message);
   }
 }
 
@@ -18973,7 +18973,6 @@ async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
   const output = await runCommand(command);
   let outputXML;
-  console.log(output);
   try {
     outputXML = output.toString();
   } catch (error) {
