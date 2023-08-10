@@ -35,7 +35,8 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    console.error(error.message);
+    core.setFailed(error.message);
+    return 'failed';
   }
 }
 

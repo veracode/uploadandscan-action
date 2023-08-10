@@ -18738,7 +18738,8 @@ async function runCommand (command){
   try {
     return execSync(command);
   } catch (error){
-    console.error(error.message);
+    core.setFailed(error.message);
+    return 'failed';
   }
 }
 
@@ -18972,12 +18973,9 @@ const { minimatch } = __nccwpck_require__(8821)
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
   const output = await runCommand(command);
-  let outputXML;
-  try {
-    outputXML = output.toString();
-  } catch (error) {
-    throw new Error(`Error converting output to string: ${error.message}`);
-  }
+  if (output === 'failed') 
+    throw new Error(`Error creating build: ${output}`);
+  const outputXML = output.toString();
   // parse outputXML for build_id
   const regex = /<build build_id="(\d+)"/;
   let buildId = '';
@@ -25391,7 +25389,6 @@ const { downloadJar } = __nccwpck_require__(3487);
 const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = __nccwpck_require__(8718);
 const appConfig = __nccwpck_require__(3896);
-const { minimatch } = __nccwpck_require__(8821)
 
 const vid = core.getInput('vid', { required: true });
 const vkey = core.getInput('vkey', { required: true });

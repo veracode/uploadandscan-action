@@ -5,12 +5,9 @@ const { minimatch } = require('minimatch')
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
   const output = await runCommand(command);
-  let outputXML;
-  try {
-    outputXML = output.toString();
-  } catch (error) {
-    throw new Error(`Error converting output to string: ${error.message}`);
-  }
+  if (output === 'failed') 
+    throw new Error(`Error creating build: ${output}`);
+  const outputXML = output.toString();
   // parse outputXML for build_id
   const regex = /<build build_id="(\d+)"/;
   let buildId = '';

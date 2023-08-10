@@ -5,7 +5,6 @@ const { downloadJar } = require('./api/java-wrapper.js');
 const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = require('./services/scan-service.js');
 const appConfig = require('./app-cofig.js');
-const { minimatch } = require('minimatch')
 
 const vid = core.getInput('vid', { required: true });
 const vkey = core.getInput('vkey', { required: true });
