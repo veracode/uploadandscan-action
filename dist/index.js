@@ -18827,6 +18827,7 @@ const {
 const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(6954);
 const { getVeracodePolicyByName } = __nccwpck_require__(2065);
+const { Console } = __nccwpck_require__(6206);
 
 async function getApplicationByName (vid, vkey, applicationName)  {
   const resource = {
@@ -18882,11 +18883,14 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
+  console.log("Starting to fetch results");
   const resource = {
     resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
     queryAttribute: 'violates_policy',
     queryValue: 'True'
   };
+  Console.log("APP GUID: "+veracodeApp.appGuid)
+  console.log("API URL: "+resource.resourceUri)
   const response = await getResourceByAttribute(vid, vkey, resource);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
@@ -18895,13 +18899,16 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
   try {
     const jsonData = response;
 
+    console.log("results\n"+JSON.stringify(jsonData, null, 2))
+
     //filter the resutls to only include the flaws that violate the policy
     const findings = jsonData._embedded.findings;
     const fixedSearchTerm = "OPEN"; // Fixed search term
-    console.log("Filtered entries length: "+findings.length);
+    console.log(findings.length+" findings found");
 
     const newFindings = [];
 
+    console.log("Filtering findings");
     for ( i=0 ; i <= findings.length-1 ; i++ ) {
         if ( findings[i].finding_status.status != fixedSearchTerm ){
             console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is not open and will be ignored");
@@ -19122,6 +19129,14 @@ module.exports = require("assert");
 
 "use strict";
 module.exports = require("child_process");
+
+/***/ }),
+
+/***/ 6206:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("console");
 
 /***/ }),
 
