@@ -18889,7 +18889,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
     queryAttribute: 'violates_policy',
     queryValue: 'True'
   };
-  Console.log("APP GUID: "+veracodeApp.appGuid)
+  console.log("APP GUID: "+veracodeApp.appGuid)
   console.log("API URL: "+resource.resourceUri)
   const response = await getResourceByAttribute(vid, vkey, resource);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
