@@ -72,7 +72,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
   // save response to policy_flaws.json
   // save resultsUrl to results_url.txt
   try {
-    const jsonData = JSON.parse(response);
+    const jsonData = response;
 
     //filter the resutls to only include the flaws that violate the policy
     const findings = jsonData._embedded.findings;
