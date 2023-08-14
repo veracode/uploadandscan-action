@@ -81,8 +81,11 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
   const output = await runCommand(command);
   const outputXML = output.toString();
   if (outputXML.indexOf('Results Ready') > -1) {
+    console.log(outputXML);
     const parser = new xml2js.Parser();
     const result = await parser.parseStringPromise(outputXML);
+    console.log('===============');
+    console.log(result);
     let passFail = 'Did Not Pass';
     result.buildinfo.build.forEach(build => {
       if (build.build_id === buildId) {
