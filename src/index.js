@@ -48,6 +48,7 @@ async function run() {
     return;
   }
   core.info(`Veracode App Id: ${veracodeApp.appId}`);
+  core.info(`Veracode App Guid: ${veracodeApp.appGuid}`);
 
   const jarName = await downloadJar();
 
