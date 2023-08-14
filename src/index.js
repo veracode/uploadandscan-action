@@ -113,6 +113,7 @@ async function run() {
     const scanStatus = await checkScanSuccess(vid, vkey, jarName, veracodeApp.appId, buildId);
     if (scanStatus.scanCompleted) {
       core.info('Results Ready!');
+      core.info(`Scan Status: ${scanStatus.passFail}`)
       if (scanStatus.passFail === 'Did Not Pass') {
         if (failbuild.toLowerCase() === 'true')
           core.setFailed('Veracode Policy Scan Failed');

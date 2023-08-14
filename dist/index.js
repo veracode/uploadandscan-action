@@ -19087,8 +19087,8 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
     const result = await parser.parseStringPromise(outputXML);
     let passFail = 'Did Not Pass';
     result.buildinfo.build.forEach(build => {
-      if (build.$.policy_compliance_status === 'Calculating...') return { 'scanCompleted' : false };
       if (build.build_id === buildId) {
+        if (build.$.policy_compliance_status === 'Calculating...') return { 'scanCompleted' : false };
         passFail = build.$.policy_compliance_status;
       }
     });
@@ -25540,6 +25540,7 @@ async function run() {
     const scanStatus = await checkScanSuccess(vid, vkey, jarName, veracodeApp.appId, buildId);
     if (scanStatus.scanCompleted) {
       core.info('Results Ready!');
+      core.info(`Scan Status: ${scanStatus.passFail}`)
       if (scanStatus.passFail === 'Did Not Pass') {
         if (failbuild.toLowerCase() === 'true')
           core.setFailed('Veracode Policy Scan Failed');
