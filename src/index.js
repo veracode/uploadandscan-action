@@ -17,6 +17,9 @@ const policy = core.getInput('policy', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
 
+const POLICY_EVALUATION_FAILED = 9;
+const SCAN_TIME_OUT = 8;
+
 function checkParameters() {
   if (vid === '' || vkey === '' || appname === '' || version === '' || filepath === '') {
     core.setFailed('vid, vkey, appname, version, and filepath are required');
@@ -38,6 +41,8 @@ function checkParameters() {
 }
 
 async function run() {
+  let responseCode = 0;
+
   if (!checkParameters())
     return;
 
@@ -116,20 +121,26 @@ async function run() {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (scanDate < policyScanDate) {
-        if (statusUpdate.passFail === 'DID_NOT_PASS' && failbuild.toLowerCase() === 'true')
-          core.setFailed('Veracode Policy Scan Failed');
+        if (statusUpdate.passFail === 'DID_NOT_PASS' && failbuild.toLowerCase() === 'true'){
+          core.setFailed('Policy Violation: Veracode Policy Scan Failed');
+          responseCode = POLICY_EVALUATION_FAILED;
+        }
         else
-          core.info(`Policy Status: ${statusUpdate.passFail}`)
+          core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
         break;
+      } else {
+        core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
       }
     }
     
     if (endTime < new Date()) {
       core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
-      return;
+      responseCode = SCAN_TIME_OUT;
+      return responseCode;
     }
   }
   await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId);
+  return responseCode;
 }
 
 function sleep(ms) {
