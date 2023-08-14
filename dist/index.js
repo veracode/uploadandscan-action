@@ -18928,25 +18928,26 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
     console.log("results\n"+JSON.stringify(jsonData, null, 2))
 
-    //filter the resutls to only include the flaws that violate the policy
-    const findings = jsonData._embedded.findings;
-    const fixedSearchTerm = "OPEN"; // Fixed search term
-    console.log(findings.length+" findings found");
+    let newFindings = [];
+    if (jsonData.page.total_elements > 0) {
+      //filter the resutls to only include the flaws that violate the policy
+      const findings = jsonData._embedded.findings;
+      const fixedSearchTerm = "OPEN"; // Fixed search term
+      console.log(findings.length+" findings found");
 
-    const newFindings = [];
-
-    console.log("Filtering findings");
-    for ( i=0 ; i <= findings.length-1 ; i++ ) {
-        if ( findings[i].finding_status.status != fixedSearchTerm ){
-            console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is not open and will be ignored");
-            console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
-        }
-        else {
-            //adding finding to new array
-            console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is open");
-            console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
-            newFindings.push(findings[i]);
-        }
+      console.log("Filtering findings");
+      for ( i=0 ; i <= findings.length-1 ; i++ ) {
+          if ( findings[i].finding_status.status != fixedSearchTerm ){
+              console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is not open and will be ignored");
+              console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
+          }
+          else {
+              //adding finding to new array
+              console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is open");
+              console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
+              newFindings.push(findings[i]);
+          }
+      }
     }
 
     //recreate json output
