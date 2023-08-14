@@ -18892,15 +18892,11 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
   scans.forEach(scan => {
     const scanUrl = scan.scan_url;
     const scanId = scanUrl.split(':')[3];
-    console.log(scanId);
-    
     if (scanId === buildId) {
-      console.log(scan.status);
-      console.log(response.profile.policies[0].policy_compliance_status);
+      console.log(`Scan Status: ${scan.status}`);
       return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
     }
   });
-  return { 'scanStatus': 'not found', 'passFail': 'not found'};
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
@@ -25553,11 +25549,9 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
-    core.info('================')
-    core.info(scanStatus);
+    core.info(scanStatus.scanStatus);
+    core.info(`Policy Status: ${scanStatus.passFail}`)
     if (scanStatus.scanStatus === 'PUBLISHED') {
-      core.info(scanStatus.scanStatus);
-      core.info(`Policy Status: ${scanStatus.passFail}`)
       break;
     }
     // if (scanStatus.scanCompleted) {
