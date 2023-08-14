@@ -73,7 +73,10 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
     const scanId = scanUrl.split(':')[3];
     if (scanId === buildId) {
       console.log(`Scan Status: ${scan.status}`);
-      return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
+      return { 
+        'status': scan.status, 
+        'passFail': response.profile.policies[0].policy_compliance_status
+      };
     }
   });
 }

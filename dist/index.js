@@ -18894,7 +18894,10 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
     const scanId = scanUrl.split(':')[3];
     if (scanId === buildId) {
       console.log(`Scan Status: ${scan.status}`);
-      return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
+      return { 
+        'status': scan.status, 
+        'passFail': response.profile.policies[0].policy_compliance_status
+      };
     }
   });
 }
@@ -25548,10 +25551,11 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
-    core.info(scanStatus.scanStatus);
-    core.info(`Policy Status: ${scanStatus.passFail}`)
-    if (scanStatus.scanStatus === 'PUBLISHED') {
+    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
+    core.info(statusUpdate);
+    core.info(statusUpdate.status);
+    core.info(`Policy Status: ${statusUpdate.passFail}`)
+    if (statusUpdate.statusUpdate === 'PUBLISHED') {
       break;
     }
     // if (scanStatus.scanCompleted) {
