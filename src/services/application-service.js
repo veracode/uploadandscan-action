@@ -68,15 +68,14 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
   };
   const response = await getResourceByAttribute(vid, vkey, resource);
   console.log(response);
-  console.log(response.data);
-  console.log(response.data._embedded);
-  console.log("results\n"+JSON.stringify(response, null, 2))
-  const scans = response.data._embedded;
+  console.log(response.scans);
+  const scans = response.scans;
   scans.forEach(scan => {
     const scanUrl = scan.scan_url;
     const scanId = scanUrl.split(':')[3];
     if (scanId === buildId) {
       console.log(scan.status);
+      console.log(response.profile.policies[0].policy_compliance_status);
       return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
     }
   });
