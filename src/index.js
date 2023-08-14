@@ -118,8 +118,15 @@ async function run() {
     core.info(`Last Policy Scan Date: ${statusUpdate.lastPolicyScanData}`)
     core.info(typeof statusUpdate.scanUpdateDate)
     core.info(typeof statusUpdate.lastPolicyScanData)
-    if (statusUpdate.status === 'PUBLISHED') {
-      break;
+    if (statusUpdate.status === 'PUBLISHED' && statusUpdate.scanUpdateDate) {
+      const scanDate = new Date(statusUpdate.scanUpdateDate);
+      const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
+      if (scanDate < policyScanDate) {
+        core.info('===================');
+        core.info(`Policy Status: ${statusUpdate.passFail}`)
+        break;
+      }
+      
     }
     // if (scanStatus.scanCompleted) {
     //   core.info('Results Ready!');
