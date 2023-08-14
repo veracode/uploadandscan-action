@@ -18897,7 +18897,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
     console.log(typeof buildId);
     console.log(scanId === buildId);
     if (scanId === buildId) {
-      console.log(`Scan Status: ${scan.status}`);
+      console.log(`Scan Status: ${scan[i].status}`);
       console.log({
         'status': scans[i].status,
         'passFail': response.profile.policies[0].policy_compliance_status
