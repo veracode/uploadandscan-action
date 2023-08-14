@@ -112,10 +112,13 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
-    core.info(statusUpdate);
     core.info(statusUpdate.status);
     core.info(`Policy Status: ${statusUpdate.passFail}`)
-    if (statusUpdate.statusUpdate === 'PUBLISHED') {
+    core.info(`Scan Update Date: ${statusUpdate.scanUpdateDate}`)
+    core.info(`Last Policy Scan Date: ${statusUpdate.lastPolicyScanData}`)
+    core.info(typeof statusUpdate.scanUpdateDate)
+    core.info(typeof statusUpdate.lastPolicyScanData)
+    if (statusUpdate.status === 'PUBLISHED') {
       break;
     }
     // if (scanStatus.scanCompleted) {

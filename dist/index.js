@@ -18893,32 +18893,16 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
   for(let i = 0; i < scans.length; i++) {
     const scanUrl = scans[i].scan_url;
     const scanId = scanUrl.split(':')[3];
-    console.log(typeof scanId);
-    console.log(typeof buildId);
-    console.log(scanId === buildId);
     if (scanId === buildId) {
       console.log(`Scan Status: ${scans[i].status}`);
-      console.log({
-        'status': scans[i].status,
-        'passFail': response.profile.policies[0].policy_compliance_status
-      });
       return {
         'status': scans[i].status,
-        'passFail': response.profile.policies[0].policy_compliance_status
+        'passFail': response.profile.policies[0].policy_compliance_status,
+        'scanUpdateDate': scans[i].modified_date,
+        'lastPolicyScanData': response.last_policy_compliance_check_date
       };
     }
   }
-  // scans.forEach(scan => {
-  //   const scanUrl = scan.scan_url;
-  //   const scanId = scanUrl.split(':')[3];
-  //   if (scanId === buildId) {
-  //     console.log(`Scan Status: ${scan.status}`);
-  //     return { 
-  //       'status': scan.status, 
-  //       'passFail': response.profile.policies[0].policy_compliance_status
-  //     };
-  //   }
-  // });
   return { 
     'status': 'not found', 
     'passFail': 'not found'
@@ -25575,10 +25559,13 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
-    core.info(statusUpdate);
     core.info(statusUpdate.status);
     core.info(`Policy Status: ${statusUpdate.passFail}`)
-    if (statusUpdate.statusUpdate === 'PUBLISHED') {
+    core.info(`Scan Update Date: ${statusUpdate.scanUpdateDate}`)
+    core.info(`Last Policy Scan Date: ${statusUpdate.lastPolicyScanData}`)
+    core.info(typeof statusUpdate.scanUpdateDate)
+    core.info(typeof statusUpdate.lastPolicyScanData)
+    if (statusUpdate.status === 'PUBLISHED') {
       break;
     }
     // if (scanStatus.scanCompleted) {
