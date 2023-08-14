@@ -66,6 +66,9 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
     queryAttribute: '',
     queryValue: ''
   };
+  console.log(resource.resourceUri);
+  console.log('==========');
+  console.log(veracodeApp);
   const response = await getResourceByAttribute(vid, vkey, resource);
   console.log(response);
   console.log(response.scans);
