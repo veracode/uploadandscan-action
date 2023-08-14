@@ -111,7 +111,7 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, jarName, veracodeApp.appGuid, buildId);
+    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
     if (scanStatus.scanStatus === 'PUBLISHED') {
       core.info(scanStatus.scanStatus);
       core.info(`Policy Status: ${scanStatus.passFail}`)

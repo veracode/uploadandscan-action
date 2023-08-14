@@ -18881,15 +18881,12 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
   }
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, appGuid, buildId) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
   const resource = {
-    resourceUri: `${appConfig().applicationUri}/${appGuid}`,
+    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
     queryAttribute: '',
     queryValue: ''
   };
-  console.log(resource.resourceUri);
-  console.log('==========');
-  console.log(appGuid);
   const response = await getResourceByAttribute(vid, vkey, resource);
   console.log(response);
   console.log(response.scans);
@@ -25554,7 +25551,7 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, jarName, veracodeApp.appGuid, buildId);
+    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
     if (scanStatus.scanStatus === 'PUBLISHED') {
       core.info(scanStatus.scanStatus);
       core.info(`Policy Status: ${scanStatus.passFail}`)

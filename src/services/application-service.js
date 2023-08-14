@@ -60,15 +60,12 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
   }
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, appGuid, buildId) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
   const resource = {
-    resourceUri: `${appConfig().applicationUri}/${appGuid}`,
+    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
     queryAttribute: '',
     queryValue: ''
   };
-  console.log(resource.resourceUri);
-  console.log('==========');
-  console.log(appGuid);
   const response = await getResourceByAttribute(vid, vkey, resource);
   console.log(response);
   console.log(response.scans);
