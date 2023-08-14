@@ -6,7 +6,6 @@ const {
 const fs = require('fs/promises');
 const artifact = require('@actions/artifact');
 const { getVeracodePolicyByName } = require('./policy-service.js');
-const { Console } = require('console');
 
 async function getApplicationByName (vid, vkey, applicationName)  {
   const resource = {
@@ -59,6 +58,25 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
       }
     }
   }
+}
+
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
+  const resource = {
+    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
+    queryAttribute: '',
+    queryValue: ''
+  };
+  const response = await getResourceByAttribute(vid, vkey, resource);
+  console.log(response.scans);
+  const scans = response.scans;
+  scans.forEach(scan => {
+    const scanUrl = scan.scan_url;
+    const scanId = scanUrl.split(':')[3];
+    if (scanId === buildId) {
+      console.log(scan.status);
+      return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
+    }
+  });
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
@@ -129,5 +147,6 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }

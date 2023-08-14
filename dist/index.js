@@ -18827,7 +18827,6 @@ const {
 const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(956);
 const { getVeracodePolicyByName } = __nccwpck_require__(546);
-const { Console } = __nccwpck_require__(6206);
 
 async function getApplicationByName (vid, vkey, applicationName)  {
   const resource = {
@@ -18880,6 +18879,25 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
       }
     }
   }
+}
+
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
+  const resource = {
+    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
+    queryAttribute: '',
+    queryValue: ''
+  };
+  const response = await getResourceByAttribute(vid, vkey, resource);
+  console.log(response.scans);
+  const scans = response.scans;
+  scans.forEach(scan => {
+    const scanUrl = scan.scan_url;
+    const scanId = scanUrl.split(':')[3];
+    if (scanId === buildId) {
+      console.log(scan.status);
+      return { 'scanStatus': scan.status, 'passFail': response.profile.policies[0].policy_compliance_status};
+    }
+  });
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
@@ -18950,6 +18968,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }
 
@@ -19130,14 +19149,6 @@ module.exports = require("assert");
 
 "use strict";
 module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 6206:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("console");
 
 /***/ }),
 
@@ -25426,7 +25437,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(4272);
-const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(2137);
 const { downloadJar } = __nccwpck_require__(3487);
 const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
@@ -25537,18 +25548,23 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const scanStatus = await checkScanSuccess(vid, vkey, jarName, veracodeApp.appId, buildId);
-    if (scanStatus.scanCompleted) {
-      core.info('Results Ready!');
-      core.info(`Scan Status: ${scanStatus.passFail}`)
-      if (scanStatus.passFail === 'Did Not Pass') {
-        if (failbuild.toLowerCase() === 'true')
-          core.setFailed('Veracode Policy Scan Failed');
-        else
-          core.info('Veracode Policy Scan Failed');
-      } 
+    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, jarName, veracodeApp, buildId);
+    if (scanStatus.scanStatus === 'PUBLISHED') {
+      core.info(scanStatus.scanStatus);
+      core.info(`Policy Status: ${scanStatus.passFail}`)
       break;
     }
+    // if (scanStatus.scanCompleted) {
+    //   core.info('Results Ready!');
+    //   core.info(`Scan Status: ${scanStatus.passFail}`)
+    //   if (scanStatus.passFail === 'Did Not Pass') {
+    //     if (failbuild.toLowerCase() === 'true')
+    //       core.setFailed('Veracode Policy Scan Failed');
+    //     else
+    //       core.info('Veracode Policy Scan Failed');
+    //   } 
+    //   break;
+    // }
     if (endTime < new Date()) {
       core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
       return;

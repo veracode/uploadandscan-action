@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = require('./services/application-service.js');
 const { downloadJar } = require('./api/java-wrapper.js');
 const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
@@ -110,18 +110,23 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const scanStatus = await checkScanSuccess(vid, vkey, jarName, veracodeApp.appId, buildId);
-    if (scanStatus.scanCompleted) {
-      core.info('Results Ready!');
-      core.info(`Scan Status: ${scanStatus.passFail}`)
-      if (scanStatus.passFail === 'Did Not Pass') {
-        if (failbuild.toLowerCase() === 'true')
-          core.setFailed('Veracode Policy Scan Failed');
-        else
-          core.info('Veracode Policy Scan Failed');
-      } 
+    const scanStatus = await getVeracodeApplicationScanStatus(vid, vkey, jarName, veracodeApp, buildId);
+    if (scanStatus.scanStatus === 'PUBLISHED') {
+      core.info(scanStatus.scanStatus);
+      core.info(`Policy Status: ${scanStatus.passFail}`)
       break;
     }
+    // if (scanStatus.scanCompleted) {
+    //   core.info('Results Ready!');
+    //   core.info(`Scan Status: ${scanStatus.passFail}`)
+    //   if (scanStatus.passFail === 'Did Not Pass') {
+    //     if (failbuild.toLowerCase() === 'true')
+    //       core.setFailed('Veracode Policy Scan Failed');
+    //     else
+    //       core.info('Veracode Policy Scan Failed');
+    //   } 
+    //   break;
+    // }
     if (endTime < new Date()) {
       core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
       return;
