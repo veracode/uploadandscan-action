@@ -18810,7 +18810,7 @@ function appConfig() {
     policyUri: '/appsec/v1/policies',
     applicationUri: '/appsec/v1/applications',
     findingsUri: '/appsec/v2/applications',
-    pollingInterval: 15000,
+    pollingInterval: 30000,
   };
 }
 
@@ -18925,8 +18925,6 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
   // save resultsUrl to results_url.txt
   try {
     const jsonData = response;
-
-    console.log("results\n"+JSON.stringify(jsonData, null, 2))
 
     let newFindings = [];
     if (jsonData.page.total_elements > 0) {

@@ -6,6 +6,6 @@ function appConfig() {
     policyUri: '/appsec/v1/policies',
     applicationUri: '/appsec/v1/applications',
     findingsUri: '/appsec/v2/applications',
-    pollingInterval: 15000,
+    pollingInterval: 30000,
   };
 }

@@ -105,8 +105,6 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
   try {
     const jsonData = response;
 
-    console.log("results\n"+JSON.stringify(jsonData, null, 2))
-
     let newFindings = [];
     if (jsonData.page.total_elements > 0) {
       //filter the resutls to only include the flaws that violate the policy
