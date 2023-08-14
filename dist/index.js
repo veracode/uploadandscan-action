@@ -18827,6 +18827,7 @@ const {
 const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(956);
 const { getVeracodePolicyByName } = __nccwpck_require__(546);
+const { type } = __nccwpck_require__(2037);
 
 async function getApplicationByName (vid, vkey, applicationName)  {
   const resource = {
@@ -18892,10 +18893,17 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
   for(let i = 0; i < scans.length; i++) {
     const scanUrl = scans[i].scan_url;
     const scanId = scanUrl.split(':')[3];
+    console.log(typeof scanId);
+    console.log(typeof buildId);
+    console.log(scanId === buildId);
     if (scanId === buildId) {
       console.log(`Scan Status: ${scan.status}`);
+      console.log({
+        'status': scans[i].status,
+        'passFail': response.profile.policies[0].policy_compliance_status
+      });
       return {
-        'status': scan.status,
+        'status': scans[i].status,
         'passFail': response.profile.policies[0].policy_compliance_status
       };
     }

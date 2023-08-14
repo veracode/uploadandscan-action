@@ -6,6 +6,7 @@ const {
 const fs = require('fs/promises');
 const artifact = require('@actions/artifact');
 const { getVeracodePolicyByName } = require('./policy-service.js');
+const { type } = require('os');
 
 async function getApplicationByName (vid, vkey, applicationName)  {
   const resource = {
@@ -71,10 +72,17 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
   for(let i = 0; i < scans.length; i++) {
     const scanUrl = scans[i].scan_url;
     const scanId = scanUrl.split(':')[3];
+    console.log(typeof scanId);
+    console.log(typeof buildId);
+    console.log(scanId === buildId);
     if (scanId === buildId) {
       console.log(`Scan Status: ${scan.status}`);
+      console.log({
+        'status': scans[i].status,
+        'passFail': response.profile.policies[0].policy_compliance_status
+      });
       return {
-        'status': scan.status,
+        'status': scans[i].status,
         'passFail': response.profile.policies[0].policy_compliance_status
       };
     }
