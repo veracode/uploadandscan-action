@@ -18888,8 +18888,9 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
     queryValue: ''
   };
   const response = await getResourceByAttribute(vid, vkey, resource);
-  console.log(response.scans);
-  const scans = response.scans;
+  console.log(response);
+  // console.log("results\n"+JSON.stringify(response, null, 2))
+  const scans = response.data.scans;
   scans.forEach(scan => {
     const scanUrl = scan.scan_url;
     const scanId = scanUrl.split(':')[3];
