@@ -18900,6 +18900,10 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId)
       };
     }
   });
+  return { 
+    'status': 'not found', 
+    'passFail': 'not found'
+  };
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
