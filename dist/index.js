@@ -25572,7 +25572,8 @@ async function run() {
         moduleSelectionStartTime = new Date();
       if (new Date() - moduleSelectionStartTime > appConfig().moduleSelectionTimeout) {
         core.setFailed('Veracode Policy Scan Exited: Module Selection Timeout Exceeded. ' +
-          'Please review the scan on Veracode Platform.');
+          'Please review the scan on Veracode Platform.' + 
+          `https://analysiscenter.veracode.com/auth/index.jsp#HomeAppProfile:${veracodeApp.oid}:${veracodeApp.appId}`);
         responseCode = SCAN_TIME_OUT;
         return responseCode;
       }
