@@ -113,14 +113,27 @@ async function run() {
   }
 
   core.info('Waiting for Scan Results...');
+  let moduleSelectionStartTime = new Date();
+  let moduleSelectionCount = 0;
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
+    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED') {
+      moduleSelectionCount++;
+      if (moduleSelectionCount === 1)
+        moduleSelectionStartTime = new Date();
+      if (new Date() - moduleSelectionStartTime > appConfig().moduleSelectionTimeout) {
+        core.setFailed('Veracode Policy Scan Exited: Module Selection Timeout Exceeded. ' +
+          'Please review the scan on Veracode Platform.');
+        responseCode = SCAN_TIME_OUT;
+        return responseCode;
+      }
+    }
     if (statusUpdate.status === 'PUBLISHED' && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
-      if (scanDate < policyScanDate) {
+      if (!policyScanDate || scanDate < policyScanDate) {
         if (statusUpdate.passFail === 'DID_NOT_PASS' && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;

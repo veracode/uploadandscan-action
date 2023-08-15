@@ -7,5 +7,6 @@ function appConfig() {
     applicationUri: '/appsec/v1/applications',
     findingsUri: '/appsec/v2/applications',
     pollingInterval: 30000,
+    moduleSelectionTimeout: 60000,
   };
 }
