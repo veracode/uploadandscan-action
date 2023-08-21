@@ -18,9 +18,28 @@ async function getApplicationByName (vid, vkey, applicationName)  {
   return response;
 }
 
+function profileExists(responseData, applicationName) {
+  if (responseData.page.total_elements === 0)
+    return { exists: false, veracodeApp: null };
+  else {
+    for(let i = 0; i < responseData._embedded.applications.length; i++) {
+      if (responseData._embedded.applications[i].profile.name.toLowerCase() 
+            === applicationName.toLowerCase()) {
+        return { exists: true, veracodeApp: {
+          'appId': responseData._embedded.applications[i].id,
+          'appGuid': responseData._embedded.applications[i].guid,
+          'oid': responseData._embedded.applications[i].oid,
+        } };;
+      }
+    }
+    return { exists: false, veracodeApp: null };
+  }
+}
+
 async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, policyName, createprofile)  {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
-  if (responseData.page.total_elements === 0) {
+  const profile = profileExists(responseData, applicationName);
+  if (!profile.exists) {
     if (createprofile.toLowerCase() !== 'true')
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
@@ -47,18 +66,7 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
       'appGuid': response.guid,
       'oid': appProfile.split(':')[1]
     };
-  } else {
-    for(let i = 0; i < responseData._embedded.applications.length; i++) {
-      if (responseData._embedded.applications[i].profile.name.toLowerCase() 
-            === applicationName.toLowerCase()) {
-        return {
-          'appId': responseData._embedded.applications[i].id,
-          'appGuid': responseData._embedded.applications[i].guid,
-          'oid': responseData._embedded.applications[i].oid,
-        }
-      }
-    }
-  }
+  } else return profile.veracodeApp;
 }
 
 async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
