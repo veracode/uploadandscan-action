@@ -6,6 +6,7 @@ function appConfig() {
     policyUri: '/appsec/v1/policies',
     applicationUri: '/appsec/v1/applications',
     findingsUri: '/appsec/v2/applications',
+    teamsUri: '/api/authn/v2/teams',
     pollingInterval: 30000,
     moduleSelectionTimeout: 60000,
   };

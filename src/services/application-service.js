@@ -6,9 +6,9 @@ const {
 const fs = require('fs/promises');
 const artifact = require('@actions/artifact');
 const { getVeracodePolicyByName } = require('./policy-service.js');
-const { type } = require('os');
+const { getVeracodeTeamsByName } = require('./teams-service.js');
 
-async function getApplicationByName (vid, vkey, applicationName)  {
+async function getApplicationByName(vid, vkey, applicationName) {
   const resource = {
     resourceUri: appConfig().applicationUri,
     queryAttribute: 'name',
@@ -36,7 +36,7 @@ function profileExists(responseData, applicationName) {
   }
 }
 
-async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, policyName, createprofile)  {
+async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile) {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
   const profile = profileExists(responseData, applicationName);
   if (!profile.exists) {
@@ -44,6 +44,7 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
     const veracodePolicy = await getVeracodePolicyByName(vid, vkey, policyName);
+    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams)
     // create a new Veracode application
     const resource = {
       resourceUri: appConfig().applicationUri,
@@ -55,7 +56,8 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
             {
               guid: veracodePolicy.policyGuid
             }
-          ]
+          ],
+          teams: veracodeTeams
         }
       }
     };

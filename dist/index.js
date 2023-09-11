@@ -18810,6 +18810,7 @@ function appConfig() {
     policyUri: '/appsec/v1/policies',
     applicationUri: '/appsec/v1/applications',
     findingsUri: '/appsec/v2/applications',
+    teamsUri: '/api/authn/v2/teams',
     pollingInterval: 30000,
     moduleSelectionTimeout: 60000,
   };
@@ -18828,9 +18829,9 @@ const {
 const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(956);
 const { getVeracodePolicyByName } = __nccwpck_require__(546);
-const { type } = __nccwpck_require__(2037);
+const { getVeracodeTeamsByName } = __nccwpck_require__(2961);
 
-async function getApplicationByName (vid, vkey, applicationName)  {
+async function getApplicationByName(vid, vkey, applicationName) {
   const resource = {
     resourceUri: appConfig().applicationUri,
     queryAttribute: 'name',
@@ -18858,7 +18859,7 @@ function profileExists(responseData, applicationName) {
   }
 }
 
-async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, policyName, createprofile)  {
+async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile) {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
   const profile = profileExists(responseData, applicationName);
   if (!profile.exists) {
@@ -18866,6 +18867,7 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
     const veracodePolicy = await getVeracodePolicyByName(vid, vkey, policyName);
+    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams)
     // create a new Veracode application
     const resource = {
       resourceUri: appConfig().applicationUri,
@@ -18877,7 +18879,8 @@ async function getVeracodeApplicationForPolicyScan (vid, vkey, applicationName, 
             {
               guid: veracodePolicy.policyGuid
             }
-          ]
+          ],
+          teams: veracodeTeams
         }
       }
     };
@@ -19142,6 +19145,50 @@ module.exports = {
   beginScan,
   checkScanSuccess
 }
+
+/***/ }),
+
+/***/ 2961:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const appConfig = __nccwpck_require__(3896);
+const { 
+  getResourceByAttribute,
+}= __nccwpck_require__(3616);
+
+async function getTeamsByName (vid, vkey, teamName)  {
+  const resource = {
+    resourceUri: appConfig().teamsUri,
+    queryAttribute: 'team_name',
+    queryValue: encodeURIComponent(teamName)
+  };
+  const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function getVeracodeTeamsByName(vid, vkey, teams) {
+  if (teamName !== '') {
+    const teamsName = teams.trim().split(',');
+    let teamGuids = [];
+    teamsName.forEach(async teamName => {
+      const responseData = await getTeamsByName(vid, vkey, teamName);
+      if (responseData.page.total_elements !== 0) {
+        for(let i = 0; i < responseData._embedded.teams.length; i++) {
+          if (responseData._embedded.teams[i].team_name.toLowerCase()
+                === teamName.toLowerCase()) {
+            teamGuids.push(responseData._embedded.teams[i].team_id);
+          }
+        }
+      }
+    });
+    return teamGuids;
+  }
+  return [];
+}
+
+module.exports = {
+  getVeracodeTeamsByName,
+};
 
 /***/ }),
 
@@ -25469,6 +25516,7 @@ const filepath = core.getInput('filepath', { required: true });
 const createprofile = core.getInput('createprofile', { required: true });
 const include = core.getInput('include', { required: false });
 const policy = core.getInput('policy', { required: false });
+const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
 
@@ -25501,7 +25549,7 @@ async function run() {
   if (!checkParameters())
     return;
 
-  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, createprofile);
+  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile);
   if (veracodeApp.appId === -1) {
     core.setFailed(`Veracode application profile Not Found. Please create a profile on Veracode Platform, \
       or set "createprofile" to "true" in the pipeline configuration to automatically create profile.`);

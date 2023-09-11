@@ -14,6 +14,7 @@ const filepath = core.getInput('filepath', { required: true });
 const createprofile = core.getInput('createprofile', { required: true });
 const include = core.getInput('include', { required: false });
 const policy = core.getInput('policy', { required: false });
+const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
 
@@ -46,7 +47,7 @@ async function run() {
   if (!checkParameters())
     return;
 
-  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, createprofile);
+  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile);
   if (veracodeApp.appId === -1) {
     core.setFailed(`Veracode application profile Not Found. Please create a profile on Veracode Platform, \
       or set "createprofile" to "true" in the pipeline configuration to automatically create profile.`);

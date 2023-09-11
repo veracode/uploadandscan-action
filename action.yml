@@ -28,6 +28,10 @@ inputs:
     description: 'Veracode Policy Name'
     required: false
     default: ''
+  teams:
+    description: 'Veracode Team Name'
+    required: false
+    default: ''
   scantimeout:
     description: 'Scan Timeout in minutes'
     required: false
