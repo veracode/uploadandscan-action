@@ -14,11 +14,11 @@ async function getTeamsByName (vid, vkey, teamName)  {
 }
 
 async function getVeracodeTeamsByName(vid, vkey, teams) {
-  console.log(teams);
   if (teams !== '') {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];
-    teamsName.forEach(async teamName => {
+    for (let index = 0; index < teamsName.length; index++) {
+      const teamName = teamsName[index];
       const responseData = await getTeamsByName(vid, vkey, teamName);
       if (responseData.page.total_elements !== 0) {
         for(let i = 0; i < responseData._embedded.teams.length; i++) {
@@ -30,7 +30,7 @@ async function getVeracodeTeamsByName(vid, vkey, teams) {
           }
         }
       }
-    });
+    }
     return teamGuids;
   }
   return [];
