@@ -19167,7 +19167,7 @@ async function getTeamsByName (vid, vkey, teamName)  {
 }
 
 async function getVeracodeTeamsByName(vid, vkey, teams) {
-  if (teamName !== '') {
+  if (teams !== '') {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];
     teamsName.forEach(async teamName => {
