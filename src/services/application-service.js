@@ -44,7 +44,8 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
     const veracodePolicy = await getVeracodePolicyByName(vid, vkey, policyName);
-    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams)
+    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams);
+    console.log(veracodeTeams);
     // create a new Veracode application
     const resource = {
       resourceUri: appConfig().applicationUri,

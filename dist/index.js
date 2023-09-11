@@ -18867,7 +18867,8 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
     const veracodePolicy = await getVeracodePolicyByName(vid, vkey, policyName);
-    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams)
+    const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams);
+    console.log(veracodeTeams);
     // create a new Veracode application
     const resource = {
       resourceUri: appConfig().applicationUri,
@@ -19167,6 +19168,7 @@ async function getTeamsByName (vid, vkey, teamName)  {
 }
 
 async function getVeracodeTeamsByName(vid, vkey, teams) {
+  console.log(teams);
   if (teams !== '') {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];
@@ -19176,7 +19178,9 @@ async function getVeracodeTeamsByName(vid, vkey, teams) {
         for(let i = 0; i < responseData._embedded.teams.length; i++) {
           if (responseData._embedded.teams[i].team_name.toLowerCase()
                 === teamName.toLowerCase()) {
-            teamGuids.push(responseData._embedded.teams[i].team_id);
+            teamGuids.push({
+              "guid": responseData._embedded.teams[i].team_id
+            })
           }
         }
       }
