@@ -56,7 +56,8 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
             {
               guid: veracodePolicy.policyGuid
             }
-          ]
+          ], 
+          teams: []
         }
       }
     };
