@@ -18,7 +18,7 @@ async function getVeracodeTeamsByName(vid, vkey, teams) {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];
     for (let index = 0; index < teamsName.length; index++) {
-      const teamName = teamsName[index];
+      const teamName = teamsName[index].trim();
       const responseData = await getTeamsByName(vid, vkey, teamName);
       if (responseData.page.total_elements !== 0) {
         for(let i = 0; i < responseData._embedded.teams.length; i++) {
