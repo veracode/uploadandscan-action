@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const appConfig = require('../app-cofig.js');
 const { 
   getResourceByAttribute,

@@ -19170,6 +19170,7 @@ module.exports = {
 /***/ 2961:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const core = __nccwpck_require__(4272);
 const appConfig = __nccwpck_require__(3896);
 const { 
   getResourceByAttribute,
