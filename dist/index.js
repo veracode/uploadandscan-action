@@ -18821,6 +18821,7 @@ function appConfig() {
 /***/ 2137:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const core = __nccwpck_require__(4272);
 const appConfig = __nccwpck_require__(3896);
 const { 
   getResourceByAttribute,
@@ -18837,7 +18838,10 @@ async function getApplicationByName(vid, vkey, applicationName) {
     queryAttribute: 'name',
     queryValue: encodeURIComponent(applicationName)
   };
+  core.debug(`Getting Veracode Application By Name: ${applicationName}`);
+  core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
+  core.debug(response);
   return response;
 }
 
@@ -18861,6 +18865,7 @@ function profileExists(responseData, applicationName) {
 
 async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile) {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
+  core.debug(responseData);
   const profile = profileExists(responseData, applicationName);
   if (!profile.exists) {
     if (createprofile.toLowerCase() !== 'true')

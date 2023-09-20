@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const appConfig = require('../app-cofig.js');
 const { 
   getResourceByAttribute,
@@ -14,7 +15,10 @@ async function getApplicationByName(vid, vkey, applicationName) {
     queryAttribute: 'name',
     queryValue: encodeURIComponent(applicationName)
   };
+  core.debug(`Getting Veracode Application By Name: ${applicationName}`);
+  core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
+  core.debug(response);
   return response;
 }
 
@@ -38,6 +42,7 @@ function profileExists(responseData, applicationName) {
 
 async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile) {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
+  core.debug(responseData);
   const profile = profileExists(responseData, applicationName);
   if (!profile.exists) {
     if (createprofile.toLowerCase() !== 'true')
