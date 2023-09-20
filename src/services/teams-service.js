@@ -14,6 +14,7 @@ async function getTeamsByName (vid, vkey, teamName)  {
 }
 
 async function getVeracodeTeamsByName(vid, vkey, teams) {
+  core.debug(`Module: teams-service, function: getVeracodeTeamsByName. teams: ${teams}`);
   if (teams !== '') {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];

@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const appConfig = require('../app-cofig.js');
 const { 
   getResourceByAttribute,
@@ -15,6 +16,7 @@ async function getPolicyByName (vid, vkey, policyName)  {
 }
 
 async function getVeracodePolicyByName(vid, vkey, policyName) {
+  core.debug(`Module: policy-service, function: getVeracodePolicyByName. policyName: ${policyName}`);
   if (policyName !== '') {
     const responseData = await getPolicyByName(vid, vkey, policyName);
     if (responseData.page.total_elements !== 0) {
@@ -28,6 +30,7 @@ async function getVeracodePolicyByName(vid, vkey, policyName) {
       }
     }
   }
+  core.debug(`No Veracode policy found for ${policyName}, using default policy`);
   return { 'policyGuid': '9ab6dc63-29cf-4457-a1d1-e2125277df0e' };
 }
 

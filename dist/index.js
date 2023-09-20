@@ -18833,21 +18833,23 @@ const { getVeracodePolicyByName } = __nccwpck_require__(546);
 const { getVeracodeTeamsByName } = __nccwpck_require__(2961);
 
 async function getApplicationByName(vid, vkey, applicationName) {
+  core.debug(`Module: application-service, function: getApplicationByName. Application: ${applicationName}`);
   const resource = {
     resourceUri: appConfig().applicationUri,
     queryAttribute: 'name',
     queryValue: encodeURIComponent(applicationName)
   };
-  core.debug(`Getting Veracode Application By Name: ${applicationName}`);
   core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
-  core.debug(response);
   return response;
 }
 
 function profileExists(responseData, applicationName) {
-  if (responseData.page.total_elements === 0)
+  core.debug(`Module: application-service, function: profileExists. Application: ${applicationName}`);
+  if (responseData.page.total_elements === 0) {
+    core.debug(`No Veracode application profile found for ${applicationName}`);
     return { exists: false, veracodeApp: null };
+  }
   else {
     for(let i = 0; i < responseData._embedded.applications.length; i++) {
       if (responseData._embedded.applications[i].profile.name.toLowerCase() 
@@ -18859,20 +18861,27 @@ function profileExists(responseData, applicationName) {
         } };;
       }
     }
+    core.debug(`No Veracode application profile with exact the profile name: ${applicationName}`);
     return { exists: false, veracodeApp: null };
   }
 }
 
 async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile) {
+  core.debug(`Module: application-service, function: getVeracodeApplicationForPolicyScan. Application: ${applicationName}`);
   const responseData = await getApplicationByName(vid, vkey, applicationName);
+  core.debug(`Check if ${applicationName} is found via Application API`);
   core.debug(responseData);
   const profile = profileExists(responseData, applicationName);
+  core.debug(`Check if ${applicationName} has a Veracode application profile`);
+  core.debug(profile);
   if (!profile.exists) {
     if (createprofile.toLowerCase() !== 'true')
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };
     
     const veracodePolicy = await getVeracodePolicyByName(vid, vkey, policyName);
+    core.debug(`Veracode Policy: ${veracodePolicy}`)
     const veracodeTeams = await getVeracodeTeamsByName(vid, vkey, teams);
+    core.debug(`Veracode Teams: ${veracodeTeams}`);
     // create a new Veracode application
     const resource = {
       resourceUri: appConfig().applicationUri,
@@ -18889,7 +18898,9 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
         }
       }
     };
+    core.debug(`Create Veracode application profile: ${JSON.stringify(resource)}`);
     const response = await createResource(vid, vkey, resource);
+    core.debug(`Veracode application profile created: ${JSON.stringify(response)}`);
     const appProfile = response.app_profile_url;
     return {
       'appId': response.id,
@@ -19002,6 +19013,7 @@ module.exports = {
 /***/ 546:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const core = __nccwpck_require__(4272);
 const appConfig = __nccwpck_require__(3896);
 const { 
   getResourceByAttribute,
@@ -19019,6 +19031,7 @@ async function getPolicyByName (vid, vkey, policyName)  {
 }
 
 async function getVeracodePolicyByName(vid, vkey, policyName) {
+  core.debug(`Module: policy-service, function: getVeracodePolicyByName. policyName: ${policyName}`);
   if (policyName !== '') {
     const responseData = await getPolicyByName(vid, vkey, policyName);
     if (responseData.page.total_elements !== 0) {
@@ -19032,6 +19045,7 @@ async function getVeracodePolicyByName(vid, vkey, policyName) {
       }
     }
   }
+  core.debug(`No Veracode policy found for ${policyName}, using default policy`);
   return { 'policyGuid': '9ab6dc63-29cf-4457-a1d1-e2125277df0e' };
 }
 
@@ -19172,6 +19186,7 @@ async function getTeamsByName (vid, vkey, teamName)  {
 }
 
 async function getVeracodeTeamsByName(vid, vkey, teams) {
+  core.debug(`Module: teams-service, function: getVeracodeTeamsByName. teams: ${teams}`);
   if (teams !== '') {
     const teamsName = teams.trim().split(',');
     let teamGuids = [];
