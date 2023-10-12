@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = require('./services/application-service.js');
 const { downloadJar } = require('./api/java-wrapper.js');
-const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
+const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess, beginScanCompositAction
 } = require('./services/scan-service.js');
 const appConfig = require('./app-cofig.js');
 
@@ -59,17 +59,19 @@ async function run() {
 
   const jarName = await downloadJar();
 
-  let buildId;
-  try {
-    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
-    core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
-  } catch (error) {
-    core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
-    return;
-  }
+  // let buildId;
+  // try {
+  //   buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
+  //   core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+  // } catch (error) {
+  //   core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
+  //   return;
+  // }
 
-  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
-  core.info(`Artifact(s) uploaded: ${uploaded}`);
+  // const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
+  // core.info(`Artifact(s) uploaded: ${uploaded}`);
+
+
 
   // return and exit the app if the duration of the run is more than scantimeout
   let endTime = new Date();
@@ -83,7 +85,7 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;

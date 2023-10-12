@@ -19155,6 +19155,14 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
   return { 'scanCompleted' : false };
 }
 
+async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -autoscan ${autoscan} -createprofile false -version ${version}`;
+  const output = await runCommand(command);
+  const outputXML = output.toString();
+  console.log(outputXML);
+  return;
+}
+
 module.exports = {
   createBuild,
   uploadFile,
@@ -19162,7 +19170,8 @@ module.exports = {
   checkPrescanSuccess,
   getModules,
   beginScan,
-  checkScanSuccess
+  checkScanSuccess,
+  beginScanCompositAction
 }
 
 /***/ }),
@@ -25528,7 +25537,7 @@ const core = __nccwpck_require__(4272);
 const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(2137);
 const { downloadJar } = __nccwpck_require__(3487);
-const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
+const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess, beginScanCompositAction
 } = __nccwpck_require__(8718);
 const appConfig = __nccwpck_require__(3896);
 
@@ -25585,17 +25594,19 @@ async function run() {
 
   const jarName = await downloadJar();
 
-  let buildId;
-  try {
-    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
-    core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
-  } catch (error) {
-    core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
-    return;
-  }
+  // let buildId;
+  // try {
+  //   buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
+  //   core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+  // } catch (error) {
+  //   core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
+  //   return;
+  // }
 
-  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
-  core.info(`Artifact(s) uploaded: ${uploaded}`);
+  // const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
+  // core.info(`Artifact(s) uploaded: ${uploaded}`);
+
+
 
   // return and exit the app if the duration of the run is more than scantimeout
   let endTime = new Date();
@@ -25609,7 +25620,7 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;

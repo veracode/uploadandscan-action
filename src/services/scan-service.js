@@ -95,6 +95,14 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
   return { 'scanCompleted' : false };
 }
 
+async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -autoscan ${autoscan} -createprofile false -version ${version}`;
+  const output = await runCommand(command);
+  const outputXML = output.toString();
+  console.log(outputXML);
+  return;
+}
+
 module.exports = {
   createBuild,
   uploadFile,
@@ -102,5 +110,6 @@ module.exports = {
   checkPrescanSuccess,
   getModules,
   beginScan,
-  checkScanSuccess
+  checkScanSuccess,
+  beginScanCompositAction
 }
