@@ -98,11 +98,11 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 
 async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version, include='') {
   let command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -createprofile false -version ${version} -scanpollinginterval 15`;
-  if (!autoscan) command += ` -inlcude ${include}`;
+  if (!autoscan) command += ` -include ${include}`;
   const output = await runCommand(command);
   const outputString = output.toString();
   core.debug(outputString);
-  
+
   const analysisIdRegex = /The analysis id of the new analysis is "(\d+)"/;
   const match = outputString.match(analysisIdRegex);
 
