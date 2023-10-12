@@ -1,6 +1,7 @@
 const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
-const { minimatch } = require('minimatch')
+const { minimatch } = require('minimatch');
+const core = require('@actions/core');
 
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -98,9 +99,16 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -autoscan ${autoscan} -createprofile false -version ${version}`;
   const output = await runCommand(command);
-  const outputXML = output.toString();
-  console.log(outputXML);
-  return;
+  const outputString = output.toString();
+  const analysisIdRegex = /The analysis id of the new analysis is "(\d+)"/;
+  const match = outputString.match(analysisIdRegex);
+
+  if (match && match.length > 1) {
+    const buildId = match[1];
+    core.info(`Analysis ID: ${buildId}`);
+    return buildId;
+  } else
+    core.setFailed('Build Id not found in output');
 }
 
 module.exports = {

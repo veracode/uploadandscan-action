@@ -19060,7 +19060,8 @@ module.exports = {
 
 const { runCommand } = __nccwpck_require__(3487);
 const xml2js = __nccwpck_require__(5561);
-const { minimatch } = __nccwpck_require__(8821)
+const { minimatch } = __nccwpck_require__(8821);
+const core = __nccwpck_require__(4272);
 
 async function createBuild(vid, vkey, jarName, appId, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -19158,9 +19159,16 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -autoscan ${autoscan} -createprofile false -version ${version}`;
   const output = await runCommand(command);
-  const outputXML = output.toString();
-  console.log(outputXML);
-  return;
+  const outputString = output.toString();
+  const analysisIdRegex = /The analysis id of the new analysis is "(\d+)"/;
+  const match = outputString.match(analysisIdRegex);
+
+  if (match && match.length > 1) {
+    const buildId = match[1];
+    core.info(`Analysis ID: ${buildId}`);
+    return buildId;
+  } else
+    core.setFailed('Build Id not found in output');
 }
 
 module.exports = {
@@ -25617,10 +25625,12 @@ async function run() {
 
   core.info(`scantimeout: ${scantimeout}`);
   core.info(`include: ${include}`)
+
+  let buildId = -1;
   
   if (include === '') {
     const autoScan = true;
-    await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
+    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;

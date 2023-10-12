@@ -82,10 +82,12 @@ async function run() {
 
   core.info(`scantimeout: ${scantimeout}`);
   core.info(`include: ${include}`)
+
+  let buildId = -1;
   
   if (include === '') {
     const autoScan = true;
-    await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
+    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
