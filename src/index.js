@@ -83,26 +83,26 @@ async function run() {
     buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version, include);
     // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
     // core.info(`Pre-Scan Submitted: ${prescan}`);
-    while (true) {
-      await sleep(appConfig().pollingInterval);
-      core.info('Checking for Pre-Scan Results...');
-      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
-        core.info('Pre-Scan Success!');
-        break;
-      }
-      if (scantimeout !== '' && endTime < new Date()) {
-        if (failbuild.toLowerCase() === 'true')
-          core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
-        else
-          core.info(`Veracode Policy Scan Exited: Scan Timeout Exceeded`)
-        return;
-      }
-    }
+    // while (true) {
+    //   await sleep(appConfig().pollingInterval);
+    //   core.info('Checking for Pre-Scan Results...');
+    //   if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
+    //     core.info('Pre-Scan Success!');
+    //     break;
+    //   }
+    //   if (scantimeout !== '' && endTime < new Date()) {
+    //     if (failbuild.toLowerCase() === 'true')
+    //       core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
+    //     else
+    //       core.info(`Veracode Policy Scan Exited: Scan Timeout Exceeded`)
+    //     return;
+    //   }
+    // }
 
-    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
-    core.info(`Modules to Scan: ${moduleIds.toString()}`);
-    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
-    core.info(`Scan Submitted: ${scan}`);
+    // const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
+    // core.info(`Modules to Scan: ${moduleIds.toString()}`);
+    // const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
+    // core.info(`Scan Submitted: ${scan}`);
   }
 
   core.info('Waiting for Scan Results...');
