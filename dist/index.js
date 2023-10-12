@@ -25548,8 +25548,7 @@ const core = __nccwpck_require__(4272);
 const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(2137);
 const { downloadJar } = __nccwpck_require__(3487);
-const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess, beginScanCompositAction
-} = __nccwpck_require__(8718);
+const { beginScanCompositAction } = __nccwpck_require__(8718);
 const appConfig = __nccwpck_require__(3896);
 
 const vid = core.getInput('vid', { required: true });
@@ -25627,28 +25626,6 @@ async function run() {
   } else {
     const autoScan = false;
     buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version, include);
-    // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
-    // core.info(`Pre-Scan Submitted: ${prescan}`);
-    // while (true) {
-    //   await sleep(appConfig().pollingInterval);
-    //   core.info('Checking for Pre-Scan Results...');
-    //   if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
-    //     core.info('Pre-Scan Success!');
-    //     break;
-    //   }
-    //   if (scantimeout !== '' && endTime < new Date()) {
-    //     if (failbuild.toLowerCase() === 'true')
-    //       core.setFailed(`Veracode Policy Scan Exited: Scan Timeout Exceeded`);
-    //     else
-    //       core.info(`Veracode Policy Scan Exited: Scan Timeout Exceeded`)
-    //     return;
-    //   }
-    // }
-
-    // const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
-    // core.info(`Modules to Scan: ${moduleIds.toString()}`);
-    // const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
-    // core.info(`Scan Submitted: ${scan}`);
   }
 
   core.info('Waiting for Scan Results...');
