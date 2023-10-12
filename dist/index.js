@@ -19156,10 +19156,13 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
   return { 'scanCompleted' : false };
 }
 
-async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -autoscan ${autoscan} -createprofile false -version ${version}`;
+async function beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoscan, version, include='') {
+  let command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadAndScan -appname ${appname} -filepath ${filepath} -createprofile false -version ${version} -scanpollinginterval 15`;
+  if (!autoscan) command += ` -inlcude ${include}`;
   const output = await runCommand(command);
   const outputString = output.toString();
+  core.debug(outputString);
+  
   const analysisIdRegex = /The analysis id of the new analysis is "(\d+)"/;
   const match = outputString.match(analysisIdRegex);
 
@@ -25623,7 +25626,7 @@ async function run() {
     }
   } else {
     const autoScan = false;
-    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
+    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version, include);
     // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
     // core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {

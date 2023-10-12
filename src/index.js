@@ -80,7 +80,7 @@ async function run() {
     }
   } else {
     const autoScan = false;
-    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
+    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version, include);
     // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
     // core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
