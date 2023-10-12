@@ -25602,20 +25602,6 @@ async function run() {
 
   const jarName = await downloadJar();
 
-  // let buildId;
-  // try {
-  //   buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
-  //   core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
-  // } catch (error) {
-  //   core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
-  //   return;
-  // }
-
-  // const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
-  // core.info(`Artifact(s) uploaded: ${uploaded}`);
-
-
-
   // return and exit the app if the duration of the run is more than scantimeout
   let endTime = new Date();
   if (scantimeout !== '') {
@@ -25637,7 +25623,8 @@ async function run() {
     }
   } else {
     const autoScan = false;
-    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
+    // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
     core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
       await sleep(appConfig().pollingInterval);
