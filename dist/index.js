@@ -25625,7 +25625,7 @@ async function run() {
     const autoScan = false;
     buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version);
     // const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
-    core.info(`Pre-Scan Submitted: ${prescan}`);
+    // core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
       await sleep(appConfig().pollingInterval);
       core.info('Checking for Pre-Scan Results...');
