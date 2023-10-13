@@ -25626,6 +25626,7 @@ async function run() {
   } else {
     const autoScan = false;
     buildId = await beginScanCompositAction(vid, vkey, jarName, appname, filepath, autoScan, version, include);
+    core.info('Static Scan Submitted, waiting for Pre Scan results.');
   }
 
   core.info('Waiting for Scan Results...');
