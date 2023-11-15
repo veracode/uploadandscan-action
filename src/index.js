@@ -16,6 +16,7 @@ const include = core.getInput('include', { required: false });
 const policy = core.getInput('policy', { required: false });
 const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
+const deleteincompletescan = core.getInput('deleteincompletescan', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
 
 const POLICY_EVALUATION_FAILED = 9;
@@ -36,6 +37,10 @@ function checkParameters() {
   }
   if (failbuild.toLowerCase() !== 'true' && failbuild.toLowerCase() !== 'false') {
     core.setFailed('failbuild must be set to true or false');
+    return false;
+  }
+  if (deleteincompletescan.toLowerCase() !== 'true' && deleteincompletescan.toLowerCase() !== 'false') {
+    core.setFailed('deleteincompletescan must be set to true or false');
     return false;
   }
   return true;
@@ -61,7 +66,7 @@ async function run() {
 
   let buildId;
   try {
-    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version);  
+    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan);  
     core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
   } catch (error) {
     core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');

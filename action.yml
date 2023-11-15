@@ -35,6 +35,10 @@ inputs:
   scantimeout:
     description: 'Scan Timeout in minutes'
     required: false
+  deleteincompletescan:
+    description: 'Delete a broken or running policy scan'
+    required: false
+    default: false
   failbuild:
     description: 'Fail the build if the scan fails'
     required: false
