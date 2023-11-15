@@ -2,11 +2,25 @@ const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
 const { minimatch } = require('minimatch')
 
-async function createBuild(vid, vkey, jarName, appId, version) {
+async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
-  const output = await runCommand(command);
-  if (output === 'failed') 
+  var output = await runCommand(command);
+  if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
+  }
+  else if (output === 'failed' && deleteincompletescan === 'true'){
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -appid ${appId} -version ${version}`
+    const deleteOutput = await runCommand(deleteCommand);
+    if (deleteOutput === 'failed'){
+      throw new Error(`Error deleting build: ${deleteOutput}`);
+    }
+    else 
+    output = await runCommand(command);
+      if (output === 'failed'){
+        throw new Error(`Error creating build: ${createOutput}`);
+    }
+  }
+
   const outputXML = output.toString();
   // parse outputXML for build_id
   const regex = /<build build_id="(\d+)"/;
