@@ -33,6 +33,37 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
   return buildId;
 }
 
+async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, createsandbox, sandboxname) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action createSandbox -appid ${appId} -version ${version}`
+  var output = await runCommand(command);
+  if (output === 'failed' && deleteincompletescan === 'false'){
+    throw new Error(`Error creating build: ${output}`);
+  }
+  else if (output === 'failed' && deleteincompletescan === 'true'){
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -appid ${appId} -version ${version}`
+    const deleteOutput = await runCommand(deleteCommand);
+    if (deleteOutput === 'failed'){
+      throw new Error(`Error deleting build: ${deleteOutput}`);
+    }
+    else 
+    output = await runCommand(command);
+      if (output === 'failed'){
+        throw new Error(`Error creating build: ${createOutput}`);
+    }
+  }
+
+  const outputXML = output.toString();
+  // parse outputXML for build_id
+  const regex = /<build build_id="(\d+)"/;
+  let buildId = '';
+  try {
+    buildId = outputXML.match(regex)[1];
+  } catch (error) {
+    throw new Error(`Error parsing build_id from outputXML: ${error.message}`);
+  }
+  return buildId;
+}
+
 async function uploadFile(vid, vkey, jarName, appId, filepath) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
   const output = await runCommand(command);
@@ -111,6 +142,7 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 
 module.exports = {
   createBuild,
+  createSandboxBuild,
   uploadFile,
   beginPreScan,
   checkPrescanSuccess,

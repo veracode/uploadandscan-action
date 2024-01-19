@@ -43,6 +43,14 @@ inputs:
     description: 'Fail the build if the scan fails'
     required: false
     default: true
+  createsanbox:
+    description: 'Create a sandbox for the scan'
+    required: false
+    default: false
+  sandboxname:
+    description: 'Sandbox Name'
+    required: false
+    default: ''
 
 runs:
   using: 'node16'

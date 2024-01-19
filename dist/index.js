@@ -18816,6 +18816,7 @@ function appConfig() {
   };
 }
 
+
 /***/ }),
 
 /***/ 4437:
@@ -18841,6 +18842,32 @@ async function getApplicationByName(vid, vkey, applicationName) {
   };
   core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function getVeracodeSandboxIDFromProfile(vid, vkey, applicationName) {
+  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${applicationName}`);
+  const responseData = await getApplicationByName(vid, vkey, applicationName);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    queryValue: encodeURIComponent(applicationName)
+  };
+  core.debug(resource);
+  const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function createSandbox(vid, vkey, applicationName, sandboxname) {
+  core.debug(`Module: application-service, function: createSandbox. Application: ${applicationName}`);
+  const responseData = await getApplicationByName(vid, vkey, applicationName);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    resourceData: {
+        name: sandboxname
+    }
+  };
+  core.debug(resource);
+  const response = await createResource(vid, vkey, resource);
   return response;
 }
 
@@ -19004,6 +19031,8 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  createSandbox,
+  getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }
@@ -19064,6 +19093,37 @@ const { minimatch } = __nccwpck_require__(7590)
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
+  var output = await runCommand(command);
+  if (output === 'failed' && deleteincompletescan === 'false'){
+    throw new Error(`Error creating build: ${output}`);
+  }
+  else if (output === 'failed' && deleteincompletescan === 'true'){
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -appid ${appId} -version ${version}`
+    const deleteOutput = await runCommand(deleteCommand);
+    if (deleteOutput === 'failed'){
+      throw new Error(`Error deleting build: ${deleteOutput}`);
+    }
+    else 
+    output = await runCommand(command);
+      if (output === 'failed'){
+        throw new Error(`Error creating build: ${createOutput}`);
+    }
+  }
+
+  const outputXML = output.toString();
+  // parse outputXML for build_id
+  const regex = /<build build_id="(\d+)"/;
+  let buildId = '';
+  try {
+    buildId = outputXML.match(regex)[1];
+  } catch (error) {
+    throw new Error(`Error parsing build_id from outputXML: ${error.message}`);
+  }
+  return buildId;
+}
+
+async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, createsandbox, sandboxname) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action createSandbox -appid ${appId} -version ${version}`
   var output = await runCommand(command);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
@@ -19171,6 +19231,7 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 
 module.exports = {
   createBuild,
+  createSandboxBuild,
   uploadFile,
   beginPreScan,
   checkPrescanSuccess,
@@ -25629,10 +25690,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(5127);
-const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandbox, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(4437);
 const { downloadJar } = __nccwpck_require__(4686);
-const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
+const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = __nccwpck_require__(9972);
 const appConfig = __nccwpck_require__(3798);
 
@@ -25648,6 +25709,8 @@ const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const deleteincompletescan = core.getInput('deleteincompletescan', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
+const createsandbox = core.getInput('createsandbox', { required: false });
+const sandboxname = core.getInput('sandboxname', { required: false });
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -25696,10 +25759,41 @@ async function run() {
 
   let buildId;
   try {
-    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan);  
-    core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+    if (createsandbox === 'true'){
+      core.info(`Running a Sandbox Scan: ${sandboxname}`);
+      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, appname);
+
+      let sandboxID = {sandboxID: -1};
+      for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
+        if (sandboxes._embedded.sandboxes[i].name === sandboxname){
+          sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
+        }
+      }
+      if ( sandboxID === -1 && createsandbox === 'true'){
+        core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
+        //create sandbox
+        const createSandbox = await createSandbox(vid, vkey, veracodeApp.appId, sandboxname);
+        core.info(`Veracode Sandbox Created: ${createSandbox}`);
+        sandboxID = createSandbox.sandboxID;
+      }
+      else if (sandboxID === -1 && createsandbox === 'false'){
+        core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
+        or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
+        return;
+      }
+      else{
+        core.info(`Sandbox Found: ${sandboxID}`);
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, createsandbox, sandboxname);
+        core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
+      }
+    }
+    else{
+      core.info(`Running a Policy Scan: ${appname}`);
+      buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan);  
+      core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+    }
   } catch (error) {
-    core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
+    core.setFailed('Failed to create Veracode Scan. App not in state where new builds are allowed.');
     return;
   }
 

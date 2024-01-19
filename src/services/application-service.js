@@ -21,6 +21,32 @@ async function getApplicationByName(vid, vkey, applicationName) {
   return response;
 }
 
+async function getVeracodeSandboxIDFromProfile(vid, vkey, applicationName) {
+  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${applicationName}`);
+  const responseData = await getApplicationByName(vid, vkey, applicationName);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    queryValue: encodeURIComponent(applicationName)
+  };
+  core.debug(resource);
+  const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function createSandbox(vid, vkey, applicationName, sandboxname) {
+  core.debug(`Module: application-service, function: createSandbox. Application: ${applicationName}`);
+  const responseData = await getApplicationByName(vid, vkey, applicationName);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    resourceData: {
+        name: sandboxname
+    }
+  };
+  core.debug(resource);
+  const response = await createResource(vid, vkey, resource);
+  return response;
+}
+
 function profileExists(responseData, applicationName) {
   core.debug(`Module: application-service, function: profileExists. Application: ${applicationName}`);
   if (responseData.page.total_elements === 0) {
@@ -181,6 +207,8 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  createSandbox,
+  getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }
