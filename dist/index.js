@@ -25767,7 +25767,7 @@ async function run() {
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
-          core.info(`Sandbox Found: ${sandboxID}`);
+          core.info(`Sandbox Found:`);
           core.info(JSON.stringify(sandboxID))
         }
       }
@@ -25785,6 +25785,7 @@ async function run() {
       }
       else{
         core.info(`Sandbox Found: ${sandboxID}`);
+        core.info(JSON.stringify(sandboxID))
         buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, createsandbox, sandboxname);
         core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
       }
