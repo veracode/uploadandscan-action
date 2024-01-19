@@ -25767,7 +25767,8 @@ async function run() {
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
-          core.info(`Sandbox Found: ${JSON.stringify(sandboxID)}`);
+          core.info(`Sandbox Found: ${sandboxID}`);
+          core.info(JSON.stringify(sandboxID))
         }
       }
       if ( sandboxID === -1 && createsandbox === 'true'){
