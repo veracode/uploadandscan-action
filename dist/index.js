@@ -25760,13 +25760,14 @@ async function run() {
   let buildId;
   try {
     if (createsandbox === 'true'){
-      core.info(`Running a Sandbox Scan: ${sandboxname}`);
+      core.info(`Running a Sandbox Scan: ${sandboxname} on applicaiton: ${appname}`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, appname);
 
       let sandboxID = {sandboxID: -1};
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
+          core.info(`Sandbox Found: ${JSON.stringify(sandboxID)}`);
         }
       }
       if ( sandboxID === -1 && createsandbox === 'true'){
