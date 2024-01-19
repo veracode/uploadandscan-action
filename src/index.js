@@ -72,22 +72,23 @@ async function run() {
       core.info(`Running a Sandbox Scan: ${sandboxname} on applicaiton: ${appname}`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, appname);
 
-      let sandboxID = {sandboxID: -1};
+      let sandboxID = '';
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
+        core.info('Sandbox: '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
           core.info(`Sandbox Found:`);
           core.info(JSON.stringify(sandboxID))
         }
       }
-      if ( sandboxID === -1 && createsandbox === 'true'){
+      if ( sandboxID == '' && createsandbox === 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandbox = await createSandbox(vid, vkey, veracodeApp.appId, sandboxname);
         core.info(`Veracode Sandbox Created: ${createSandbox}`);
         sandboxID = createSandbox.sandboxID;
       }
-      else if (sandboxID === -1 && createsandbox === 'false'){
+      else if (sandboxID != '' && createsandbox === 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
         or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
         return;
