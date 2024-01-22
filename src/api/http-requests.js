@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { calculateAuthorizationHeader } = require('./veracode-hmac.js');
 const appConfig = require('../app-cofig.js');
+const core = require('@actions/core');
 
 async function getResourceByAttribute (vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
@@ -30,6 +31,7 @@ async function getResource (vid, vkey, resource) {
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
   try {
     const response = await axios.get(appUrl, { headers });
+    core.info(JSON.stringify(response.data));
     return response.data; // Access the response data
   } catch (error) {
     console.error(error);

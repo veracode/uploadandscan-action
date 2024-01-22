@@ -18654,6 +18654,7 @@ function wrappy (fn, cb) {
 const axios = __nccwpck_require__(2223);
 const { calculateAuthorizationHeader } = __nccwpck_require__(9857);
 const appConfig = __nccwpck_require__(3798);
+const core = __nccwpck_require__(5127);
 
 async function getResourceByAttribute (vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
@@ -18683,6 +18684,7 @@ async function getResource (vid, vkey, resource) {
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
   try {
     const response = await axios.get(appUrl, { headers });
+    core.info(JSON.stringify(response.data));
     return response.data; // Access the response data
   } catch (error) {
     console.error(error);
