@@ -92,7 +92,7 @@ async function run() {
         core.info(`Veracode Sandbox Created: ${createSandbox}`);
         sandboxID = createSandbox.sandboxID;
       }
-      else if (sandboxID != '' && createsandbox === 'false'){
+      else if (sandboxID == '' && createsandbox === 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
         or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
         return;

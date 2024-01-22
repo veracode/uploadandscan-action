@@ -30,7 +30,6 @@ async function getResource (vid, vkey, resource) {
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
   try {
     const response = await axios.get(appUrl, { headers });
-    core.info(JSON.stringify(response.data));
     return response.data; // Access the response data
   } catch (error) {
     console.error(error);
