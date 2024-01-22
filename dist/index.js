@@ -19186,7 +19186,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
 async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
   let command;
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}-sandboxid ${sandboxID}`
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan} -sandboxid ${sandboxID}`
   }
   else{
     command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
