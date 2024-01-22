@@ -87,7 +87,7 @@ async function run() {
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
-        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
+        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name} / ${createSandboxResponse.guid}`);
         sandboxID = createSandboxResponse.id;
         sandboxGUID = createSandboxResponse.guid;
         buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
@@ -99,7 +99,7 @@ async function run() {
         return;
       }
       else{
-        core.info(`Sandbox Found: ${sandboxID}`);
+        core.info(`Sandbox Found: ${sandboxID} - ${sandboxGUID}`);
         buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
         core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
       }
@@ -166,7 +166,7 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
+    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
