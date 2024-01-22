@@ -66,13 +66,14 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 }
 
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
+  let command;
   if ( sandboxID > 1){
     core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
-    const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
   }
   else{
     core.info(`Uploading artifact(s) to Policy Scan`);
-    const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
   }
   const output = await runCommand(command);
   const outputXML = output.toString();
