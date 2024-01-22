@@ -70,7 +70,7 @@ async function run() {
   try {
     if (createsandbox === 'true'){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
-      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, appname);
+      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
       core.info(`Veracode Sandboxes: ${JSON.stringify(sandboxes)}`);
 
       let sandboxID = '';
@@ -86,7 +86,7 @@ async function run() {
       if ( sandboxID == '' && createsandbox === 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
-        const createSandbox = await createSandbox(vid, vkey, veracodeApp.appId, sandboxname);
+        const createSandbox = await createSandbox(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${createSandbox}`);
         sandboxID = createSandbox.sandboxID;
       }
