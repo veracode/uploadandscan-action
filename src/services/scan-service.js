@@ -1,6 +1,7 @@
 const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
 const { minimatch } = require('minimatch')
+const core = require('@actions/core');
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -66,9 +67,11 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   if ( sandboxID > 1){
+    core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
     const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
   }
   else{
+    core.info(`Uploading artifact(s) to Policy Scan`);
     const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
   }
   const output = await runCommand(command);
