@@ -43,7 +43,7 @@ inputs:
     description: 'Fail the build if the scan fails'
     required: false
     default: true
-  createsanbox:
+  createsandbox:
     description: 'Create a sandbox for the scan'
     required: false
     default: false
