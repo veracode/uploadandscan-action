@@ -73,9 +73,9 @@ async function run() {
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
       core.info(`Veracode Sandboxes: ${JSON.stringify(sandboxes)}`);
 
+      core.info('Finding Sandbox GUID')
       let sandboxID = '';
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
-        core.info('Finding Sandbox GUID')
         core.info('Sandbox: '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};

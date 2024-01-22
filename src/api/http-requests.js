@@ -27,12 +27,7 @@ async function getResource (vid, vkey, resource) {
   const headers = {
     'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, '', 'GET')
   };
-
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
-  core.info('AppURL: ')
-  core.info(appUrl);
-  core.info('Headers: ')
-  core.info(JSON.stringify(headers));
   try {
     const response = await axios.get(appUrl, { headers });
     core.info(JSON.stringify(response.data));

@@ -18680,12 +18680,7 @@ async function getResource (vid, vkey, resource) {
   const headers = {
     'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, '', 'GET')
   };
-
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
-  core.info('AppURL: ')
-  core.info(appUrl);
-  core.info('Headers: ')
-  core.info(JSON.stringify(headers));
   try {
     const response = await axios.get(appUrl, { headers });
     core.info(JSON.stringify(response.data));
@@ -18874,7 +18869,6 @@ async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
   };
   core.debug(resource);
-  //core.info(JSON.stringify(resource));
   const response = await getResource(vid, vkey, resource);
   return response;
 }
@@ -25785,9 +25779,9 @@ async function run() {
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
       core.info(`Veracode Sandboxes: ${JSON.stringify(sandboxes)}`);
 
+      core.info('Finding Sandbox GUID')
       let sandboxID = '';
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
-        core.info('Finding Sandbox GUID')
         core.info('Sandbox: '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
