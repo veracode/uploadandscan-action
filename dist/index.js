@@ -18682,7 +18682,9 @@ async function getResource (vid, vkey, resource) {
   };
 
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
+  core.info('AppURL: ')
   core.info(appUrl);
+  core.info('Headers: ')
   core.info(JSON.stringify(headers));
   try {
     const response = await axios.get(appUrl, { headers });
@@ -18871,7 +18873,7 @@ async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
   };
   core.debug(resource);
-  core.info(JSON.stringify(resource));
+  //core.info(JSON.stringify(resource));
   const response = await getResource(vid, vkey, resource);
   return response;
 }
