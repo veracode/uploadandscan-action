@@ -85,14 +85,14 @@ async function run() {
           core.info(`Sandbox Not Found: ${sandboxname} - looiking into ${sandboxes._embedded.sandboxes[i].name}`);
         }
       }
-      if ( sandboxID == '' && createsandbox === 'true'){
+      if ( sandboxID == '' && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandbox = await createSandbox(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${createSandbox}`);
         sandboxID = createSandbox.sandboxID;
       }
-      else if (sandboxID == '' && createsandbox === 'false'){
+      else if (sandboxID == '' && createsandbox == 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
         or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
         return;
