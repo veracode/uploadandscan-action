@@ -25704,7 +25704,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(5127);
-const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandbox, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandboxRequest, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(4437);
 const { downloadJar } = __nccwpck_require__(4686);
 const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
@@ -25792,14 +25792,14 @@ async function run() {
       }
       core.info(`Sandbox ID: ${sandboxID}`);
       core.info(`Create Sandbox: ${createsandbox}`);
-      if ( sandboxID == undefined && createsandbox === true){
+      if ( sandboxID == undefined && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
         sandboxID = createSandboxResponse.sandboxID;
       }
-      else if ( sandboxID == undefined && createsandbox === false){
+      else if ( sandboxID == undefined && createsandbox == 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
         or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
         return;
