@@ -85,6 +85,7 @@ async function run() {
           core.info(`Not the sandbox '${sandboxes._embedded.sandboxes[i].name}' we are looking for ' ${sandboxname}'`);
         }
       }
+      core.ifno(`Sandbox ID: ${sandboxID}`);
       if ( sandboxID == '' && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
