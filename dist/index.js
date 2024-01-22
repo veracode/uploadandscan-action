@@ -19137,13 +19137,13 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
 }
 
 async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, sandboxID) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -sandbox_id ${sandboxID} -appid ${appId} -version ${version}`
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -sandboxid ${sandboxID} -appid ${appId} -version ${version}`
   var output = await runCommand(command);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
   else if (output === 'failed' && deleteincompletescan === 'true'){
-    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -sandbox_id ${sandboxID} -appid ${appId}`
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -sandboxid ${sandboxID} -appid ${appId}`
     const deleteOutput = await runCommand(deleteCommand);
     if (deleteOutput === 'failed'){
       throw new Error(`Error deleting build: ${deleteOutput}`);
