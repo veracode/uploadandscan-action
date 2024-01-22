@@ -77,7 +77,7 @@ async function run() {
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
         core.info('Sandbox '+i+': '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
-          sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
+          sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].guid};
           core.info(`Sandbox Found:`);
           core.info(JSON.stringify(sandboxID))
         }
