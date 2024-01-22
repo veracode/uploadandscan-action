@@ -82,7 +82,7 @@ async function run() {
           core.info(JSON.stringify(sandboxID))
         }
         else {
-          core.info(`Sandbox Not Found: ${sandboxname} - looiking into ${sandboxes._embedded.sandboxes[i].name}`);
+          core.info(`Not the sandbox '${sandboxes._embedded.sandboxes[i].name}' we are looking for ' ${sandboxname}'`);
         }
       }
       if ( sandboxID == '' && createsandbox == 'true'){
