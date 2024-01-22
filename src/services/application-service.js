@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const appConfig = require('../app-cofig.js');
 const { 
   getResourceByAttribute,
+  getResource,
   createResource,
 }= require('../api/http-requests.js');
 const fs = require('fs/promises');

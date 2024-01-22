@@ -18848,6 +18848,7 @@ const core = __nccwpck_require__(5127);
 const appConfig = __nccwpck_require__(3798);
 const { 
   getResourceByAttribute,
+  getResource,
   createResource,
 }= __nccwpck_require__(261);
 const fs = __nccwpck_require__(3292);
