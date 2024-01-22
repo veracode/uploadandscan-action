@@ -18867,7 +18867,7 @@ async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
   };
   core.debug(resource);
-  core.info(resource);
+  core.info(JSON.stringify(resource));
   const response = await getResource(vid, vkey, resource);
   return response;
 }
