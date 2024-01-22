@@ -29,6 +29,8 @@ async function getResource (vid, vkey, resource) {
   };
 
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
+  core.info(appUrl);
+  core.info(JSON.stringify(headers));
   try {
     const response = await axios.get(appUrl, { headers });
     core.info(JSON.stringify(response.data));
