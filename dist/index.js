@@ -18678,7 +18678,7 @@ async function getResourceByAttribute (vid, vkey, resource) {
 async function getResource (vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
   const headers = {
-    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, 'GET')
+    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, '', 'GET')
   };
 
   const appUrl = `https://${appConfig().hostName}${resourceUri}`;
