@@ -18872,7 +18872,7 @@ async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
   return response;
 }
 
-async function createSandbox(vid, vkey, appguid, sandboxname) {
+async function createSandboxRequest(vid, vkey, appguid, sandboxname) {
   core.debug(`Module: application-service, function: createSandbox. Application: ${appguid}`);
   const resource = {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
@@ -19045,7 +19045,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
-  createSandbox,
+  createSandboxRequest,
   getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
@@ -25795,8 +25795,8 @@ async function run() {
       if ( sandboxID == undefined && createsandbox === true){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
-        const createSandboxResponse = await createSandbox(vid, vkey, veracodeApp.appGuid, sandboxname);
-        core.info(`Veracode Sandbox Created: ${createSandbox}`);
+        const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
+        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
         sandboxID = createSandboxResponse.sandboxID;
       }
       else if ( sandboxID == undefined && createsandbox === false){

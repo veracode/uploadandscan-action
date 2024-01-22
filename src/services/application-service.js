@@ -32,7 +32,7 @@ async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
   return response;
 }
 
-async function createSandbox(vid, vkey, appguid, sandboxname) {
+async function createSandboxRequest(vid, vkey, appguid, sandboxname) {
   core.debug(`Module: application-service, function: createSandbox. Application: ${appguid}`);
   const resource = {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
@@ -205,7 +205,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
-  createSandbox,
+  createSandboxRequest,
   getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings

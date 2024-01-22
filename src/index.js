@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandbox, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandboxRequest, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = require('./services/application-service.js');
 const { downloadJar } = require('./api/java-wrapper.js');
 const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
@@ -90,8 +90,8 @@ async function run() {
       if ( sandboxID == undefined && createsandbox === true){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
-        const createSandboxResponse = await createSandbox(vid, vkey, veracodeApp.appGuid, sandboxname);
-        core.info(`Veracode Sandbox Created: ${createSandbox}`);
+        const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
+        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
         sandboxID = createSandboxResponse.sandboxID;
       }
       else if ( sandboxID == undefined && createsandbox === false){
