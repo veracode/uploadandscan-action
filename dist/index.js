@@ -19136,14 +19136,14 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
   return buildId;
 }
 
-async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, createsandbox, sandboxname) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action createSandbox -appid ${appId} -version ${version}`
+async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, sandboxID) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -sanbox_id ${sandboxID} -appid ${appId} -version ${version}`
   var output = await runCommand(command);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
   else if (output === 'failed' && deleteincompletescan === 'true'){
-    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -appid ${appId} -version ${version}`
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -sanbox_id ${sandboxID} -appid ${appId} -version ${version}`
     const deleteOutput = await runCommand(deleteCommand);
     if (deleteOutput === 'failed'){
       throw new Error(`Error deleting build: ${deleteOutput}`);
@@ -25797,7 +25797,8 @@ async function run() {
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${JSON.stringify(createSandboxResponse)}`);
-        sandboxID = createSandboxResponse.sandboxID;
+        sandboxID = createSandboxResponse.id;
+        sandboxGUID = createSandboxResponse.guid;
       }
       else if ( sandboxID == undefined && createsandbox == 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
@@ -25807,7 +25808,7 @@ async function run() {
       else{
         core.info(`Sandbox Found: ${sandboxID}`);
         core.info(JSON.stringify(sandboxID))
-        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, createsandbox, sandboxname);
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
         core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
       }
     }

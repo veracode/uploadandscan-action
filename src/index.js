@@ -92,7 +92,8 @@ async function run() {
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${JSON.stringify(createSandboxResponse)}`);
-        sandboxID = createSandboxResponse.sandboxID;
+        sandboxID = createSandboxResponse.id;
+        sandboxGUID = createSandboxResponse.guid;
       }
       else if ( sandboxID == undefined && createsandbox == 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
@@ -102,7 +103,7 @@ async function run() {
       else{
         core.info(`Sandbox Found: ${sandboxID}`);
         core.info(JSON.stringify(sandboxID))
-        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, createsandbox, sandboxname);
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
         core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
       }
     }
