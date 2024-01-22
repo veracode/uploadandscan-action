@@ -18845,23 +18845,22 @@ async function getApplicationByName(vid, vkey, applicationName) {
   return response;
 }
 
-async function getVeracodeSandboxIDFromProfile(vid, vkey, applicationName) {
+async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
   core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${applicationName}`);
-  const responseData = await getApplicationByName(vid, vkey, applicationName);
   const resource = {
-    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
     queryValue: encodeURIComponent(applicationName)
   };
+  core.info(resource);
   core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
   return response;
 }
 
-async function createSandbox(vid, vkey, applicationName, sandboxname) {
+async function createSandbox(vid, vkey, appguid, sandboxname) {
   core.debug(`Module: application-service, function: createSandbox. Application: ${applicationName}`);
-  const responseData = await getApplicationByName(vid, vkey, applicationName);
   const resource = {
-    resourceUri: appConfig().applicationUri+"/"+responseData._embedded.applications[0].guid+"/sandboxes",
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
     resourceData: {
         name: sandboxname
     }
@@ -25761,7 +25760,7 @@ async function run() {
   try {
     if (createsandbox === 'true'){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
-      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, appname);
+      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
       core.info(`Veracode Sandboxes: ${JSON.stringify(sandboxes)}`);
 
       let sandboxID = '';
@@ -25777,7 +25776,7 @@ async function run() {
       if ( sandboxID == '' && createsandbox === 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
-        const createSandbox = await createSandbox(vid, vkey, veracodeApp.appId, sandboxname);
+        const createSandbox = await createSandbox(vid, vkey, veracodeApp.appGuid, sandboxname);
         core.info(`Veracode Sandbox Created: ${createSandbox}`);
         sandboxID = createSandbox.sandboxID;
       }
