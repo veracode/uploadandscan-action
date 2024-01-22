@@ -19183,22 +19183,40 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   return outputXML.indexOf('Uploaded') > -1;
 }
 
-async function beginPreScan(vid, vkey, jarName, appId, autoScan) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
+async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}-sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Submitted') > -1;
 }
 
-async function checkPrescanSuccess(vid, vkey, jarName, appId) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+async function checkPrescanSuccess(vid, vkey, jarName, appId, sandboxID) {
+  let command
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Success') > -1;
 }
 
-async function getModules(vid, vkey, jarName, appId, include) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId}`
+async function getModules(vid, vkey, jarName, appId, include, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   const parser = new xml2js.Parser();
@@ -19226,15 +19244,27 @@ async function getModules(vid, vkey, jarName, appId, include) {
   return moduleIds;
 }
 
-async function beginScan(vid, vkey, jarName, appId, moduleIds) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds}`
+async function beginScan(vid, vkey, jarName, appId, moduleIds, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds} -sandboxid ${sandboxID}`
+  }
+  else {
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Submitted to Engine') > -1;
 }
 
-async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+async function checkScanSuccess(vid, vkey, jarName, appId, buildId, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   if (outputXML.indexOf('Results Ready') > -1) {
@@ -25797,7 +25827,6 @@ async function run() {
           core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
         }
       }
-      core.info(`Sandbox ID: ${sandboxID}`);
       if ( sandboxID == undefined && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
@@ -25844,19 +25873,19 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
     }
   } else {
     const autoScan = false;
-    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
       await sleep(appConfig().pollingInterval);
       core.info('Checking for Pre-Scan Results...');
-      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
+      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId, sandboxID)) {
         core.info('Pre-Scan Success!');
         break;
       }
@@ -25869,9 +25898,9 @@ async function run() {
       }
     }
 
-    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
+    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include, sandboxID);
     core.info(`Modules to Scan: ${moduleIds.toString()}`);
-    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
+    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString(), sandboxID);
     core.info(`Scan Submitted: ${scan}`);
   }
 

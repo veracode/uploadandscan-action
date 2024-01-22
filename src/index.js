@@ -83,7 +83,6 @@ async function run() {
           core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
         }
       }
-      core.info(`Sandbox ID: ${sandboxID}`);
       if ( sandboxID == undefined && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
@@ -130,19 +129,19 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
     }
   } else {
     const autoScan = false;
-    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
       await sleep(appConfig().pollingInterval);
       core.info('Checking for Pre-Scan Results...');
-      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
+      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId, sandboxID)) {
         core.info('Pre-Scan Success!');
         break;
       }
@@ -155,9 +154,9 @@ async function run() {
       }
     }
 
-    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
+    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include, sandboxID);
     core.info(`Modules to Scan: ${moduleIds.toString()}`);
-    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
+    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString(), sandboxID);
     core.info(`Scan Submitted: ${scan}`);
   }
 
