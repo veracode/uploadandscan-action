@@ -64,8 +64,13 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
   return buildId;
 }
 
-async function uploadFile(vid, vkey, jarName, appId, filepath) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
+  if ( sandboxID !== undefined){
+    const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+  }
+  else{
+    const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Uploaded') > -1;

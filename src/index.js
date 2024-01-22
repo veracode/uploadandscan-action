@@ -72,26 +72,23 @@ async function run() {
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
 
-      core.info('Finding Sandbox GUID')
+      core.info('Finding Sandbox ID & GUID')
       let sandboxID;
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
-        //core.info('Sandbox '+i+': '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
-          sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].guid};
-          //core.info(`Sandbox Found:`);
-          //core.info(JSON.stringify(sandboxID))
+          sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].id};
+          sandboxGUID = {sandboxGUID: sandboxes._embedded.sandboxes[i].guid};
         }
         else {
           core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
         }
       }
-      core.info(`Sandbox ID: ${sandboxID}`);
-      core.info(`Create Sandbox: ${createsandbox}`);
+      core.info(`Sandbox ID: ${JSON.stringify(sandboxID)}`);
       if ( sandboxID == undefined && createsandbox == 'true'){
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
-        core.info(`Veracode Sandbox Created: ${JSON.stringify(createSandboxResponse)}`);
+        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
         sandboxID = createSandboxResponse.id;
         sandboxGUID = createSandboxResponse.guid;
         buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
@@ -103,7 +100,7 @@ async function run() {
         return;
       }
       else{
-        core.info(`Sandbox Found: ${sandboxID}`);
+        core.info(`Sandbox Found: ${sandboxID.id}`);
         core.info(JSON.stringify(sandboxID))
         buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
         core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
@@ -119,7 +116,7 @@ async function run() {
     return;
   }
 
-  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
+  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath, sandboxID);
   core.info(`Artifact(s) uploaded: ${uploaded}`);
 
   // return and exit the app if the duration of the run is more than scantimeout
