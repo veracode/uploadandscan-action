@@ -22,19 +22,17 @@ async function getApplicationByName(vid, vkey, applicationName) {
 }
 
 async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
-  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${applicationName}`);
+  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${appguid}`);
   const resource = {
-    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
-    queryValue: encodeURIComponent(applicationName)
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
   };
-  core.info(resource);
   core.debug(resource);
-  const response = await getResourceByAttribute(vid, vkey, resource);
+  const response = await getResource(vid, vkey, resource);
   return response;
 }
 
 async function createSandbox(vid, vkey, appguid, sandboxname) {
-  core.debug(`Module: application-service, function: createSandbox. Application: ${applicationName}`);
+  core.debug(`Module: application-service, function: createSandbox. Application: ${appguid}`);
   const resource = {
     resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
     resourceData: {
