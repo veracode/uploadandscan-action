@@ -25780,11 +25780,11 @@ async function run() {
       core.info('Finding Sandbox GUID')
       let sandboxID;
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
-        core.info('Sandbox '+i+': '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
+        //core.info('Sandbox '+i+': '+JSON.stringify(sandboxes._embedded.sandboxes[i]));
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = {sandboxID: sandboxes._embedded.sandboxes[i].guid};
-          core.info(`Sandbox Found:`);
-          core.info(JSON.stringify(sandboxID))
+          //core.info(`Sandbox Found:`);
+          //core.info(JSON.stringify(sandboxID))
         }
         else {
           core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
@@ -25796,7 +25796,7 @@ async function run() {
         core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
         //create sandbox
         const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
-        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name}`);
+        core.info(`Veracode Sandbox Created: ${JSON.stringify(createSandboxResponse)}`);
         sandboxID = createSandboxResponse.sandboxID;
       }
       else if ( sandboxID == undefined && createsandbox == 'false'){
