@@ -25777,13 +25777,13 @@ async function run() {
   const jarName = await downloadJar();
 
   let buildId;
+  let sandboxID;
   try {
     if (sandboxname !== ''){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
 
       core.info('Finding Sandbox ID & GUID')
-      let sandboxID;
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
         if (sandboxes._embedded.sandboxes[i].name === sandboxname){
           sandboxID = sandboxes._embedded.sandboxes[i].id;
