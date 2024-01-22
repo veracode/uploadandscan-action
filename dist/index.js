@@ -25799,6 +25799,8 @@ async function run() {
         core.info(`Veracode Sandbox Created: ${JSON.stringify(createSandboxResponse)}`);
         sandboxID = createSandboxResponse.id;
         sandboxGUID = createSandboxResponse.guid;
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
+        core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
       }
       else if ( sandboxID == undefined && createsandbox == 'false'){
         core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
