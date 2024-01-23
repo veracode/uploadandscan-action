@@ -167,7 +167,8 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName);
-    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'Pre-Scan Success') {
+    core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
+    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
         moduleSelectionStartTime = new Date();
@@ -179,11 +180,11 @@ async function run() {
         return responseCode;
       }
     }
-    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status === 'Results Ready') && statusUpdate.scanUpdateDate) {
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status === 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (!policyScanDate || scanDate < policyScanDate) {
-        if (statusUpdate.passFail === 'DID_NOT_PASS' && failbuild.toLowerCase() === 'true'){
+        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail === 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;
         }

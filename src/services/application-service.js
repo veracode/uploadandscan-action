@@ -122,13 +122,13 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const outputXML = output.toString();
     const parser = new xml2js.Parser({attrkey:'att'});
     const result = await parser.parseStringPromise(outputXML);
-    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status);
-    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status);
+    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
     core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
-    core.info('Veracode Policy Compliance Date: '+result.buildinfo.build[0].att.launch_date);
+    core.info('Veracode Scan Creation Date: '+result.buildinfo.build[0].att.launch_date);
     return {
-      'status': result.buildinfo.build[0].analysis_unit[0].att.status,
-      'passFail': result.buildinfo.build[0].att.policy_compliance_status,
+      'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
+      'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
       'scanUpdateDate': result.buildinfo.build[0].analysis_unit[0].att.published_date,
       'lastPolicyScanData': result.buildinfo.build[0].att.launch_date
     }
