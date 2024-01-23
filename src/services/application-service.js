@@ -116,7 +116,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
 async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxGUID, jarName) {
   let resource;
   if (sandboxGUID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID} -buildid ${buildId}`
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
     const output = await runCommand(command);
     const outputXML = output.toString();
     const parser = new xml2js.Parser();
