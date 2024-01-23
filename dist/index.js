@@ -18664,7 +18664,7 @@ async function getResourceByAttribute (vid, vkey, resource) {
   const queryValue2 = resource.queryValue2;
   var urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if ( queryAttribute2 ){
-    urlQueryParams = urlQueryParams+`&${queryAttribute2}=${queryValue2}}`;
+    urlQueryParams = urlQueryParams+`&${queryAttribute2}=${queryValue2}`;
   }
   const headers = {
     'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, 
