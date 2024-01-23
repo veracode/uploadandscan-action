@@ -180,9 +180,12 @@ async function run() {
         return responseCode;
       }
     }
-    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status === 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status == 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
+      core.info(`Scan Date < Policy Scan Date`);
+      core.info(`${scanDate}`)
+      core.info(`${policyScanDate}`);
       if (!policyScanDate || scanDate < policyScanDate) {
         if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail === 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
