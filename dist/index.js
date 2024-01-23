@@ -18954,12 +18954,6 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
 }
 
 async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
-  core.info(`Module: application-service, function: getVeracodeApplicationScanStatus. Application: ${veracodeApp.appGuid}`);
-  core.info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
-  core.info(`buildID: ${buildId}`)
-  core.info(`sandboxID: ${sandboxID}`)
-  core.info(`sandboxGUID: ${sandboxGUID}`)
-  core.info(`jarName: ${jarName}`)
   let resource;
   if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
@@ -18970,17 +18964,10 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const result = await parser.parseStringPromise(outputXML);
     core.info(`Check results output: ${outputXML}`)
     core.info(`Check results: ${result}`)
-    core.info(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit.status}`);
-    core.info(`Veracode Policy Compliance Status: ${result.buildinfo.build.policy_compliance_status}`);
+    core.info(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit}`);
+    core.info(`Veracode Policy Compliance Status: ${result.buildinfo.build}`);
     core.info(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
     core.info(`Veracode Policy Compliance Date: ${result.buildinfo.build.published_date}`);
-
-    console.log(`Check results output: ${outputXML}`)
-    console.log(`Check results: ${result}`)
-    console.log(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit.status}`);
-    console.log(`Veracode Policy Compliance Status: ${result.buildinfo.build.policy_compliance_status}`);
-    console.log(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
-    console.log(`Veracode Policy Compliance Date: ${result.buildinfo.build.published_date}`);
     return {
       'status': result.buildinfo.build.analysis_unit.status,
       'passFail': result.buildinfo.build.policy_compliance_status,
