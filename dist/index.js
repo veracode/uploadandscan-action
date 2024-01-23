@@ -18964,15 +18964,15 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const result = await parser.parseStringPromise(outputXML);
     core.info(`Check results output: ${outputXML}`)
     core.info(`Check results: ${JSON.stringify(result)}`)
-    core.info(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit}`);
-    core.info(`Veracode Policy Compliance Status: ${result.buildinfo.build}`);
-    core.info(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
-    core.info(`Veracode Policy Compliance Date: ${result.buildinfo.build.published_date}`);
+    core.info(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit.$.status}`);
+    core.info(`Veracode Policy Compliance Status: ${result.buildinfo.build.$.policy_compliance_status}`);
+    core.info(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.$.published_date-result.analysis_unit.$.published_date_sec}`);
+    core.info(`Veracode Policy Compliance Date: ${result.buildinfo.build.$.published_date}`);
     return {
-      'status': result.buildinfo.build.analysis_unit.status,
-      'passFail': result.buildinfo.build.policy_compliance_status,
-      'scanUpdateDate': result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec,
-      'lastPolicyScanData': result.buildinfo.build.published_date
+      'status': result.buildinfo.build.analysis_unit.$.status,
+      'passFail': result.buildinfo.build.$.policy_compliance_status,
+      'scanUpdateDate': result.buildinfo.build.analysis_unit.$.published_date-result.analysis_unit.$.published_date_sec,
+      'lastPolicyScanData': result.buildinfo.build.$.published_date
     }
     
   }
