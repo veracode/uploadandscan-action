@@ -9,7 +9,7 @@ async function getResourceByAttribute (vid, vkey, resource) {
   const queryValue = resource.queryValue;
   const queryAttribute2 = resource.queryAttribute2;
   const queryValue2 = resource.queryValue2;
-  const urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
+  var urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if ( queryAttribute2 ){
     urlQueryParams = urlQueryParams+`&${queryAttribute2}=${queryValue2}}`;
   }
