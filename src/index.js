@@ -167,7 +167,6 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName);
-    core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
@@ -183,19 +182,16 @@ async function run() {
     if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status == 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
-      core.info(`Scan Date < Policy Scan Date`);
-      core.info(`${scanDate}`)
-      core.info(`${policyScanDate}`);
       if (!policyScanDate || scanDate < policyScanDate) {
         if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;
         }
         else
-          core.info(`Policy Evaluation1: ${statusUpdate.passFail}`)
+          core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
         break;
       } else {
-        core.info(`Policy Evaluation2: ${statusUpdate.passFail}`)
+        core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
       }
     }
     
@@ -205,7 +201,7 @@ async function run() {
       return responseCode;
     }
   }
-  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId);
+  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID);
   return responseCode;
 }
 
