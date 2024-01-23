@@ -18849,6 +18849,8 @@ const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(1413);
 const { getVeracodePolicyByName } = __nccwpck_require__(8157);
 const { getVeracodeTeamsByName } = __nccwpck_require__(8305);
+const { runCommand } = __nccwpck_require__(4686);
+const xml2js = __nccwpck_require__(2812);
 
 async function getApplicationByName(vid, vkey, applicationName) {
   core.debug(`Module: application-service, function: getApplicationByName. Application: ${applicationName}`);
@@ -18951,31 +18953,52 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
-  const resource = {
-    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
-    queryAttribute: '',
-    queryValue: ''
-  };
-  const response = await getResourceByAttribute(vid, vkey, resource);
-  const scans = response.scans;
-  for(let i = 0; i < scans.length; i++) {
-    const scanUrl = scans[i].scan_url;
-    const scanId = scanUrl.split(':')[3];
-    if (scanId === buildId) {
-      console.log(`Scan Status: ${scans[i].status}`);
-      return {
-        'status': scans[i].status,
-        'passFail': response.profile.policies[0].policy_compliance_status,
-        'scanUpdateDate': scans[i].modified_date,
-        'lastPolicyScanData': response.last_policy_compliance_check_date
-      };
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxGUID) {
+  let resource;
+  if (sandboxGUID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+    const output = await runCommand(command);
+    const outputXML = output.toString();
+    const parser = new xml2js.Parser();
+    const result = await parser.parseStringPromise(outputXML);
+    core.info(`Veracode Scan Status: ${result.analysis_unit.status}`);
+    core.info(`Veracode Policy Compliance Status: ${result.build.policy_compliance_status}`);
+    core.info(`Veracode Scan Date: ${result.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
+    core.info(`Veracode Policy Compliance Date: ${result.build.published_date}`);
+    return {
+      'status': result.buildinfo.build.analysis_unit.status,
+      'passFail': result.buildinfo.build.policy_compliance_status,
+      'scanUpdateDate': result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec,
+      'lastPolicyScanData': result.buildinfo.build.published_date
     }
+    
   }
-  return { 
-    'status': 'not found', 
-    'passFail': 'not found'
-  };
+  else {
+    resource = {
+      resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
+      queryAttribute: '',
+      queryValue: ''
+    };
+    const response = await getResourceByAttribute(vid, vkey, resource);
+    const scans = response.scans;
+    for(let i = 0; i < scans.length; i++) {
+      const scanUrl = scans[i].scan_url;
+      const scanId = scanUrl.split(':')[3];
+      if (scanId === buildId) {
+        console.log(`Scan Status: ${scans[i].status}`);
+        return {
+          'status': scans[i].status,
+          'passFail': response.profile.policies[0].policy_compliance_status,
+          'scanUpdateDate': scans[i].modified_date,
+          'lastPolicyScanData': response.last_policy_compliance_check_date
+        };
+      }
+    }
+    return { 
+      'status': 'not found', 
+      'passFail': 'not found'
+    };
+  }
 }
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
@@ -25911,7 +25934,7 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID);
-    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED') {
+    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'Pre-Scan Success') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
         moduleSelectionStartTime = new Date();
