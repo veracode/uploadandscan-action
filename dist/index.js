@@ -25955,15 +25955,15 @@ async function run() {
       core.info(`${scanDate}`)
       core.info(`${policyScanDate}`);
       if (!policyScanDate || scanDate < policyScanDate) {
-        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail === 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
+        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;
         }
         else
-          core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
+          core.info(`Policy Evaluation1: ${statusUpdate.passFail}`)
         break;
       } else {
-        core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
+        core.info(`Policy Evaluation2: ${statusUpdate.passFail}`)
       }
     }
     
