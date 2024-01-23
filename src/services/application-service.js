@@ -113,7 +113,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxGUID, jarName) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
   let resource;
   if (sandboxGUID > 1){
     command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
