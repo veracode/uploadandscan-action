@@ -122,8 +122,6 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const outputXML = output.toString();
     const parser = new xml2js.Parser({attrkey:'att'});
     const result = await parser.parseStringPromise(outputXML);
-    core.info(`Check results output: ${outputXML}`)
-    core.info(`Check results: ${JSON.stringify(result)}`)
     core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status);
     core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status);
     core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date-result.buildinfo.build[0].analysis_unit[0].att.published_date_sec);
@@ -131,7 +129,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     return {
       'status': result.buildinfo.build[0].analysis_unit[0].att.status,
       'passFail': result.buildinfo.build[0].att.policy_compliance_status,
-      'scanUpdateDate': result.buildinfo.build[0].analysis_unit[0].att.published_date-result.buildinfo.build[0].analysis_unit[0].att.published_date_sec,
+      'scanUpdateDate': result.buildinfo.build[0].analysis_unit[0].att.published_date+result.buildinfo.build[0].launch_date,
       'lastPolicyScanData': result.buildinfo.build[0].att.published_date
     }
     
