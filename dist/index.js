@@ -18957,11 +18957,11 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
   core.info(`Module: application-service, function: getVeracodeApplicationScanStatus. Application: ${veracodeApp.appGuid}`);
   core.info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
   core.info(`buildID: ${buildId}`)
-  core.info(`buildID: ${sandboxID}`)
-  core.info(`buildID: ${sandboxGUID}`)
-  core.info(`buildID: ${jarName}`)
+  core.info(`sandboxID: ${sandboxID}`)
+  core.info(`sandboxGUID: ${sandboxGUID}`)
+  core.info(`jarName: ${jarName}`)
   let resource;
-  if (sandboxGUID > 1){
+  if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
     command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
     const output = await runCommand(command);
