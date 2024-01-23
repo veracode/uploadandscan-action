@@ -18955,7 +18955,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
 
 async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
   core.info(`Module: application-service, function: getVeracodeApplicationScanStatus. Application: ${veracodeApp.appGuid}`);
-  core,info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
+  core.info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
   core.info(`buildID: ${buildId}`)
   core.info(`buildID: ${sandboxID}`)
   core.info(`buildID: ${sandboxGUID}`)
@@ -25961,7 +25961,7 @@ async function run() {
         return responseCode;
       }
     }
-    if (statusUpdate.status === 'PUBLISHED' && statusUpdate.scanUpdateDate) {
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status === 'Results Ready') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (!policyScanDate || scanDate < policyScanDate) {

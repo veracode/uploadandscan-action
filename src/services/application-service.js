@@ -115,7 +115,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
 
 async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
   core.info(`Module: application-service, function: getVeracodeApplicationScanStatus. Application: ${veracodeApp.appGuid}`);
-  core,info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
+  core.info(`Veracode App: ${JSON.stringify(veracodeApp)}`)
   core.info(`buildID: ${buildId}`)
   core.info(`buildID: ${sandboxID}`)
   core.info(`buildID: ${sandboxGUID}`)

@@ -179,7 +179,7 @@ async function run() {
         return responseCode;
       }
     }
-    if (statusUpdate.status === 'PUBLISHED' && statusUpdate.scanUpdateDate) {
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status === 'Results Ready') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (!policyScanDate || scanDate < policyScanDate) {
