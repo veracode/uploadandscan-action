@@ -129,7 +129,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     return {
       'status': result.buildinfo.build[0].analysis_unit[0].att.status,
       'passFail': result.buildinfo.build[0].att.policy_compliance_status,
-      'scanUpdateDate': result.buildinfo.build[0].analysis_unit[0].att.published_date+result.buildinfo.build[0].launch_date,
+      'scanUpdateDate': result.buildinfo.build[0].analysis_unit[0].att.published_date,
       'lastPolicyScanData': result.buildinfo.build[0].att.published_date
     }
     
