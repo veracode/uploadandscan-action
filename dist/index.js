@@ -18961,10 +18961,15 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const outputXML = output.toString();
     const parser = new xml2js.Parser();
     const result = await parser.parseStringPromise(outputXML);
+    core.info(`Check results output: ${outputXML}`)
+    core.info(`Check results: ${result}`)
     core.info(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit.status}`);
     core.info(`Veracode Policy Compliance Status: ${result.buildinfo.build.policy_compliance_status}`);
     core.info(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
     core.info(`Veracode Policy Compliance Date: ${result.buildinfo.build.published_date}`);
+
+    console.log(`Check results output: ${outputXML}`)
+    console.log(`Check results: ${result}`)
     console.log(`Veracode Scan Status: ${result.buildinfo.build.analysis_unit.status}`);
     console.log(`Veracode Policy Compliance Status: ${result.buildinfo.build.policy_compliance_status}`);
     console.log(`Veracode Scan Date: ${result.buildinfo.build.analysis_unit.published_date-result.analysis_unit.published_date_sec}`);
