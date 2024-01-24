@@ -68,6 +68,7 @@ async function run() {
 
   let buildId;
   let sandboxID;
+  let sandboxGUID;
   const mylaunchDate = new Date();
   try {
     if (sandboxname !== ''){
