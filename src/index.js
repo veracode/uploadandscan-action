@@ -167,6 +167,7 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName);
+    core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)

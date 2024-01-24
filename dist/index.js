@@ -18967,10 +18967,10 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const outputXML = output.toString();
     const parser = new xml2js.Parser({attrkey:'att'});
     const result = await parser.parseStringPromise(outputXML);
-    core.debug('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
-    core.debug('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
-    core.debug('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
-    core.debug('Veracode Scan Creation Date: '+result.buildinfo.build[0].att.launch_date);
+    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
+    core.info('Veracode Scan Creation Date: '+result.buildinfo.build[0].att.launch_date);
     return {
       'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
       'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
@@ -19009,8 +19009,12 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
 
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID) {
   console.log("Starting to fetch results");
+  console.log("APP GUID: "+veracodeApp.appGuid)
+  console.log("API URL: "+resource.resourceUri)
   let resource
   if ( sandboxGUID ){
+    core.info(`SandboxID: ${sandboxID}`)
+    core.info(`SandboxGUID: ${sandboxGUID}`)
     resource = {
       resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
       queryAttribute: 'violates_policy',
@@ -19026,8 +19030,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
       queryValue: 'True'
     };
   }
-  console.log("APP GUID: "+veracodeApp.appGuid)
-  console.log("API URL: "+resource.resourceUri)
+  
   const response = await getResourceByAttribute(vid, vkey, resource);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
@@ -25952,6 +25955,7 @@ async function run() {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
     const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName);
+    core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
