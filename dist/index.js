@@ -19009,7 +19009,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
 async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID) {
   console.log("Starting to fetch results");
   console.log("APP GUID: "+veracodeApp.appGuid)
-  console.log("API URL: "+resource.resourceUri)
+  console.log("API URL: "+appConfig().findingsUri)
   let resource
   if ( sandboxGUID ){
     core.info(`SandboxID: ${sandboxID}`)
