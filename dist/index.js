@@ -18970,12 +18970,11 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
     core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
     core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
-    core.info('Veracode Scan Creation Date: '+result.buildinfo.build[0].att.launch_date);
     return {
       'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
       'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
       'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
-      'scanUpdateDate': result.buildinfo.build[0].att.launch_date
+      'scanUpdateDate': new Date()
     }
     
   }
