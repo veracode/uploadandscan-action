@@ -18958,7 +18958,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate) {
   let resource;
   if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
@@ -18974,7 +18974,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
       'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
       'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
       'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
-      'scanUpdateDate': new Date()
+      'scanUpdateDate': launchDate
     }
     
   }
@@ -25855,6 +25855,7 @@ async function run() {
 
   let buildId;
   let sandboxID;
+  const mylaunchDate = new Date();
   try {
     if (sandboxname !== ''){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
@@ -25953,7 +25954,7 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName);
+    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, mylaunchDate);
     core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;

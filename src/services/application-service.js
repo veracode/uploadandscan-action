@@ -113,7 +113,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate) {
   let resource;
   if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
@@ -129,7 +129,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
       'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
       'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
       'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
-      'scanUpdateDate': new Date()
+      'scanUpdateDate': launchDate
     }
     
   }
