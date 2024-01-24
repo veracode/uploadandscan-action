@@ -18654,18 +18654,38 @@ function wrappy (fn, cb) {
 const axios = __nccwpck_require__(2223);
 const { calculateAuthorizationHeader } = __nccwpck_require__(9857);
 const appConfig = __nccwpck_require__(3798);
+const core = __nccwpck_require__(5127);
 
 async function getResourceByAttribute (vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
   const queryAttribute = resource.queryAttribute;
   const queryValue = resource.queryValue;
-  const urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
+  const queryAttribute2 = resource.queryAttribute2;
+  const queryValue2 = resource.queryValue2;
+  var urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
+  if ( queryAttribute2 ){
+    urlQueryParams = urlQueryParams+`&${queryAttribute2}=${queryValue2}`;
+  }
   const headers = {
     'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, 
       urlQueryParams, 'GET')
   };
 
   const appUrl = `https://${appConfig().hostName}${resourceUri}${urlQueryParams}`;
+  try {
+    const response = await axios.get(appUrl, { headers });
+    return response.data; // Access the response data
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getResource (vid, vkey, resource) {
+  const resourceUri = resource.resourceUri;
+  const headers = {
+    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, '', 'GET')
+  };
+  const appUrl = `https://${appConfig().hostName}${resourceUri}`;
   try {
     const response = await axios.get(appUrl, { headers });
     return response.data; // Access the response data
@@ -18693,6 +18713,7 @@ async function createResource(vid, vkey, resource) {
 
 module.exports = {
   getResourceByAttribute,
+  getResource,
   createResource,
 };
 
@@ -18816,6 +18837,7 @@ function appConfig() {
   };
 }
 
+
 /***/ }),
 
 /***/ 4437:
@@ -18825,12 +18847,15 @@ const core = __nccwpck_require__(5127);
 const appConfig = __nccwpck_require__(3798);
 const { 
   getResourceByAttribute,
+  getResource,
   createResource,
 }= __nccwpck_require__(261);
 const fs = __nccwpck_require__(3292);
 const artifact = __nccwpck_require__(1413);
 const { getVeracodePolicyByName } = __nccwpck_require__(8157);
 const { getVeracodeTeamsByName } = __nccwpck_require__(8305);
+const { runCommand } = __nccwpck_require__(4686);
+const xml2js = __nccwpck_require__(2812);
 
 async function getApplicationByName(vid, vkey, applicationName) {
   core.debug(`Module: application-service, function: getApplicationByName. Application: ${applicationName}`);
@@ -18841,6 +18866,29 @@ async function getApplicationByName(vid, vkey, applicationName) {
   };
   core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
+  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${appguid}`);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
+  };
+  core.debug(resource);
+  const response = await getResource(vid, vkey, resource);
+  return response;
+}
+
+async function createSandboxRequest(vid, vkey, appguid, sandboxname) {
+  core.debug(`Module: application-service, function: createSandbox. Application: ${appguid}`);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
+    resourceData: {
+        name: sandboxname
+    }
+  };
+  core.debug(resource);
+  const response = await createResource(vid, vkey, resource);
   return response;
 }
 
@@ -18910,42 +18958,78 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
-  const resource = {
-    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
-    queryAttribute: '',
-    queryValue: ''
-  };
-  const response = await getResourceByAttribute(vid, vkey, resource);
-  const scans = response.scans;
-  for(let i = 0; i < scans.length; i++) {
-    const scanUrl = scans[i].scan_url;
-    const scanId = scanUrl.split(':')[3];
-    if (scanId === buildId) {
-      console.log(`Scan Status: ${scans[i].status}`);
-      return {
-        'status': scans[i].status,
-        'passFail': response.profile.policies[0].policy_compliance_status,
-        'scanUpdateDate': scans[i].modified_date,
-        'lastPolicyScanData': response.last_policy_compliance_check_date
-      };
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate) {
+  let resource;
+  if (sandboxID > 1){
+    core.info('Checking the Sandbox Scan Status')
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
+    const output = await runCommand(command);
+    const outputXML = output.toString();
+    const parser = new xml2js.Parser({attrkey:'att'});
+    const result = await parser.parseStringPromise(outputXML);
+    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
+    return {
+      'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
+      'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
+      'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
+      'scanUpdateDate': launchDate
     }
+    
   }
-  return { 
-    'status': 'not found', 
-    'passFail': 'not found'
-  };
+  else {
+    resource = {
+      resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
+      queryAttribute: '',
+      queryValue: ''
+    };
+    const response = await getResourceByAttribute(vid, vkey, resource);
+    const scans = response.scans;
+    for(let i = 0; i < scans.length; i++) {
+      const scanUrl = scans[i].scan_url;
+      const scanId = scanUrl.split(':')[3];
+      if (scanId === buildId) {
+        console.log(`Scan Status: ${scans[i].status}`);
+        return {
+          'status': scans[i].status,
+          'passFail': response.profile.policies[0].policy_compliance_status,
+          'scanUpdateDate': scans[i].modified_date,
+          'lastPolicyScanData': response.last_policy_compliance_check_date
+        };
+      }
+    }
+    return { 
+      'status': 'not found', 
+      'passFail': 'not found'
+    };
+  }
 }
 
-async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
+async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID) {
   console.log("Starting to fetch results");
-  const resource = {
-    resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
-    queryAttribute: 'violates_policy',
-    queryValue: 'True'
-  };
   console.log("APP GUID: "+veracodeApp.appGuid)
-  console.log("API URL: "+resource.resourceUri)
+  console.log("API URL: "+appConfig().findingsUri)
+  let resource
+  if ( sandboxGUID ){
+    core.info(`SandboxID: ${sandboxID}`)
+    core.info(`SandboxGUID: ${sandboxGUID}`)
+    resource = {
+      resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
+      queryAttribute: 'violates_policy',
+      queryValue: 'True',
+      queryAttribute2: 'context',
+      queryValue2: sandboxGUID
+    };
+  }
+  else {
+    resource = {
+      resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
+      queryAttribute: 'violates_policy',
+      queryValue: 'True'
+    };
+  }
+  
   const response = await getResourceByAttribute(vid, vkey, resource);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
@@ -19004,6 +19088,8 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  createSandboxRequest,
+  getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }
@@ -19061,6 +19147,7 @@ module.exports = {
 const { runCommand } = __nccwpck_require__(4686);
 const xml2js = __nccwpck_require__(2812);
 const { minimatch } = __nccwpck_require__(7590)
+const core = __nccwpck_require__(5127);
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
@@ -19093,29 +19180,86 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
   return buildId;
 }
 
-async function uploadFile(vid, vkey, jarName, appId, filepath) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, sandboxID) {
+  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -sandboxid ${sandboxID} -appid ${appId} -version ${version}`
+  var output = await runCommand(command);
+  if (output === 'failed' && deleteincompletescan === 'false'){
+    throw new Error(`Error creating build: ${output}`);
+  }
+  else if (output === 'failed' && deleteincompletescan === 'true'){
+    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -sandboxid ${sandboxID} -appid ${appId}`
+    const deleteOutput = await runCommand(deleteCommand);
+    if (deleteOutput === 'failed'){
+      throw new Error(`Error deleting build: ${deleteOutput}`);
+    }
+    else 
+    output = await runCommand(command);
+      if (output === 'failed'){
+        throw new Error(`Error creating build: ${createOutput}`);
+    }
+  }
+
+  const outputXML = output.toString();
+  // parse outputXML for build_id
+  const regex = /<build build_id="(\d+)"/;
+  let buildId = '';
+  try {
+    buildId = outputXML.match(regex)[1];
+  } catch (error) {
+    throw new Error(`Error parsing build_id from outputXML: ${error.message}`);
+  }
+  return buildId;
+}
+
+async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+  }
+  else{
+    core.info(`Uploading artifact(s) to Policy Scan`);
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Uploaded') > -1;
 }
 
-async function beginPreScan(vid, vkey, jarName, appId, autoScan) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
+async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Submitted') > -1;
 }
 
-async function checkPrescanSuccess(vid, vkey, jarName, appId) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+async function checkPrescanSuccess(vid, vkey, jarName, appId, sandboxID) {
+  let command
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Success') > -1;
 }
 
-async function getModules(vid, vkey, jarName, appId, include) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId}`
+async function getModules(vid, vkey, jarName, appId, include, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   const parser = new xml2js.Parser();
@@ -19143,15 +19287,27 @@ async function getModules(vid, vkey, jarName, appId, include) {
   return moduleIds;
 }
 
-async function beginScan(vid, vkey, jarName, appId, moduleIds) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds}`
+async function beginScan(vid, vkey, jarName, appId, moduleIds, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds} -sandboxid ${sandboxID}`
+  }
+  else {
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Submitted to Engine') > -1;
 }
 
-async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+async function checkScanSuccess(vid, vkey, jarName, appId, buildId, sandboxID) {
+  let command;
+  if ( sandboxID > 1){
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+  }
+  else{
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
+  }
   const output = await runCommand(command);
   const outputXML = output.toString();
   if (outputXML.indexOf('Results Ready') > -1) {
@@ -19171,6 +19327,7 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId) {
 
 module.exports = {
   createBuild,
+  createSandboxBuild,
   uploadFile,
   beginPreScan,
   checkPrescanSuccess,
@@ -25629,10 +25786,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(5127);
-const { getVeracodeApplicationForPolicyScan, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
+const { getVeracodeApplicationForPolicyScan, getVeracodeSandboxIDFromProfile, createSandboxRequest, getVeracodeApplicationScanStatus, getVeracodeApplicationFindings
 } = __nccwpck_require__(4437);
 const { downloadJar } = __nccwpck_require__(4686);
-const { createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
+const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = __nccwpck_require__(9972);
 const appConfig = __nccwpck_require__(3798);
 
@@ -25648,6 +25805,8 @@ const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const deleteincompletescan = core.getInput('deleteincompletescan', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
+const createsandbox = core.getInput('createsandbox', { required: false });
+const sandboxname = core.getInput('sandboxname', { required: false });
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -25695,15 +25854,56 @@ async function run() {
   const jarName = await downloadJar();
 
   let buildId;
+  let sandboxID;
+  let sandboxGUID;
+  const mylaunchDate = new Date();
   try {
-    buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan);  
-    core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+    if (sandboxname !== ''){
+      core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
+      const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
+
+      core.info('Finding Sandbox ID & GUID')
+      for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
+        if (sandboxes._embedded.sandboxes[i].name === sandboxname){
+          sandboxID = sandboxes._embedded.sandboxes[i].id;
+          sandboxGUID = sandboxes._embedded.sandboxes[i].guid
+        }
+        else {
+          core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
+        }
+      }
+      if ( sandboxID == undefined && createsandbox == 'true'){
+        core.debug(`Sandbox Not Found. Creating Sandbox: ${sandboxname}`);
+        //create sandbox
+        const createSandboxResponse = await createSandboxRequest(vid, vkey, veracodeApp.appGuid, sandboxname);
+        core.info(`Veracode Sandbox Created: ${createSandboxResponse.name} / ${createSandboxResponse.guid}`);
+        sandboxID = createSandboxResponse.id;
+        sandboxGUID = createSandboxResponse.guid;
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
+        core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
+      }
+      else if ( sandboxID == undefined && createsandbox == 'false'){
+        core.setFailed(`Sandbox Not Found. Please create a sandbox on Veracode Platform, \
+        or set "createsandbox" to "true" in the pipeline configuration to automatically create sandbox.`);
+        return;
+      }
+      else{
+        core.info(`Sandbox Found: ${sandboxID} - ${sandboxGUID}`);
+        buildId = await createSandboxBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan, sandboxID);
+        core.info(`Veracode Sandbox Scan Created, Build Id: ${buildId}`);
+      }
+    }
+    else{
+      core.info(`Running a Policy Scan: ${appname}`);
+      buildId = await createBuild(vid, vkey, jarName, veracodeApp.appId, version, deleteincompletescan);  
+      core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
+    }
   } catch (error) {
-    core.setFailed('Failed to create Veracode Policy Scan. App not in state where new builds are allowed.');
+    core.setFailed('Failed to create Veracode Scan. App not in state where new builds are allowed.');
     return;
   }
 
-  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath);
+  const uploaded = await uploadFile(vid, vkey, jarName, veracodeApp.appId, filepath, sandboxID);
   core.info(`Artifact(s) uploaded: ${uploaded}`);
 
   // return and exit the app if the duration of the run is more than scantimeout
@@ -25718,19 +25918,19 @@ async function run() {
   
   if (include === '') {
     const autoScan = true;
-    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
     }
   } else {
     const autoScan = false;
-    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan);
+    const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     core.info(`Pre-Scan Submitted: ${prescan}`);
     while (true) {
       await sleep(appConfig().pollingInterval);
       core.info('Checking for Pre-Scan Results...');
-      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId)) {
+      if (await checkPrescanSuccess(vid, vkey, jarName, veracodeApp.appId, sandboxID)) {
         core.info('Pre-Scan Success!');
         break;
       }
@@ -25743,9 +25943,9 @@ async function run() {
       }
     }
 
-    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include);
+    const moduleIds = await getModules(vid, vkey, jarName, veracodeApp.appId, include, sandboxID);
     core.info(`Modules to Scan: ${moduleIds.toString()}`);
-    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString());
+    const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString(), sandboxID);
     core.info(`Scan Submitted: ${scan}`);
   }
 
@@ -25755,8 +25955,9 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId);
-    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED') {
+    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, mylaunchDate);
+    core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
+    if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
       if (moduleSelectionCount === 1)
         moduleSelectionStartTime = new Date();
@@ -25768,11 +25969,11 @@ async function run() {
         return responseCode;
       }
     }
-    if (statusUpdate.status === 'PUBLISHED' && statusUpdate.scanUpdateDate) {
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status == 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (!policyScanDate || scanDate < policyScanDate) {
-        if (statusUpdate.passFail === 'DID_NOT_PASS' && failbuild.toLowerCase() === 'true'){
+        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;
         }
@@ -25790,7 +25991,7 @@ async function run() {
       return responseCode;
     }
   }
-  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId);
+  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID);
   return responseCode;
 }
 

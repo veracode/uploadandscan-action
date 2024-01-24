@@ -2,12 +2,15 @@ const core = require('@actions/core');
 const appConfig = require('../app-cofig.js');
 const { 
   getResourceByAttribute,
+  getResource,
   createResource,
 }= require('../api/http-requests.js');
 const fs = require('fs/promises');
 const artifact = require('@actions/artifact');
 const { getVeracodePolicyByName } = require('./policy-service.js');
 const { getVeracodeTeamsByName } = require('./teams-service.js');
+const { runCommand } = require('../api/java-wrapper.js');
+const xml2js = require('xml2js');
 
 async function getApplicationByName(vid, vkey, applicationName) {
   core.debug(`Module: application-service, function: getApplicationByName. Application: ${applicationName}`);
@@ -18,6 +21,29 @@ async function getApplicationByName(vid, vkey, applicationName) {
   };
   core.debug(resource);
   const response = await getResourceByAttribute(vid, vkey, resource);
+  return response;
+}
+
+async function getVeracodeSandboxIDFromProfile(vid, vkey, appguid) {
+  core.debug(`Module: application-service, function: getSandboxIDfromProfile. Application: ${appguid}`);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes"
+  };
+  core.debug(resource);
+  const response = await getResource(vid, vkey, resource);
+  return response;
+}
+
+async function createSandboxRequest(vid, vkey, appguid, sandboxname) {
+  core.debug(`Module: application-service, function: createSandbox. Application: ${appguid}`);
+  const resource = {
+    resourceUri: appConfig().applicationUri+"/"+appguid+"/sandboxes",
+    resourceData: {
+        name: sandboxname
+    }
+  };
+  core.debug(resource);
+  const response = await createResource(vid, vkey, resource);
   return response;
 }
 
@@ -87,42 +113,78 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId) {
-  const resource = {
-    resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
-    queryAttribute: '',
-    queryValue: ''
-  };
-  const response = await getResourceByAttribute(vid, vkey, resource);
-  const scans = response.scans;
-  for(let i = 0; i < scans.length; i++) {
-    const scanUrl = scans[i].scan_url;
-    const scanId = scanUrl.split(':')[3];
-    if (scanId === buildId) {
-      console.log(`Scan Status: ${scans[i].status}`);
-      return {
-        'status': scans[i].status,
-        'passFail': response.profile.policies[0].policy_compliance_status,
-        'scanUpdateDate': scans[i].modified_date,
-        'lastPolicyScanData': response.last_policy_compliance_check_date
-      };
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate) {
+  let resource;
+  if (sandboxID > 1){
+    core.info('Checking the Sandbox Scan Status')
+    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
+    const output = await runCommand(command);
+    const outputXML = output.toString();
+    const parser = new xml2js.Parser({attrkey:'att'});
+    const result = await parser.parseStringPromise(outputXML);
+    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
+    return {
+      'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
+      'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
+      'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
+      'scanUpdateDate': launchDate
     }
+    
   }
-  return { 
-    'status': 'not found', 
-    'passFail': 'not found'
-  };
+  else {
+    resource = {
+      resourceUri: `${appConfig().applicationUri}/${veracodeApp.appGuid}`,
+      queryAttribute: '',
+      queryValue: ''
+    };
+    const response = await getResourceByAttribute(vid, vkey, resource);
+    const scans = response.scans;
+    for(let i = 0; i < scans.length; i++) {
+      const scanUrl = scans[i].scan_url;
+      const scanId = scanUrl.split(':')[3];
+      if (scanId === buildId) {
+        console.log(`Scan Status: ${scans[i].status}`);
+        return {
+          'status': scans[i].status,
+          'passFail': response.profile.policies[0].policy_compliance_status,
+          'scanUpdateDate': scans[i].modified_date,
+          'lastPolicyScanData': response.last_policy_compliance_check_date
+        };
+      }
+    }
+    return { 
+      'status': 'not found', 
+      'passFail': 'not found'
+    };
+  }
 }
 
-async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
+async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID) {
   console.log("Starting to fetch results");
-  const resource = {
-    resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
-    queryAttribute: 'violates_policy',
-    queryValue: 'True'
-  };
   console.log("APP GUID: "+veracodeApp.appGuid)
-  console.log("API URL: "+resource.resourceUri)
+  console.log("API URL: "+appConfig().findingsUri)
+  let resource
+  if ( sandboxGUID ){
+    core.info(`SandboxID: ${sandboxID}`)
+    core.info(`SandboxGUID: ${sandboxGUID}`)
+    resource = {
+      resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
+      queryAttribute: 'violates_policy',
+      queryValue: 'True',
+      queryAttribute2: 'context',
+      queryValue2: sandboxGUID
+    };
+  }
+  else {
+    resource = {
+      resourceUri: `${appConfig().findingsUri}/${veracodeApp.appGuid}/findings`,
+      queryAttribute: 'violates_policy',
+      queryValue: 'True'
+    };
+  }
+  
   const response = await getResourceByAttribute(vid, vkey, resource);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
@@ -181,6 +243,8 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId) {
 
 module.exports = {
   getVeracodeApplicationForPolicyScan,
+  createSandboxRequest,
+  getVeracodeSandboxIDFromProfile,
   getVeracodeApplicationScanStatus,
   getVeracodeApplicationFindings
 }
