@@ -76,7 +76,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   core.debug(responseData);
   const profile = profileExists(responseData, applicationName);
   core.debug(`Check if ${applicationName} has a Veracode application profile`);
-  core.debug(profile);
+  // core.debug(profile);
   if (!profile.exists) {
     if (createprofile.toLowerCase() !== 'true')
       return { 'appId': -1, 'appGuid': -1, 'oid': -1 };

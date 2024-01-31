@@ -74,6 +74,7 @@ async function run() {
     if (sandboxname !== ''){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
+      core.debug(sandboxes);
 
       core.info('Finding Sandbox ID & GUID')
       for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
