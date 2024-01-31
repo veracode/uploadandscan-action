@@ -74,16 +74,17 @@ async function run() {
     if (sandboxname !== ''){
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
       const sandboxes = await getVeracodeSandboxIDFromProfile(vid, vkey, veracodeApp.appGuid);
-      core.debug(sandboxes);
 
-      core.info('Finding Sandbox ID & GUID')
-      for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
-        if (sandboxes._embedded.sandboxes[i].name === sandboxname){
-          sandboxID = sandboxes._embedded.sandboxes[i].id;
-          sandboxGUID = sandboxes._embedded.sandboxes[i].guid
-        }
-        else {
-          core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
+      core.info('Finding Sandbox ID & GUID');
+      if (sandboxes.page.total_elements !== 0) {
+        for (let i = 0; i < sandboxes._embedded.sandboxes.length; i++){
+          if (sandboxes._embedded.sandboxes[i].name.toLowerCase() === sandboxname.toLowerCase()){
+            sandboxID = sandboxes._embedded.sandboxes[i].id;
+            sandboxGUID = sandboxes._embedded.sandboxes[i].guid
+          }
+          else {
+            core.info(`Not the sandbox (${sandboxes._embedded.sandboxes[i].name}) we are looking for (${sandboxname})`);
+          }
         }
       }
       if ( sandboxID == undefined && createsandbox == 'true'){
