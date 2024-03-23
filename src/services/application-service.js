@@ -227,8 +227,13 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
     console.log(err);
   }
   
-
-  const artifactClient = artifact.create()
+  const use_upgraded_version = core.getInput('use_upgraded_version', {required: false});
+  
+  let artifactClient = artifact.create()
+  if(use_upgraded_version == 'true') {
+      const {DefaultArtifactClient} = require('@actions/artifact-v2')
+      artifactClient = new DefaultArtifactClient()
+  }
   const artifactName = 'policy-flaws';
   const files = [
     'policy_flaws.json',
