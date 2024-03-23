@@ -228,10 +228,9 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
   }
   
   const use_upgraded_version = core.getInput('use_upgraded_version', {required: false});
-  parameters['use_upgraded_version'] = use_upgraded_version;
-
+  
   let artifactClient = artifact.create()
-  if(parameters['use_upgraded_version'] == 'true') {
+  if(use_upgraded_version == 'true') {
       const {DefaultArtifactClient} = require('@actions/artifact-v2')
       artifactClient = new DefaultArtifactClient()
   }
