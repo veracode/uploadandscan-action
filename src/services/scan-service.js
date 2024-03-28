@@ -99,14 +99,14 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
                   files.forEach(async file => {
                     if ( sandboxID > 1){
                       core.info(`Uploading artifact (${file}) to Sandbox: ${sandboxID}`);
-                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file} -sandboxid ${sandboxID}`
+                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
                       const output = await runCommand(command);
                       const outputXML = output.toString();
                       return outputXML.indexOf('Uploaded') > -1;
                     }
                     else{
                       core.info(`Uploading artifact (${file}) to Policy Scan`);
-                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file}`
+                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
                       const output = await runCommand(command);
                       const outputXML = output.toString();
                       return outputXML.indexOf('Uploaded') > -1;
