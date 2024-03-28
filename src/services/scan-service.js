@@ -3,6 +3,7 @@ const xml2js = require('xml2js');
 const { minimatch } = require('minimatch')
 const core = require('@actions/core');
 const fs = require('fs');
+const util = require('util');
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
