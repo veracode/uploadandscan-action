@@ -67,14 +67,48 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
-  if ( sandboxID > 1){
-    core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
-  }
-  else{
-    core.info(`Uploading artifact(s) to Policy Scan`);
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
-  }
+
+  fs.stat(filepath, (err, stats) => {
+    if (err) {
+        console.error(`Error reading path: ${err}`);
+    } else {
+        if (stats.isFile()) {
+            console.log(`${filepath} is a file.`);
+            if ( sandboxID > 1){
+              core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
+              command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+            }
+            else{
+              core.info(`Uploading artifact(s) to Policy Scan`);
+              command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+            }
+        } 
+        else if (stats.isDirectory()) {
+            console.log(`${filepath} is a directory.`);
+            fs.readdir(filepath, (err, files) => {
+              if (err) {
+                  console.error(`Error reading directory: ${err}`);
+              } else {
+                  files.forEach(file => {
+                    if ( sandboxID > 1){
+                      core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
+                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file} -sandboxid ${sandboxID}`
+                    }
+                    else{
+                      core.info(`Uploading artifact(s) to Policy Scan`);
+                      command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file}`
+                    }
+                  });
+              }
+            });
+        }
+    }
+  });
+
+
+
+
+  
   const output = await runCommand(command);
   const outputXML = output.toString();
   return outputXML.indexOf('Uploaded') > -1;
