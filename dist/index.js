@@ -19224,6 +19224,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
     if (err) {
         console.error(`Error reading path: ${err}`);
     } else {
+        let count = 0;
         if (stats.isFile()) {
             console.log(`${filepath} is a file.`);
             if ( sandboxID > 1){
@@ -19231,19 +19232,20 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
               command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
               const output = await runCommand(command);
               const outputXML = output.toString();
-              return outputXML.indexOf('Uploaded') > -1;
+              console.log(outputXML.indexOf('Uploaded'))
+              count++
             }
             else{
               core.info(`Uploading artifact (${filepath}) to Policy Scan`);
               command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
               const output = await runCommand(command);
               const outputXML = output.toString();
-              return outputXML.indexOf('Uploaded') > -1;
+              console.log(outputXML.indexOf('Uploaded'))
+              count++
             }
         } 
         else if (stats.isDirectory()) {
             console.log(`${filepath} is a directory.`);
-            let outputXML = '';
             fs.readdir(filepath, (err, files) => {
               if (err) {
                   console.error(`Error reading directory: ${err}`);
@@ -19253,29 +19255,27 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
                       core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
                       let output = await runCommand(command);
-                      outputXML =+ output.toString();
-                      //return outputXML.indexOf('Uploaded') > -1;
+                      let outputXML = output.toString();
+                      console.log(outputXML.indexOf('Uploaded'))
+                      count++
                     }
                     else{
                       core.info(`Uploading artifact ${file} to Policy Scan`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
                       let output = await runCommand(command);
-                      outputXML =+ output.toString();
-                      //return outputXML.indexOf('Uploaded') > -1;
+                      let outputXML = output.toString();
+                      console.log(outputXML.indexOf('Uploaded'))
+                      count++
                     }
                   });
               }
-              return outputXML.indexOf('Uploaded') > -1;
+              //return outputXML.indexOf('Uploaded') > -1;
             });
         }
     }
   });
 
-
-
-
-  
-  
+  return count;
 }
 
 async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
