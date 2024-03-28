@@ -19221,10 +19221,13 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
   let count = 0;
 
-  fs.stat(filepath, async (err, stats) => {
-    if (err) {
-        console.error(`Error reading path: ${err}`);
-    } else {
+  const stat = util.promisify(fs.stat);
+  const stats = await stat(filepath);
+
+  // fs.stat(filepath, async (err, stats) => {
+  //   if (err) {
+  //       console.error(`Error reading path: ${err}`);
+  //   } else {
         if (stats.isFile()) {
             console.log(`${filepath} is a file.`);
             if ( sandboxID > 1){
@@ -19272,8 +19275,8 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
               //return outputXML.indexOf('Uploaded') > -1;
             });
         }
-    }
-  });
+//    }
+//  });
 
   return count;
 }
