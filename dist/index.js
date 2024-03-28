@@ -19219,12 +19219,12 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
+  let count = 0;
 
   fs.stat(filepath, async (err, stats) => {
     if (err) {
         console.error(`Error reading path: ${err}`);
     } else {
-        let count = 0;
         if (stats.isFile()) {
             console.log(`${filepath} is a file.`);
             if ( sandboxID > 1){
