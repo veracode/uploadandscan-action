@@ -19218,10 +19218,10 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
   return buildId;
 }
 
-let count = 0;
+
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
-  
+  let count = 0;
 
   const stat = util.promisify(fs.stat);
   const stats = await stat(filepath);
@@ -19250,7 +19250,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
 
       const filesPromis = util.promisify(fs.readdir);
       const files = await filesPromis(filepath);
-      files.forEach(async file => {
+      for (const file of files) {
         if ( sandboxID > 1){
           core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
           command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
@@ -19267,7 +19267,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
           console.log(outputXML.indexOf('Uploaded'))
           count++
         }
-      });
+      };
   }
 
   return count;
