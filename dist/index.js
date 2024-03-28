@@ -19220,19 +19220,25 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
 
-  fs.stat(filepath, (err, stats) => {
+  fs.stat(filepath, async (err, stats) => {
     if (err) {
         console.error(`Error reading path: ${err}`);
     } else {
         if (stats.isFile()) {
             console.log(`${filepath} is a file.`);
             if ( sandboxID > 1){
-              core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
+              core.info(`Uploading artifact (${filepath}) to Sandbox: ${sandboxID}`);
               command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+              const output = await runCommand(command);
+              const outputXML = output.toString();
+              return outputXML.indexOf('Uploaded') > -1;
             }
             else{
-              core.info(`Uploading artifact(s) to Policy Scan`);
+              core.info(`Uploading artifact (${filepath}) to Policy Scan`);
               command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+              const output = await runCommand(command);
+              const outputXML = output.toString();
+              return outputXML.indexOf('Uploaded') > -1;
             }
         } 
         else if (stats.isDirectory()) {
@@ -19241,14 +19247,20 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
               if (err) {
                   console.error(`Error reading directory: ${err}`);
               } else {
-                  files.forEach(file => {
+                  files.forEach(async file => {
                     if ( sandboxID > 1){
-                      core.info(`Uploading artifact(s) to Sandbox: ${sandboxID}`);
+                      core.info(`Uploading artifact (${file}) to Sandbox: ${sandboxID}`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file} -sandboxid ${sandboxID}`
+                      const output = await runCommand(command);
+                      const outputXML = output.toString();
+                      return outputXML.indexOf('Uploaded') > -1;
                     }
                     else{
-                      core.info(`Uploading artifact(s) to Policy Scan`);
+                      core.info(`Uploading artifact (${file}) to Policy Scan`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${file}`
+                      const output = await runCommand(command);
+                      const outputXML = output.toString();
+                      return outputXML.indexOf('Uploaded') > -1;
                     }
                   });
               }
@@ -19261,9 +19273,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
 
 
   
-  const output = await runCommand(command);
-  const outputXML = output.toString();
-  return outputXML.indexOf('Uploaded') > -1;
+  
 }
 
 async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
