@@ -131,14 +131,16 @@ async function run() {
   core.info(`scantimeout: ${scantimeout}`);
   core.info(`include: ${include}`)
   
-  if (include === '') {
+  if (include === '' && uploaded > 0) {
     const autoScan = true;
     await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
     }
-  } else {
+  } 
+  else if (uploaded > 0)
+  {
     const autoScan = false;
     const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID);
     core.info(`Pre-Scan Submitted: ${prescan}`);
@@ -162,6 +164,10 @@ async function run() {
     core.info(`Modules to Scan: ${moduleIds.toString()}`);
     const scan = await beginScan(vid, vkey, jarName, veracodeApp.appId, moduleIds.toString(), sandboxID);
     core.info(`Scan Submitted: ${scan}`);
+  }
+  else 
+  {
+    console.log('No artifacts to upload');
   }
 
   core.info('Waiting for Scan Results...');
