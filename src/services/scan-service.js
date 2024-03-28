@@ -67,60 +67,57 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
   return buildId;
 }
 
+let count = 0;
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
   let command;
-  let count = 0;
+  
 
   const stat = util.promisify(fs.stat);
   const stats = await stat(filepath);
 
-  // fs.stat(filepath, async (err, stats) => {
-  //   if (err) {
-  //       console.error(`Error reading path: ${err}`);
-  //   } else {
-        if (stats.isFile()) {
-            console.log(`${filepath} is a file.`);
-            if ( sandboxID > 1){
-              core.info(`Uploading artifact (${filepath}) to Sandbox: ${sandboxID}`);
-              command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
-              const output = await runCommand(command);
-              const outputXML = output.toString();
-              console.log(outputXML.indexOf('Uploaded'))
-              count++
-            }
-            else{
-              core.info(`Uploading artifact (${filepath}) to Policy Scan`);
-              command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
-              const output = await runCommand(command);
-              const outputXML = output.toString();
-              console.log(outputXML.indexOf('Uploaded'))
-              count++
-            }
-        } 
-        else if (stats.isDirectory()) {
-            console.log(`${filepath} is a directory.`);
+  if (stats.isFile()) {
+      console.log(`${filepath} is a file.`);
+      if ( sandboxID > 1){
+        core.info(`Uploading artifact (${filepath}) to Sandbox: ${sandboxID}`);
+        command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
+        const output = await runCommand(command);
+        const outputXML = output.toString();
+        console.log(outputXML.indexOf('Uploaded'))
+        count++
+      }
+      else{
+        core.info(`Uploading artifact (${filepath}) to Policy Scan`);
+        command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
+        const output = await runCommand(command);
+        const outputXML = output.toString();
+        console.log(outputXML.indexOf('Uploaded'))
+        count++
+      }
+  } 
+  else if (stats.isDirectory()) {
+      console.log(`${filepath} is a directory.`);
 
-            const filesPromis = util.promisify(fs.readdir);
-            const files = await filesPromis(filepath);
-            files.forEach(async file => {
-              if ( sandboxID > 1){
-                core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
-                command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
-                let output = await runCommand(command);
-                let outputXML = output.toString();
-                console.log(outputXML.indexOf('Uploaded'))
-                count++
-              }
-              else{
-                core.info(`Uploading artifact ${file} to Policy Scan`);
-                command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
-                let output = await runCommand(command);
-                let outputXML = output.toString();
-                console.log(outputXML.indexOf('Uploaded'))
-                count++
-              }
-            });
+      const filesPromis = util.promisify(fs.readdir);
+      const files = await filesPromis(filepath);
+      files.forEach(async file => {
+        if ( sandboxID > 1){
+          core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
+          command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
+          let output = await runCommand(command);
+          let outputXML = output.toString();
+          console.log(outputXML.indexOf('Uploaded'))
+          count++
         }
+        else{
+          core.info(`Uploading artifact ${file} to Policy Scan`);
+          command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
+          let output = await runCommand(command);
+          let outputXML = output.toString();
+          console.log(outputXML.indexOf('Uploaded'))
+          count++
+        }
+      });
+  }
 
   return count;
 }
