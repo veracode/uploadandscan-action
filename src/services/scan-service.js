@@ -2,6 +2,7 @@ const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
 const { minimatch } = require('minimatch')
 const core = require('@actions/core');
+const fs = require('fs');
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
   const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
