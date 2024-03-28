@@ -92,6 +92,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
         } 
         else if (stats.isDirectory()) {
             console.log(`${filepath} is a directory.`);
+            let outputXML = '';
             fs.readdir(filepath, (err, files) => {
               if (err) {
                   console.error(`Error reading directory: ${err}`);
@@ -100,15 +101,15 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
                     if ( sandboxID > 1){
                       core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
-                      const output = await runCommand(command);
-                      const outputXML =+ output.toString();
+                      let output = await runCommand(command);
+                      outputXML =+ output.toString();
                       //return outputXML.indexOf('Uploaded') > -1;
                     }
                     else{
                       core.info(`Uploading artifact ${file} to Policy Scan`);
                       command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
-                      const output = await runCommand(command);
-                      const outputXML =+ output.toString();
+                      let output = await runCommand(command);
+                      outputXML =+ output.toString();
                       //return outputXML.indexOf('Uploaded') > -1;
                     }
                   });
