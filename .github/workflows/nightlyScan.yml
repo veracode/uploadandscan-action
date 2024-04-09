@@ -35,7 +35,7 @@ jobs:
       - name: Run Veracode Policy scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
-          appname: 'GitHub Pipeline Scan to Sarif Action'
+          appname: 'GitHub UploadAndScan Action'
           createprofile: false
           filepath: 'app.zip'
           scantimeout: 30
