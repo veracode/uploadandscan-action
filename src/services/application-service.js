@@ -6,7 +6,6 @@ const {
   createResource,
 }= require('../api/http-requests.js');
 const fs = require('fs/promises');
-const artifact = require('@actions/artifact');
 const { getVeracodePolicyByName } = require('./policy-service.js');
 const { getVeracodeTeamsByName } = require('./teams-service.js');
 const { runCommand } = require('../api/java-wrapper.js');
@@ -226,14 +225,9 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
   } catch (err) {
     console.log(err);
   }
+  const { DefaultArtifactClient } = require('@actions/artifact')
+  const artifactClient = new DefaultArtifactClient()
   
-  const use_upgraded_version = core.getInput('use_upgraded_version', {required: false});
-  
-  let artifactClient = artifact.create()
-  if(use_upgraded_version == 'true') {
-      const {DefaultArtifactClient} = require('@actions/artifact-v2')
-      artifactClient = new DefaultArtifactClient()
-  }
   const artifactName = 'policy-flaws';
   const files = [
     'policy_flaws.json',
