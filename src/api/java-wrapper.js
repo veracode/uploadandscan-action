@@ -31,9 +31,9 @@ async function downloadJar ()  {
   return `vosp-api-wrappers-java-${latestVersion}.jar`;
 }
 
-async function runCommand (command){
+async function runCommand (command, args = []){
   try {
-    return execSync(command);
+    return execFileSync(command, args);
   } catch (error){
     console.error(error.message);
     return 'failed';

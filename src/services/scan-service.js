@@ -6,21 +6,39 @@ const fs = require('fs');
 const util = require('util');
 
 async function createBuild(vid, vkey, jarName, appId, version, deleteincompletescan) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -appid ${appId} -version ${version}`
-  var output = await runCommand(command);
+  const createBuildCommand = 'java';
+  const createBuildArguments = [
+    '-jar', jarName,
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'CreateBuild',
+    '-appid', appId, 
+    '-version', version,
+  ];
+  const output = await runCommand(createBuildCommand, createBuildArguments);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
   else if (output === 'failed' && deleteincompletescan === 'true'){
-    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -appid ${appId} -version ${version}`
-    const deleteOutput = await runCommand(deleteCommand);
+    const deleteOutput = await runCommand(
+      'java',
+      [
+        '-jar', jarName,
+        '-vid', vid,
+        '-vkey', vkey,
+        '-action', 'DeleteBuild',
+        '-appid', appId,
+        '-version', version
+      ]
+    );
     if (deleteOutput === 'failed'){
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
-    else 
-    output = await runCommand(command);
+    else {
+      output = await runCommand(command);
       if (output === 'failed'){
         throw new Error(`Error creating build: ${createOutput}`);
+      }
     }
   }
 
@@ -37,21 +55,40 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
 }
 
 async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteincompletescan, sandboxID) {
-  const command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action CreateBuild -sandboxid ${sandboxID} -appid ${appId} -version ${version}`
-  var output = await runCommand(command);
+  const createBuildCommand = 'java';
+  const createBuildArguments = [
+    '-jar', jarName,
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'CreateBuild',
+    '-sandboxid', sandboxID,
+    '-appid', appId,
+    '-version', version
+  ];
+  const output = await runCommand(createBuildCommand, createBuildArguments);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
   else if (output === 'failed' && deleteincompletescan === 'true'){
-    const deleteCommand = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action DeleteBuild -sandboxid ${sandboxID} -appid ${appId}`
-    const deleteOutput = await runCommand(deleteCommand);
+    const deleteOutput = await runCommand(
+      'java',
+      [
+        '-jar', jarName,
+        '-vid', vid,
+        '-vkey',vkey,
+        '-action', 'DeleteBuild',
+        '-sandboxid', sandboxID,
+        '-appid', appId,
+      ]
+    );
     if (deleteOutput === 'failed'){
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
-    else 
-    output = await runCommand(command);
+    else {
+      output = await runCommand(createBuildCommand, createBuildArguments);
       if (output === 'failed'){
         throw new Error(`Error creating build: ${createOutput}`);
+      }
     }
   }
 
@@ -69,7 +106,6 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
 
 
 async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
-  let command;
   let count = 0;
 
   const stat = util.promisify(fs.stat);
@@ -79,16 +115,35 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
       console.log(`${filepath} is a file.`);
       if ( sandboxID > 1){
         core.info(`Uploading artifact (${filepath}) to Sandbox: ${sandboxID}`);
-        command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath} -sandboxid ${sandboxID}`
-        const output = await runCommand(command);
+        const output = await runCommand(
+          'java',
+          [
+            '-jar', jarName,
+            '-vid', vid,
+            '-vkey', vkey,
+            '-action', 'UploadFile',
+            '-appid', appId,
+            '-filepath', filepath,
+            '-sandboxid', sandboxID,
+          ]
+        );
         const outputXML = output.toString();
         console.log(outputXML.indexOf('Uploaded'))
         count++
       }
       else{
         core.info(`Uploading artifact (${filepath}) to Policy Scan`);
-        command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}`
-        const output = await runCommand(command);
+        const output = await runCommand(
+          'java', 
+          [
+            '-jar', jarName,
+            '-vid', vid,
+            '-vkey', vkey,
+            '-action', 'UploadFile', 
+            '-appid', appId,
+            '-filepath', filepath,
+          ]
+        );
         const outputXML = output.toString();
         console.log(outputXML.indexOf('Uploaded'))
         count++
@@ -102,17 +157,36 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
       for (const file of files) {
         if ( sandboxID > 1){
           core.info(`Uploading artifact ${file} to Sandbox: ${sandboxID}`);
-          command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file} -sandboxid ${sandboxID}`
-          let output = await runCommand(command);
-          let outputXML = output.toString();
+          const output = await runCommand(
+            'java',
+            [
+              '-jar', jarName,
+              '-vid', vid,
+              '-vkey', vkey,
+              '-action', 'UploadFile',
+              '-appid', appId,
+              '-filepath', filepath + file,
+              '-sandboxid', sandboxID,
+            ]
+          );
+          const outputXML = output.toString();
           console.log(outputXML.indexOf('Uploaded'))
           count++
         }
         else{
           core.info(`Uploading artifact ${file} to Policy Scan`);
-          command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action UploadFile -appid ${appId} -filepath ${filepath}${file}`
-          let output = await runCommand(command);
-          let outputXML = output.toString();
+          const output = await runCommand(
+            'java',
+            [
+              '-jar', jarName,
+              '-vid', vid,
+              '-vkey', vkey,
+              '-action', 'UploadFile',
+              '-appid', appId,
+              '-filepath', filepath + file,
+            ]
+          );
+          const outputXML = output.toString();
           console.log(outputXML.indexOf('Uploaded'))
           count++
         }
@@ -123,40 +197,50 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID) {
 }
 
 async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID) {
-  let command;
+  let commandArguments = [
+    '-jar', jarName, 
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'BeginPrescan',
+    '-appid', appId,
+    '-autoscan', autoScan,
+  ];
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan} -sandboxid ${sandboxID}`
+    commandArguments.push('-sandboxid', sandboxID);
   }
-  else{
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginPrescan -appid ${appId} -autoscan ${autoScan}`
-  }
-  const output = await runCommand(command);
+  const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Submitted') > -1;
 }
 
 async function checkPrescanSuccess(vid, vkey, jarName, appId, sandboxID) {
-  let command
+  let commandArguments = [
+    '-jar', jarName, 
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'GetBuildInfo',
+    '-appid', appId,
+  ];
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+    commandArguments.push('-sandboxid', sandboxID);
   }
-  else{
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
-  }
-  const output = await runCommand(command);
+  const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   return outputXML.indexOf('Pre-Scan Success') > -1;
 }
 
 async function getModules(vid, vkey, jarName, appId, include, sandboxID) {
-  let command;
+  let commandArguments = [
+    '-jar', jarName, 
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'GetPreScanResults',
+    '-appid', appId,
+  ];
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId} -sandboxid ${sandboxID}`
+    commandArguments.push('-sandboxid', sandboxID);
   }
-  else{
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetPreScanResults -appid ${appId}`
-  }
-  const output = await runCommand(command);
+  const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   const parser = new xml2js.Parser();
   const result = await parser.parseStringPromise(outputXML);
@@ -184,27 +268,34 @@ async function getModules(vid, vkey, jarName, appId, include, sandboxID) {
 }
 
 async function beginScan(vid, vkey, jarName, appId, moduleIds, sandboxID) {
-  let command;
+  let commandArguments = [
+    '-jar', jarName, 
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'BeginScan',
+    '-appid', appId,
+    '-modules', moduleIds,
+  ];
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds} -sandboxid ${sandboxID}`
+    commandArguments.push('-sandboxid', sandboxID);
   }
-  else {
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action BeginScan -appid ${appId} -modules ${moduleIds}`
-  }
-  const output = await runCommand(command);
+  const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   return outputXML.indexOf('Submitted to Engine') > -1;
 }
 
 async function checkScanSuccess(vid, vkey, jarName, appId, buildId, sandboxID) {
-  let command;
+  let commandArguments = [
+    '-jar', jarName, 
+    '-vid', vid,
+    '-vkey', vkey,
+    '-action', 'GetBuildInfo',
+    '-appid', appId,
+  ];
   if ( sandboxID > 1){
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId} -sandboxid ${sandboxID}`
+    commandArguments.push('-sandboxid', sandboxID);
   }
-  else{
-    command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${appId}`
-  }
-  const output = await runCommand(command);
+  const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   if (outputXML.indexOf('Results Ready') > -1) {
     const parser = new xml2js.Parser();
