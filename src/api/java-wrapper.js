@@ -1,5 +1,5 @@
 const util = require('util');
-const { exec, execSync } = require('child_process');
+const { exec, execFileSync } = require('child_process');
 const execPromise = util.promisify(exec);
 const core = require('@actions/core');
 
