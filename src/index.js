@@ -6,6 +6,7 @@ const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanS
 } = require('./services/scan-service.js');
 const appConfig = require('./app-cofig.js');
 
+
 const vid = core.getInput('vid', { required: true });
 const vkey = core.getInput('vkey', { required: true });
 const appname = core.getInput('appname', { required: true });
