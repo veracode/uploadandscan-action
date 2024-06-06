@@ -118,7 +118,18 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
   if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
     command = `java -jar ${jarName} -vid ${vid} -vkey ${vkey} -action GetBuildInfo -appid ${veracodeApp.appId} -sandboxid ${sandboxID} -buildid ${buildId}`
-    const output = await runCommand(command);
+    const output = await runCommand(
+      'java',
+      [
+        '-jar', jarName, 
+        '-vid', vid,
+        '-vkey', vkey,
+        '-action', 'GetBuildInfo',
+        '-appid', veracodeApp.appId,
+        '-sandboxid', sandboxID,
+        '-buildid', buildId,
+      ]
+    );
     const outputXML = output.toString();
     const parser = new xml2js.Parser({attrkey:'att'});
     const result = await parser.parseStringPromise(outputXML);
