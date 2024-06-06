@@ -51,10 +51,6 @@ inputs:
     description: 'Sandbox Name'
     required: false
     default: ''
-  use_upgraded_version:
-    description: 'Enable it, if artifact version 2 requires usage'
-    required: false
-    default: false
 
 runs:
   using: 'node20'
