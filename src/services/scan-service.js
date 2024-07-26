@@ -35,6 +35,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
+      console.log('method invoked 1');
       let tryCount = 0;
       while (tryCount < 3){
         await sleep(3000);
@@ -42,6 +43,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
         if (output === 'failed'){
           core.info(`Error creating build: ${createOutput}`);
         }
+        tryCount++;
       }
       if (output === 'failed'){
         throw new Error(`Error creating build: ${createOutput}`);
