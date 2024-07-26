@@ -16,6 +16,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
     '-version', version,
   ];
   const output = await runCommand(createBuildCommand, createBuildArguments);
+  core.info('method invoked 0');
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
@@ -35,7 +36,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
-      console.log('method invoked 1');
+      core.info('method invoked 1');
       let tryCount = 0;
       while (tryCount < 3){
         await sleep(3000);
