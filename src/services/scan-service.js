@@ -40,6 +40,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       let tryCount = 0;
       while (tryCount < 3){
         await sleep(3000);
+        core.info(`tryCount: ${tryCount}`);
         output = await runCommand(command);
         if (output === 'failed'){
           core.info(`Error creating build: ${createOutput}`);
