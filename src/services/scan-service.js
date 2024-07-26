@@ -35,7 +35,14 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
-      output = await runCommand(command);
+      let tryCount = 0;
+      while (tryCount < 3){
+        await sleep(3000);
+        output = await runCommand(command);
+        if (output === 'failed'){
+          core.info(`Error creating build: ${createOutput}`);
+        }
+      }
       if (output === 'failed'){
         throw new Error(`Error creating build: ${createOutput}`);
       }
@@ -85,7 +92,14 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
-      output = await runCommand(createBuildCommand, createBuildArguments);
+      let tryCount = 0;
+      while (tryCount < 3){
+        await sleep(3000);
+        output = await runCommand(createBuildCommand, createBuildArguments);
+        if (output === 'failed'){
+          core.info(`Error creating build: ${createOutput}`);
+        }
+      }
       if (output === 'failed'){
         throw new Error(`Error creating build: ${createOutput}`);
       }
@@ -310,6 +324,10 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId, sandboxID) {
     return { 'scanCompleted' : true, 'passFail' : passFail}
   }
   return { 'scanCompleted' : false };
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 module.exports = {
