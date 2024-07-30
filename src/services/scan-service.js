@@ -105,6 +105,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
   }
 
   const outputXML = output.toString();
+  core.info(outputXML);
   // parse outputXML for build_id
   const regex = /<build build_id="(\d+)"/;
   let buildId = '';
