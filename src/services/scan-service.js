@@ -40,8 +40,8 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       await sleep(10000);
       core.info(createBuildCommand);
       core.info(createBuildArguments);
-      output = await runCommand(createBuildCommand, createBuildArguments);
-      if (output === 'failed'){
+      const reRunOutput = await runCommand(createBuildCommand, createBuildArguments);
+      if (reRunOutput === 'failed'){
         throw new Error(`Error creating build`);
       }
     }
