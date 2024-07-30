@@ -37,8 +37,9 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
     }
     else {
       core.info('method invoked 1');
-      await sleep(20000);
-      core.info(command);
+      await sleep(10000);
+      core.info(createBuildCommand);
+      core.info(createBuildArguments);
       output = await runCommand(createBuildCommand, createBuildArguments);
       if (output === 'failed'){
         throw new Error(`Error creating build`);
