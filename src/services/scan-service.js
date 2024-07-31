@@ -313,10 +313,6 @@ async function checkScanSuccess(vid, vkey, jarName, appId, buildId, sandboxID) {
   return { 'scanCompleted' : false };
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 module.exports = {
   createBuild,
   createSandboxBuild,
