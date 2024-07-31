@@ -15,7 +15,7 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
     '-appid', appId, 
     '-version', version,
   ];
-  const output = await runCommand(createBuildCommand, createBuildArguments);
+  let output = await runCommand(createBuildCommand, createBuildArguments);
   core.info('method invoked 0');
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
@@ -36,12 +36,8 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
-      core.info('method invoked 1');
-      await sleep(10000);
-      core.info(createBuildCommand);
-      core.info(createBuildArguments);
-      const reRunOutput = await runCommand(createBuildCommand, createBuildArguments);
-      if (reRunOutput === 'failed'){
+      output = await runCommand(createBuildCommand, createBuildArguments);
+      if (output === 'failed'){
         throw new Error(`Error creating build`);
       }
     }
@@ -70,7 +66,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
     '-appid', appId,
     '-version', version
   ];
-  const output = await runCommand(createBuildCommand, createBuildArguments);
+  let output = await runCommand(createBuildCommand, createBuildArguments);
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
@@ -90,16 +86,9 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }
     else {
-      let tryCount = 0;
-      while (tryCount < 3){
-        await sleep(3000);
-        output = await runCommand(createBuildCommand, createBuildArguments);
-        if (output === 'failed'){
-          core.info(`Error creating build: ${createOutput}`);
-        }
-      }
+      output = await runCommand(createBuildCommand, createBuildArguments);
       if (output === 'failed'){
-        throw new Error(`Error creating build: ${createOutput}`);
+        throw new Error(`Error creating build`);
       }
     }
   }
