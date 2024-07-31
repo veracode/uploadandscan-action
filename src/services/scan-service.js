@@ -16,7 +16,6 @@ async function createBuild(vid, vkey, jarName, appId, version, deleteincompletes
     '-version', version,
   ];
   let output = await runCommand(createBuildCommand, createBuildArguments);
-  core.info('method invoked 0');
   if (output === 'failed' && deleteincompletescan === 'false'){
     throw new Error(`Error creating build: ${output}`);
   }
