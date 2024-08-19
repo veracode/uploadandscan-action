@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { calculateAuthorizationHeader } = require('./veracode-hmac.js');
-const appConfig = require('../app-cofig.js');
+const { getHostAndCredentials } = require('../utils.js')
 const core = require('@actions/core');
 
 async function getResourceByAttribute (vid, vkey, resource) {
@@ -13,12 +13,14 @@ async function getResourceByAttribute (vid, vkey, resource) {
   if ( queryAttribute2 ){
     urlQueryParams = urlQueryParams+`&${queryAttribute2}=${queryValue2}`;
   }
+
+  const { host, vid: updatedVid, vkey: updatedVkey } = getHostAndCredentials(vid, vkey);
   const headers = {
-    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, 
+    'Authorization': calculateAuthorizationHeader(updatedVid, updatedVkey, host, resourceUri, 
       urlQueryParams, 'GET')
   };
 
-  const appUrl = `https://${appConfig().hostName}${resourceUri}${urlQueryParams}`;
+  const appUrl = `https://${host}${resourceUri}${urlQueryParams}`;
   try {
     const response = await axios.get(appUrl, { headers });
     return response.data; // Access the response data
@@ -29,10 +31,11 @@ async function getResourceByAttribute (vid, vkey, resource) {
 
 async function getResource (vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
+  const { host, vid: updatedVid, vkey: updatedVkey } = getHostAndCredentials(vid, vkey);
   const headers = {
-    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, '', 'GET')
+    'Authorization': calculateAuthorizationHeader(updatedVid, updatedVkey, host, resourceUri, '', 'GET')
   };
-  const appUrl = `https://${appConfig().hostName}${resourceUri}`;
+  const appUrl = `https://${host}${resourceUri}`;
   try {
     const response = await axios.get(appUrl, { headers });
     return response.data; // Access the response data
@@ -44,12 +47,13 @@ async function getResource (vid, vkey, resource) {
 async function createResource(vid, vkey, resource) {
   const resourceUri = resource.resourceUri;
   const resourceData = resource.resourceData;
+  const { host, vid: updatedVid, vkey: updatedVkey } = getHostAndCredentials(vid, vkey);
   const headers = {
-    'Authorization': calculateAuthorizationHeader(vid, vkey, appConfig().hostName, resourceUri, 
+    'Authorization': calculateAuthorizationHeader(updatedVid, updatedVkey, host, resourceUri, 
       '', 'POST')
   };
 
-  const appUrl = `https://${appConfig().hostName}${resourceUri}`;
+  const appUrl = `https://${host}${resourceUri}`;
   try {
     const response = await axios.post(appUrl, resourceData, { headers });
     return response.data; // Access the response data
