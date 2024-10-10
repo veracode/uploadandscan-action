@@ -22,8 +22,14 @@ async function getResourceByAttribute (vid, vkey, resource) {
 
   const appUrl = `https://${host}${resourceUri}${urlQueryParams}`;
   try {
-    const response = await axios.get(appUrl, { headers });
-    return response.data; // Access the response data
+    if ( process.env.HTTP_PROXY !="" || process.env.HTTPS_PROXY !="" ){
+      const response = await fetch(appUrl,{ headers });
+      return data = await response.json();
+    }
+    else {
+      const response = await axios.get(appUrl, { headers });
+      return response.data; // Access the response data
+    }
   } catch (error) {
     console.error(error);
   }
@@ -37,8 +43,14 @@ async function getResource (vid, vkey, resource) {
   };
   const appUrl = `https://${host}${resourceUri}`;
   try {
-    const response = await axios.get(appUrl, { headers });
-    return response.data; // Access the response data
+    if ( process.env.HTTP_PROXY !="" || process.env.HTTPS_PROXY !="" ){
+      const response = await fetch(appUrl,{ headers });
+      return data = await response.json();
+    }
+    else {
+      const response = await axios.get(appUrl, { headers });
+      return response.data; // Access the response data
+    }
   } catch (error) {
     console.error(error);
   }
@@ -55,8 +67,14 @@ async function createResource(vid, vkey, resource) {
 
   const appUrl = `https://${host}${resourceUri}`;
   try {
-    const response = await axios.post(appUrl, resourceData, { headers });
-    return response.data; // Access the response data
+    if ( process.env.HTTP_PROXY !="" || process.env.HTTPS_PROXY !="" ){
+      const response = await fetch(appUrl,{ headers });
+      return data = await response.json();
+    }
+    else {
+      const response = await axios.post(appUrl, resourceData, { headers });
+      return response.data; // Access the response data
+    }
   } catch (error) {
     console.error(error);
   }

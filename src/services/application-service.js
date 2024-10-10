@@ -237,6 +237,17 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
     console.log(err);
   }
   
+  //we dont need a proxy for the artifact upload
+    // Store current proxy environment variables
+    const httpProxy = process.env.HTTP_PROXY
+    const httpsProxy = process.env.HTTPS_PROXY
+    const noProxy = process.env.NO_PROXY
+
+    // Unset proxy environment variables
+    delete process.env.HTTP_PROXY
+    delete process.env.HTTPS_PROXY
+    delete process.env.NO_PROXY
+
   const { DefaultArtifactClient } = require('@actions/artifact')
   const artifactClient = new DefaultArtifactClient();
 
@@ -250,6 +261,11 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
       continueOnError: true
   }
   await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options)
+
+   // Restore proxy environment variables
+   if (httpProxy) process.env.HTTP_PROXY = httpProxy
+   if (httpsProxy) process.env.HTTPS_PROXY = httpsProxy
+   if (noProxy) process.env.NO_PROXY = noProxy
 }
 
 module.exports = {
