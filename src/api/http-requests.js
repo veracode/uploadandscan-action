@@ -68,7 +68,11 @@ async function createResource(vid, vkey, resource) {
   const appUrl = `https://${host}${resourceUri}`;
   try {
     if ( process.env.HTTP_PROXY !="" || process.env.HTTPS_PROXY !="" || process.env.http_proxy !="" || process.env.https_proxy !=""){
-      const response = await fetch(appUrl,{ headers });
+      const response = await fetch(appUrl,{ 
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(resourceData)
+        });
       return data = await response.json();
     }
     else {
