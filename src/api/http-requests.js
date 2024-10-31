@@ -61,8 +61,8 @@ async function createResource(vid, vkey, resource) {
   const resourceData = resource.resourceData;
   const { host, vid: updatedVid, vkey: updatedVkey } = getHostAndCredentials(vid, vkey);
   const headers = {
-    'Authorization': calculateAuthorizationHeader(updatedVid, updatedVkey, host, resourceUri, 
-      '', 'POST')
+    'Authorization': calculateAuthorizationHeader(updatedVid, updatedVkey, host, resourceUri, '', 'POST'),
+    "Content-Type": "application/json"
   };
 
   const appUrl = `https://${host}${resourceUri}`;
