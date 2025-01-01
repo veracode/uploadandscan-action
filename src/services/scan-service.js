@@ -66,6 +66,9 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
     '-version', version
   ];
   let output = await runCommand(createBuildCommand, createBuildArguments);
+  let outputString = output.toString('utf8'); // Convert buffer to string
+  console.log(outputString);
+  console.log('output', output);
   if (output === 'failed' && deleteincompletescan === 'false') {
     throw new Error(`Error creating build: ${output}`);
   }
@@ -81,6 +84,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
         '-appid', appId,
       ]
     );
+    console.log(`deleteOutput: ${deleteOutput}`);
     if (deleteOutput === 'failed') {
       throw new Error(`Error deleting build: ${deleteOutput}`);
     }

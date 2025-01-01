@@ -114,6 +114,7 @@ async function run() {
       core.info(`Veracode Policy Scan Created, Build Id: ${buildId}`);
     }
   } catch (error) {
+    console.error(`Error creating build: ${error}`);
     core.setFailed('Failed to create Veracode Scan. App not in state where new builds are allowed.');
     return;
   }
