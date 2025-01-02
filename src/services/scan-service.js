@@ -67,8 +67,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
   ];
   let output = await runCommand(createBuildCommand, createBuildArguments);
   let outputString = output.toString('utf8'); // Convert buffer to string
-  console.log(outputString);
-  console.log('output', output);
+  console.log('outputString', outputString);
   if (output === 'failed' && deleteincompletescan === 'false') {
     throw new Error(`Error creating build: ${output}`);
   }
