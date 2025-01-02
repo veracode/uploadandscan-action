@@ -35,13 +35,10 @@ async function runCommand (command, args = []){
   try {
     return execFileSync(command, args);
   } catch (error){
-    // console.error('Error Output:', error.output?.toString('utf8'));
-    // console.error('Error Stdout:', error.stdout?.toString('utf8')); // Stdout buffer
-    // console.error('Error Stderr:', error.stderr?.toString('utf8')); // Stderr buffer
     console.error('Error:', error);
-    console.error('Error Output:', error.output?.toString());
-    console.error('Error Stdout:', error.stdout?.toString()); // Stdout buffer
-    console.error('Error Stderr:', error.stderr?.toString());
+    console.error('Error Output:', error.output?.map(buf => buf?.toString('utf8')).join('\n'));
+    console.error('Error Stdout:', error.stdout?.toString('utf8'));
+    console.error('Error Stderr:', error.stderr?.toString('utf8'));
     console.error('Error Message:', error.message);
     return 'failed';
   }
