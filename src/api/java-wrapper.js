@@ -31,33 +31,18 @@ async function downloadJar ()  {
   return `vosp-api-wrappers-java-${latestVersion}.jar`;
 }
 
-// async function runCommand (command, args = []){
-//   try {
-//     return execFileSync(command, args);
-//   } catch (error){
-//     // console.error('Error Output:', error.output?.toString('utf8'));
-//     // console.error('Error Stdout:', error.stdout?.toString('utf8')); // Stdout buffer
-//     // console.error('Error Stderr:', error.stderr?.toString('utf8')); // Stderr buffer
-//     console.error('Error Output:', error.output?.toString());
-//     console.error('Error Stdout:', error.stdout?.toString()); // Stdout buffer
-//     console.error('Error Stderr:', error.stderr?.toString());
-//     console.error('Error Message:', error.message);
-//     return 'failed';
-//   }
-// }
-
-function runCommand(command, args = []) {
+async function runCommand (command, args = []){
   try {
-    const output = execFileSync(command, args, { encoding: 'utf8' }); // Auto convert buffer to string
-    console.log('Output:', output); // Logs successful output
-    return output;
-  } catch (error) {
+    return execFileSync(command, args);
+  } catch (error){
+    // console.error('Error Output:', error.output?.toString('utf8'));
+    // console.error('Error Stdout:', error.stdout?.toString('utf8')); // Stdout buffer
+    // console.error('Error Stderr:', error.stderr?.toString('utf8')); // Stderr buffer
+    console.error('Error:', error);
+    console.error('Error Output:', error.output?.toString());
+    console.error('Error Stdout:', error.stdout?.toString()); // Stdout buffer
+    console.error('Error Stderr:', error.stderr?.toString());
     console.error('Error Message:', error.message);
-
-    // Error logs
-    if (error.stdout) console.error('Error Stdout:', error.stdout.toString('utf8'));
-    if (error.stderr) console.error('Error Stderr:', error.stderr.toString('utf8'));
-
     return 'failed';
   }
 }
