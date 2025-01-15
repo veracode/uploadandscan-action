@@ -20,6 +20,8 @@ const deleteincompletescan = core.getInput('deleteincompletescan', { required: f
 const failbuild = core.getInput('failbuild', { required: false });
 const createsandbox = core.getInput('createsandbox', { required: false });
 const sandboxname = core.getInput('sandboxname', { required: false });
+const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
+console.log("gitRepositoryUrl: ", gitRepositoryUrl);
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -55,7 +57,7 @@ async function run() {
     return;
 
   core.debug(`Getting Veracode Application for Policy Scan: ${appname}`)
-  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile);
+  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl);
   if (veracodeApp.appId === -1) {
     core.setFailed(`Veracode application profile Not Found. Please create a profile on Veracode Platform, \
       or set "createprofile" to "true" in the pipeline configuration to automatically create profile.`);
