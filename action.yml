@@ -52,7 +52,7 @@ inputs:
     required: false
     default: ''
   gitRepositoryUrl:
-    description: 'Sandbox Name'
+    description: 'Developer repository url'
     required: false
     default: ''
 
