@@ -56,6 +56,7 @@ async function createResource(vid, vkey, resource) {
   const appUrl = `https://${host}${resourceUri}`;
   try {
     const response = await axios.post(appUrl, resourceData, { headers });
+    console.log("response : ", JSON.stringify(response));
     return response.data; // Access the response data
   } catch (error) {
     console.error(error);
