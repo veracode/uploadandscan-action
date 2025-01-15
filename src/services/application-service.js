@@ -104,9 +104,6 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
     core.debug(`Create Veracode application profile: ${JSON.stringify(resource)}`);
     const response = await createResource(vid, vkey, resource);
     core.debug(`Veracode application profile created: ${JSON.stringify(response)}`);
-    console.log("data : ", JSON.stringify(response));
-    console.log("profile : ", JSON.stringify(response?.profile));
-    console.log("repo URL : ", response?.profile?.git_repo_url);
     const appProfile = response.app_profile_url;
     return {
       'appId': response.id,

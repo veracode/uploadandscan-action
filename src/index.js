@@ -21,7 +21,6 @@ const failbuild = core.getInput('failbuild', { required: false });
 const createsandbox = core.getInput('createsandbox', { required: false });
 const sandboxname = core.getInput('sandboxname', { required: false });
 const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
-console.log("gitRepositoryUrl: ", gitRepositoryUrl);
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
