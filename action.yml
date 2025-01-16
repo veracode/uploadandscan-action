@@ -52,7 +52,7 @@ inputs:
     required: false
     default: ''
   gitRepositoryUrl:
-    description: 'Developer repository url'
+    description: 'Source Repository URL'
     required: false
     default: ''
 
