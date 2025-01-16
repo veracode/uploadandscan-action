@@ -51,6 +51,10 @@ inputs:
     description: 'Sandbox Name'
     required: false
     default: ''
+  gitRepositoryUrl:
+    description: 'Source Repository URL'
+    required: false
+    default: ''
 
 runs:
   using: 'node20'
