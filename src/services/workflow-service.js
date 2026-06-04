@@ -8,6 +8,7 @@ const util = require('util');
 const { exec, execFileSync, execSync , spawn} = require('child_process');
 const execPromise = util.promisify(exec);
 const axios = require('axios');
+const { safeJavaExec } = require('../utils/safe-exec.js')
 
 const { calculateAuthorizationHeader } = require('../api/veracode-hmac.js');
 
@@ -111,7 +112,20 @@ async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filep
   let stderr;
   try {
     core.info(`Command to execute the policy scan : ${policyScanCommand}`);
-    stdout = execSync(policyScanCommand, { encoding: "utf-8" });
+    stdout = safeJavaExec(jarName, "UploadAndScanByAppId", {
+      vid:                          vid,
+      vkey:                         vkey,
+      appid:                        veracodeApp.appId,
+      filepath:                     filepath,
+      version:                      version,
+      scanpollinginterval:          "30",
+      autoscan:                     "true",
+      scanallnonfataltoplevelmodules: "true",
+      includenewmodules:            "true",
+      scantimeout:                  "6000",
+      deleteincompletescan:         "2",
+      ...(debugFlag ? { debug: "true" } : {}),
+    });
   } catch (error) {
     stdout = error.stdout?.toString();
     stderr = error.stderr?.toString();

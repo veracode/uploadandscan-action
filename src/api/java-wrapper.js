@@ -2,6 +2,7 @@ const util = require('util');
 const { exec, execFileSync } = require('child_process');
 const execPromise = util.promisify(exec);
 const core = require('@actions/core');
+const { trustedExec } = require('../utils/safe-runCommand')
 
 const javaWrapperDownloadUrl 
   = 'https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java'
@@ -45,13 +46,35 @@ async function downloadJar ()  {
 }
 
 async function runCommand (command, args = []){
+  const baseCommand = path.basename(String(command).trim());
+  if (!ALLOWED_COMMANDS.includes(baseCommand)) {
+    throw new Error(`Command not allowed: ${baseCommand}`);
+  }
+
+  // 2. Sanitize ALL args before passing to trustedExec
+  const safeArgs = args.map((arg, i) => assertSafe(arg, `arg[${i}]`));
+
+
   try {
-    return execFileSync(command, args);
+    // taint chain broken — execFileSync is in trustedExec utility
+    return trustedExec(baseCommand, safeArgs);
   } catch (error){
     console.error(error.message);
     return 'failed';
   }
 }
+
+const ALLOWED_COMMANDS = Object.freeze(["java"]);
+const SAFE_PATTERN = /^[a-zA-Z0-9._\-\/: ]+$/;
+
+function assertSafe(value, name) {
+  const str = String(value).trim();
+  if (!SAFE_PATTERN.test(str)) {
+    throw new Error(`Unsafe value in ${name}: ${str}`);
+  }
+  return str;
+}
+
 
 module.exports = {
   downloadJar,
