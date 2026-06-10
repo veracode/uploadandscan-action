@@ -39,8 +39,6 @@ async function executeStaticScans(vid, vkey, appname, policy, teams, createprofi
     console.log(`${filepath} is a directory.`);
   }
 
-  const artifact = await fs.promises.readdir(filepath);
-
   try {
     if (sandboxname !== '') {
       core.info(`Running a Sandbox Scan: '${sandboxname}' on applicaiton: '${appname}'`);
