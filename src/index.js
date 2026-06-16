@@ -25,6 +25,7 @@ const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
 const debug = core.getInput('debug', {required: false});
+const waitForScanCompletion = core.getInput('waitForScanCompletion', {required: false});
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -60,7 +61,7 @@ async function run() {
     return;
 
   if (workflowApp){
-      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug);
+      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug, scantimeout, waitForScanCompletion);
       return;
   }  
 

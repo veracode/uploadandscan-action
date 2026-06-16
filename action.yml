@@ -67,6 +67,10 @@ inputs:
     description: 'Enable or disable debug mode'
     required: false
     default: false
+  waitForScanCompletion:
+    description: 'Wait for the Veracode Static Scan to complete and poll for the final results. If set to false, the scan will be submitted asynchronously and the workflow will continue immediately.'
+    default: 'true'
+    required: false   
 runs:
   using: 'node24'
   main: 'dist/index.js'

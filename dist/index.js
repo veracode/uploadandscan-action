@@ -94215,7 +94215,7 @@ const { calculateAuthorizationHeader } = __nccwpck_require__(25296);
 const SCAN_TIME_OUT = 8;
 const POLICY_EVALUATION_FAILED = 9;
 
-async function executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug) {
+async function executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug, scantimeout, waitForScanCompletion) {
   core.info(`Getting Veracode Application for Policy Scan: ${appname}`)
   const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, debug);
   if (veracodeApp.appId === -1) {
@@ -94290,7 +94290,7 @@ async function executeStaticScans(vid, vkey, appname, policy, teams, createprofi
       core.info(`Running a Policy Scan: ${appname}`);
       //comand for policy scan 
       core.info(`Veracode Policy Scan Created, Build Id: ${version}`);
-      await executePolicyScan(vid, vkey, veracodeApp, jarName, version, filepath, responseCode, failbuild, debug)
+      await executePolicyScan(vid, vkey, veracodeApp, jarName, version, filepath, responseCode, failbuild, debug, scantimeout, waitForScanCompletion)
     }
   } catch (error) {
     console.log(error)
@@ -94300,11 +94300,12 @@ async function executeStaticScans(vid, vkey, appname, policy, teams, createprofi
 
 }
 
-async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filepath, responseCode, failbuild, debug) {
+async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filepath, responseCode, failbuild, debug, scantimeout, waitForScanCompletion) {
   const debugFlag = debug ? ' -debug' : '';
   if (debug)
     core.debug(`Module: workflow-service, function: executePolicyScan. Application: ${veracodeApp.appId}`);
-  const policyScanCommand = `java -jar ${jarName} -action UploadAndScanByAppId -vid ${vid} -vkey ${vkey} -appid ${veracodeApp.appId} -filepath ${filepath} -version ${version} -scanpollinginterval 30 -autoscan true -scanallnonfataltoplevelmodules true -includenewmodules true -scantimeout 6000 -deleteincompletescan 2${debugFlag}`;
+  const policyScanCommand = `java -jar ${jarName} -action UploadAndScanByAppId -vid ${vid} -vkey ${vkey} -appid ${veracodeApp.appId} -filepath ${filepath} -version ${version} -scanpollinginterval 30 -autoscan true -scanallnonfataltoplevelmodules true -includenewmodules true -scantimeout ${scantimeout} -deleteincompletescan 2${debugFlag}`;
+  // const policyScanCommand = `java -jar ${jarName} -action UploadAndScan -vid ${vid} -vkey ${vkey} -appname BulkScan-4 -createprofile true -filepath ${filepath} -version ${version} -scantimeout ${scantimeout}`;
   let scan_id = "";
   let sandboxID;
   let sandboxGUID;
@@ -94322,6 +94323,12 @@ async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filep
     core.debug(stdout);
     core.debug(stderr);
   }
+
+  if (String(waitForScanCompletion).toLowerCase() === 'false') {
+    core.info('Static Scan Submitted, please check Veracode Platform for results');
+    return;
+  }
+  
   if (stdout) {
     scan_id = extractValue(
         stdout,
@@ -156025,6 +156032,7 @@ const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
 const debug = core.getInput('debug', {required: false});
+const waitForScanCompletion = core.getInput('waitForScanCompletion', {required: false});
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -156060,7 +156068,7 @@ async function run() {
     return;
 
   if (workflowApp){
-      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug);
+      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug, scantimeout, waitForScanCompletion);
       return;
   }  
 
