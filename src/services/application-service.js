@@ -72,7 +72,7 @@ function profileExists(responseData, applicationName) {
   }
 }
 
-async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile, gitRepositoryUrl, debug) {
+async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, policyName, teams, createprofile, gitRepositoryUrl, tags, debug) {
   const responseData = await getApplicationByName(vid, vkey, applicationName);
   if (debug) {
     core.debug(`Module: application-service, function: getVeracodeApplicationForPolicyScan. Application: ${applicationName}`);
@@ -106,7 +106,9 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
             }
           ], 
           teams: veracodeTeams,
-          git_repo_url: gitRepositoryUrl
+          git_repo_url: gitRepositoryUrl,
+          ...(tags && tags.trim() ? { tags: tags.replace(/[\[\]]/g, '').trim() } : {})
+
         }
       }
     };

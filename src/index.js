@@ -22,6 +22,7 @@ const failbuild = core.getInput('failbuild', { required: false });
 const createsandbox = core.getInput('createsandbox', { required: false });
 const sandboxname = core.getInput('sandboxname', { required: false });
 const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
+const tags = core.getInput('tags', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
 const debug = core.getInput('debug', {required: false});
@@ -60,13 +61,13 @@ async function run() {
     return;
 
   if (workflowApp){
-      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug);
+      await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, tags, debug);
       return;
   }  
 
   if (debug)
     core.debug(`Getting Veracode Application for Policy Scan: ${appname}`)
-  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, debug);
+  const veracodeApp = await getVeracodeApplicationForPolicyScan(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, tags, debug);
   if (veracodeApp.appId === -1) {
     core.setFailed(`Veracode application profile Not Found. Please create a profile on Veracode Platform, \
       or set "createprofile" to "true" in the pipeline configuration to automatically create profile.`);
