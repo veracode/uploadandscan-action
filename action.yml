@@ -55,6 +55,10 @@ inputs:
     description: 'Source Repository URL'
     required: false
     default: ''
+  tags:
+    description: 'Tags to associate with the scan'
+    required: false
+    default: ''
   platformType:
     description: 'Specifies the platform environment type — use CLOUD for GitHub.com or ENTERPRISE for GitHub Enterprise Server (GHES).'
     default: 'CLOUD'
