@@ -74,7 +74,7 @@ async function run() {
   // Setting up a global proxy for the API calls
   setGlobalProxy(isDebug);
 
-  if (workflowApp){
+  if (workflowApp && workflowApp.toLowerCase() === 'true') {
       await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug);
       return;
   }  
