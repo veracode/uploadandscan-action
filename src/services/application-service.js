@@ -11,7 +11,7 @@ const { getVeracodeTeamsByName } = require('./teams-service.js');
 const { runCommand } = require('../api/java-wrapper.js');
 const xml2js = require('xml2js');
 
-async function getApplicationByName(vid, vkey, applicationName) {
+async function getApplicationByName(vid, vkey, applicationName,isDebug) {
   core.debug(`Module: application-service, function: getApplicationByName. Application: ${applicationName}`);
   const resource = {
     resourceUri: appConfig().applicationUri,
@@ -19,7 +19,7 @@ async function getApplicationByName(vid, vkey, applicationName) {
     queryValue: encodeURIComponent(applicationName)
   };
   core.debug(resource);
-  const response = await getResourceByAttribute(vid, vkey, resource);
+  const response = await getResourceByAttribute(vid, vkey, resource,isDebug);
   return response;
 }
 
@@ -52,6 +52,17 @@ async function createSandboxRequest(vid, vkey, appguid, sandboxname, debug) {
 
 function profileExists(responseData, applicationName) {
   core.debug(`Module: application-service, function: profileExists. Application: ${applicationName}`);
+  if (responseData == null || responseData.page == null ) {
+    core.warning("Invalid response data");
+    try {
+      core.info(JSON.stringify(responseData,null,2));
+    } catch (stringifyError) {
+      core.warning("Failed to stringify the response data");
+      core.info(responseData);
+    }
+    return { exists: false, veracodeApp: null };
+  }
+
   if (responseData.page.total_elements === 0) {
     core.debug(`No Veracode application profile found for ${applicationName}`);
     return { exists: false, veracodeApp: null };
@@ -124,7 +135,7 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
   } else return profile.veracodeApp;
 }
 
-async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate) {
+async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, launchDate,isDebug) {
   let resource;
   if (sandboxID > 1){
     core.info('Checking the Sandbox Scan Status')
@@ -160,7 +171,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
       queryAttribute: '',
       queryValue: ''
     };
-    const response = await getResourceByAttribute(vid, vkey, resource);
+    const response = await getResourceByAttribute(vid, vkey, resource,isDebug);
     const scans = response.scans;
     for(let i = 0; i < scans.length; i++) {
       const scanUrl = scans[i].scan_url;
@@ -182,7 +193,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
   }
 }
 
-async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, platformType) {
+async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, platformType, isDebug) {
   console.log("Starting to fetch results");
   console.log("APP GUID: "+veracodeApp.appGuid)
   console.log("API URL: "+appConfig().findingsUri)
@@ -206,7 +217,7 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
     };
   }
   
-  const response = await getResourceByAttribute(vid, vkey, resource);
+  const response = await getResourceByAttribute(vid, vkey, resource,isDebug);
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
   // save response to policy_flaws.json
@@ -248,6 +259,23 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
     console.log(err);
   }
   
+  //we dont need a proxy for the artifact upload
+  // Store current proxy environment variables
+  const HTTP_PROXY = process.env.HTTP_PROXY
+  const HTTPS_PROXY = process.env.HTTPS_PROXY
+  const NO_PROXY = process.env.NO_PROXY
+  const http_proxy = process.env.http_proxy
+  const https_proxy = process.env.https_proxy
+  const no_proxy = process.env.no_proxy
+
+  // Unset proxy environment variables
+  delete process.env.HTTP_PROXY
+  delete process.env.HTTPS_PROXY
+  delete process.env.NO_PROXY
+  delete process.env.http_proxy
+  delete process.env.https_proxy
+  delete process.env.no_proxy
+
   const { DefaultArtifactClient } = require('@actions/artifact');
   const artifactV1 = require('@actions/artifact-v1');
   let artifactClient;
@@ -270,6 +298,13 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
       continueOnError: true
   }
   await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options)
+
+  if (HTTP_PROXY) process.env.HTTP_PROXY = HTTP_PROXY
+  if (HTTPS_PROXY) process.env.HTTPS_PROXY = HTTPS_PROXY
+  if (NO_PROXY) process.env.NO_PROXY = NO_PROXY
+  if (http_proxy) process.env.http_proxy = http_proxy
+  if (https_proxy) process.env.https_proxy = https_proxy
+  if (no_proxy) process.env.no_proxy = no_proxy
 }
 
 module.exports = {

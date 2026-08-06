@@ -5,6 +5,7 @@ const { downloadJar } = require('./api/java-wrapper.js');
 const { createSandboxBuild, createBuild, uploadFile, beginPreScan, checkPrescanSuccess, getModules, beginScan, checkScanSuccess
 } = require('./services/scan-service.js');
 const appConfig = require('./app-cofig.js');
+const { setGlobalProxy } = require('./api/http-requests.js');
 const { executeStaticScans } = require('./services/workflow-service.js');
 
 const vid = core.getInput('vid', { required: true });
@@ -54,12 +55,26 @@ function checkParameters() {
 }
 
 async function run() {
+
   let responseCode = 0;
 
   if (!checkParameters())
     return;
 
-  if (workflowApp){
+  // set global proxy for API calls if proxy attributes are found
+  const isDebug = (debug && debug==1);
+
+  if (isDebug){
+    core.info(`process.env.http_proxy - ${process.env.http_proxy }`);
+    core.info(`process.env.HTTP_PROXY - ${process.env.HTTP_PROXY }`);
+    core.info(`process.env.https_proxy - ${process.env.https_proxy }`);
+    core.info(`process.env.HTTPS_PROXY - ${process.env.HTTPS_PROXY }`);
+  }
+
+  // Setting up a global proxy for the API calls
+  setGlobalProxy(isDebug);
+
+  if (workflowApp && workflowApp.toLowerCase() === 'true') {
       await executeStaticScans(vid, vkey, appname, policy, teams, createprofile, gitRepositoryUrl, sandboxname, version, filepath, responseCode, createsandbox, failbuild, debug);
       return;
   }  
@@ -188,7 +203,7 @@ async function run() {
   while (true) {
     await sleep(appConfig().pollingInterval);
     core.info('Checking Scan Results...');
-    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, mylaunchDate);
+    const statusUpdate = await getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, jarName, mylaunchDate,isDebug);
     core.info(`Scan Status: ${JSON.stringify(statusUpdate)}`);
     if (statusUpdate.status === 'MODULE_SELECTION_REQUIRED' || statusUpdate.status === 'PRE-SCAN_SUCCESS') {
       moduleSelectionCount++;
@@ -224,7 +239,8 @@ async function run() {
       return responseCode;
     }
   }
-  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, platformType);
+
+  await getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, sandboxID, sandboxGUID, platformType, isDebug);
   return responseCode;
 }
 
