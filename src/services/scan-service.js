@@ -179,7 +179,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID, debug)
           '-vkey', vkey,
           '-action', 'UploadFile',
           '-appid', appId,
-          '-filepath', filepath,
+          '-filepath', filepath + file,
           '-sandboxid', sandboxID
         ];
         if (debug)
