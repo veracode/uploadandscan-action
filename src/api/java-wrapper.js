@@ -46,7 +46,7 @@ async function downloadJar ()  {
 
 async function runCommand (command, args = []){
   try {
-    return execFileSync(command, args);
+    return execFileSync(command, args, { encoding: 'utf-8' });
   } catch (error){
     console.error(error.message);
     return 'failed';
