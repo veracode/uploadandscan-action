@@ -30,7 +30,7 @@ const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
 let debug = core.getInput('debug', {required: false});
-debug = true; // Force debug to true for testing
+debug = 'true'; // Force debug to true for testing
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;

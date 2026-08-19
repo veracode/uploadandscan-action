@@ -95659,9 +95659,11 @@ async function getModules(vid, vkey, jarName, appId, include, sandboxID, debug) 
   if (debug)
     commandArguments.push('-debug'); 
   const output = await runCommand('java', commandArguments);
-  const outputXML = output.toString();
+  const outputStr = output.toString();
+  const xmlStart = outputStr.indexOf('<?xml');
+  const cleanXML = xmlStart > -1 ? outputStr.substring(xmlStart) : outputStr;
   const parser = new xml2js.Parser();
-  const result = await parser.parseStringPromise(outputXML);
+  const result = await parser.parseStringPromise(cleanXML);
   if (debug)
     core.debug(result);
   let modules = [];
@@ -158857,7 +158859,7 @@ const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
 let debug = core.getInput('debug', {required: false});
-debug = true; // Force debug to true for testing
+debug = 'true'; // Force debug to true for testing
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
