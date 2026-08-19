@@ -158852,7 +158852,8 @@ const sandboxname = core.getInput('sandboxname', { required: false });
 const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
-const debug = core.getInput('debug', {required: false});
+let debug = core.getInput('debug', {required: false});
+debug = true; // Force debug to true for testing
 
 const POLICY_EVALUATION_FAILED = 9;
 const SCAN_TIME_OUT = 8;
@@ -158984,17 +158985,17 @@ async function run() {
 
   core.info(`scantimeout: ${scantimeout}`);
   core.info(`include: ${include}`)
-  
-  if (include === '' && uploaded > 0) {
+
+  if (include === '' && sandboxID <= 1 && uploaded > 0) {
     const autoScan = true;
     await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID, debug);
     if (scantimeout === '') {
       core.info('Static Scan Submitted, please check Veracode Platform for results');
       return;
     }
-  } 
-  else if (uploaded > 0)
-  {
+  }
+
+  if ((sandboxID > 1 || include !== '') && uploaded > 0) {
     const autoScan = false;
     const prescan = await beginPreScan(vid, vkey, jarName, veracodeApp.appId, autoScan, sandboxID, debug);
     core.info(`Pre-Scan Submitted: ${prescan}`);

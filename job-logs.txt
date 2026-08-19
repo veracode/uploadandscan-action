@@ -1,0 +1,1022 @@
+2026-08-12T19:55:13.5985712Z ##[debug]Starting: build-dotnet (FPS.AWS.Lambda.DmsEventProcessor, FPS.Framework/FPS.AWS.Lambda, linux-x64, Lambda D...
+2026-08-12T19:55:13.6010912Z ##[debug]Cleaning runner temp folder: /home/runner/work/_temp
+2026-08-12T19:55:13.6170980Z ##[debug]Starting: Set up job
+2026-08-12T19:55:13.6172297Z Current runner version: '2.336.0'
+2026-08-12T19:55:13.6197398Z ##[group]Runner Image Provisioner
+2026-08-12T19:55:13.6198410Z Hosted Compute Agent
+2026-08-12T19:55:13.6199142Z Version: 20260707.563
+2026-08-12T19:55:13.6199958Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-08-12T19:55:13.6200923Z Build Date: 2026-07-07T19:33:50Z
+2026-08-12T19:55:13.6201773Z Worker ID: {eb7f04fd-a67c-43ee-bf99-775a4f7b9970}
+2026-08-12T19:55:13.6202751Z Azure Region: westcentralus
+2026-08-12T19:55:13.6203485Z ##[endgroup]
+2026-08-12T19:55:13.6205536Z ##[group]Operating System
+2026-08-12T19:55:13.6206363Z Ubuntu
+2026-08-12T19:55:13.6206985Z 24.04.4
+2026-08-12T19:55:13.6207671Z LTS
+2026-08-12T19:55:13.6208287Z ##[endgroup]
+2026-08-12T19:55:13.6209241Z ##[group]Runner Image
+2026-08-12T19:55:13.6210012Z Image: ubuntu-24.04
+2026-08-12T19:55:13.6210678Z Version: 20260720.247.2
+2026-08-12T19:55:13.6212197Z Included Software: https://urldefense.com/v3/__https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwUfqQpEeg$ 
+2026-08-12T19:55:13.6214027Z Image Release: https://urldefense.com/v3/__https://github.com/actions/runner-images/releases/tag/ubuntu24*2F20260720.247__;JQ!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXBjeHdag$ 
+2026-08-12T19:55:13.6215733Z ##[endgroup]
+2026-08-12T19:55:13.6219773Z ##[group]GITHUB_TOKEN Permissions
+2026-08-12T19:55:13.6222334Z Actions: write
+2026-08-12T19:55:13.6223062Z ArtifactMetadata: write
+2026-08-12T19:55:13.6223946Z Attestations: write
+2026-08-12T19:55:13.6224868Z Checks: write
+2026-08-12T19:55:13.6225623Z CodeQuality: write
+2026-08-12T19:55:13.6226258Z Contents: write
+2026-08-12T19:55:13.6226899Z CopilotRequests: write
+2026-08-12T19:55:13.6227656Z Deployments: write
+2026-08-12T19:55:13.6228301Z Discussions: write
+2026-08-12T19:55:13.6229108Z Drives: write
+2026-08-12T19:55:13.6229751Z Issues: write
+2026-08-12T19:55:13.6230368Z Metadata: read
+2026-08-12T19:55:13.6231076Z Models: read
+2026-08-12T19:55:13.6231728Z Packages: write
+2026-08-12T19:55:13.6232341Z Pages: write
+2026-08-12T19:55:13.6233085Z PullRequests: write
+2026-08-12T19:55:13.6233804Z RepositoryProjects: write
+2026-08-12T19:55:13.6235023Z SecurityEvents: write
+2026-08-12T19:55:13.6235755Z Statuses: write
+2026-08-12T19:55:13.6236414Z VulnerabilityAlerts: read
+2026-08-12T19:55:13.6237273Z ##[endgroup]
+2026-08-12T19:55:13.6239627Z Secret source: Actions
+2026-08-12T19:55:13.6241731Z ##[debug]Primary repository: United-Airlines-Org/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:13.6243036Z Prepare workflow directory
+2026-08-12T19:55:13.6530429Z ##[debug]Creating pipeline directory: '/home/runner/work/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:13.6535754Z ##[debug]Creating workspace directory: '/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:13.6538501Z ##[debug]Update context data
+2026-08-12T19:55:13.6542767Z ##[debug]Evaluating job-level environment variables
+2026-08-12T19:55:13.6920734Z ##[debug]Evaluating job container
+2026-08-12T19:55:13.6924165Z ##[debug]Evaluating job service containers
+2026-08-12T19:55:13.6927688Z ##[debug]Evaluating job defaults
+2026-08-12T19:55:13.6960883Z Prepare all required actions
+2026-08-12T19:55:13.7018139Z Getting action download info
+2026-08-12T19:55:14.0626685Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-08-12T19:55:14.6907624Z ##[debug]Download 'https://urldefense.com/v3/__https://codeload.github.com/actions/checkout/tar.gz/d23441a48e516b6c34aea4fa41551a30e30af803__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwVId1LStw$ ' to '/home/runner/work/_actions/_temp_5ec99d67-e871-4896-b694-fd9f968c2a70/5ee0cc71-5888-4c02-87f9-284418a49c9e.tar.gz'
+2026-08-12T19:55:16.2606094Z ##[debug]Unwrap 'checkout-d23441a48e516b6c34aea4fa41551a30e30af803' to '/home/runner/work/_actions/actions/checkout/v6'
+2026-08-12T19:55:16.4155323Z ##[debug]Archive '/home/runner/work/_actions/_temp_5ec99d67-e871-4896-b694-fd9f968c2a70/5ee0cc71-5888-4c02-87f9-284418a49c9e.tar.gz' has been unzipped into '/home/runner/work/_actions/actions/checkout/v6'.
+2026-08-12T19:55:16.4242899Z Download action repository 'actions/setup-dotnet@v5' (SHA:26b0ec14cb23fa6904739307f278c14f94c95bf1)
+2026-08-12T19:55:17.0776674Z ##[debug]Download 'https://urldefense.com/v3/__https://codeload.github.com/actions/setup-dotnet/tar.gz/26b0ec14cb23fa6904739307f278c14f94c95bf1__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXWpOlBwA$ ' to '/home/runner/work/_actions/_temp_f654a00c-6378-44ff-a025-5a15673f60ea/eb581c50-18d7-4608-98e8-c281a8579b2c.tar.gz'
+2026-08-12T19:55:17.1231369Z ##[debug]Unwrap 'setup-dotnet-26b0ec14cb23fa6904739307f278c14f94c95bf1' to '/home/runner/work/_actions/actions/setup-dotnet/v5'
+2026-08-12T19:55:17.1396296Z ##[debug]Archive '/home/runner/work/_actions/_temp_f654a00c-6378-44ff-a025-5a15673f60ea/eb581c50-18d7-4608-98e8-c281a8579b2c.tar.gz' has been unzipped into '/home/runner/work/_actions/actions/setup-dotnet/v5'.
+2026-08-12T19:55:17.1503811Z Download action repository 'veracode/uploadandscan-action@v0.2.3' (SHA:d2deb5741e4216f9b3bcc0cd565c1716c6cc57d2)
+2026-08-12T19:55:17.8292739Z ##[debug]Download 'https://urldefense.com/v3/__https://codeload.github.com/veracode/uploadandscan-action/tar.gz/d2deb5741e4216f9b3bcc0cd565c1716c6cc57d2__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWe6kKCZg$ ' to '/home/runner/work/_actions/_temp_3bebaef4-409e-4c19-b146-fdcbd1b1e2bf/45d08487-78a3-4eca-8075-5027a926f6d6.tar.gz'
+2026-08-12T19:55:17.8637973Z ##[debug]Unwrap 'uploadandscan-action-d2deb5741e4216f9b3bcc0cd565c1716c6cc57d2' to '/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3'
+2026-08-12T19:55:17.8672113Z ##[debug]Archive '/home/runner/work/_actions/_temp_3bebaef4-409e-4c19-b146-fdcbd1b1e2bf/45d08487-78a3-4eca-8075-5027a926f6d6.tar.gz' has been unzipped into '/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3'.
+2026-08-12T19:55:17.8698302Z ##[debug]action.yml for action: '/home/runner/work/_actions/actions/checkout/v6/action.yml'.
+2026-08-12T19:55:17.9277047Z ##[debug]action.yml for action: '/home/runner/work/_actions/actions/setup-dotnet/v5/action.yml'.
+2026-08-12T19:55:17.9309978Z ##[debug]action.yml for action: '/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/action.yml'.
+2026-08-12T19:55:17.9376370Z ##[debug]Set step '__run' display name to: 'Support long paths'
+2026-08-12T19:55:17.9378222Z ##[debug]Set step '__actions_checkout' display name to: 'Check out code'
+2026-08-12T19:55:17.9379210Z ##[debug]Set step '__actions_setup-dotnet' display name to: 'Setup dotnet'
+2026-08-12T19:55:17.9380119Z ##[debug]Set step '__run_2' display name to: 'Restore nuget packages'
+2026-08-12T19:55:17.9381050Z ##[debug]Set step '__run_3' display name to: 'Build debug and package'
+2026-08-12T19:55:17.9381940Z ##[debug]Set step '__run_4' display name to: 'Run unit tests'
+2026-08-12T19:55:17.9382821Z ##[debug]Set step '__run_5' display name to: 'Set sandbox instance number'
+2026-08-12T19:55:17.9383775Z ##[debug]Set step '__veracode_uploadandscan-action' display name to: 'Submit sandbox scan'
+2026-08-12T19:55:17.9384872Z ##[debug]Set step '__run_6' display name to: 'Build release'
+2026-08-12T19:55:17.9385427Z Complete job name: build-dotnet (FPS.AWS.Lambda.DmsEventProcessor, FPS.Framework/FPS.AWS.Lambda, linux-x64, Lambda D...
+2026-08-12T19:55:17.9406251Z ##[debug]Collect running processes for tracking orphan processes.
+2026-08-12T19:55:17.9547500Z ##[debug]Finishing: Set up job
+2026-08-12T19:55:17.9654956Z ##[debug]Evaluating condition for step: 'Support long paths'
+2026-08-12T19:55:17.9683290Z ##[debug]Evaluating: success()
+2026-08-12T19:55:17.9687092Z ##[debug]Evaluating success:
+2026-08-12T19:55:17.9698775Z ##[debug]=> true
+2026-08-12T19:55:17.9703589Z ##[debug]Result: true
+2026-08-12T19:55:17.9725483Z ##[debug]Starting: Support long paths
+2026-08-12T19:55:17.9816065Z ##[debug]Loading inputs
+2026-08-12T19:55:17.9820716Z ##[debug]Loading env
+2026-08-12T19:55:17.9867168Z ##[group]Run git config --global core.longpaths true
+2026-08-12T19:55:17.9867557Z [36;1mgit config --global core.longpaths true[0m
+2026-08-12T19:55:17.9909814Z shell: /usr/bin/bash -e {0}
+2026-08-12T19:55:17.9910609Z env:
+2026-08-12T19:55:17.9910871Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:55:17.9911185Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:55:17.9911459Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:55:17.9911759Z   release-publish-folder-name: publish-release
+2026-08-12T19:55:17.9911992Z ##[endgroup]
+2026-08-12T19:55:17.9976708Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/https://urldefense.com/v3/__http://789a7a3f-e65c-48ae-a410-4dbfc4c5f2ee.sh__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwUCVHU5bA$ 
+2026-08-12T19:55:18.0112038Z ##[debug]Finishing: Support long paths
+2026-08-12T19:55:18.0123493Z ##[debug]Evaluating condition for step: 'Check out code'
+2026-08-12T19:55:18.0126156Z ##[debug]Evaluating: success()
+2026-08-12T19:55:18.0126489Z ##[debug]Evaluating success:
+2026-08-12T19:55:18.0126885Z ##[debug]=> true
+2026-08-12T19:55:18.0127176Z ##[debug]Result: true
+2026-08-12T19:55:18.0127881Z ##[debug]Starting: Check out code
+2026-08-12T19:55:18.0157686Z ##[debug]Register post job cleanup for action: actions/checkout@v6
+2026-08-12T19:55:18.0175985Z ##[debug]Loading inputs
+2026-08-12T19:55:18.0183057Z ##[debug]Evaluating: github.repository
+2026-08-12T19:55:18.0183710Z ##[debug]Evaluating Index:
+2026-08-12T19:55:18.0185435Z ##[debug]..Evaluating github:
+2026-08-12T19:55:18.0186136Z ##[debug]..=> Object
+2026-08-12T19:55:18.0190430Z ##[debug]..Evaluating String:
+2026-08-12T19:55:18.0190898Z ##[debug]..=> 'repository'
+2026-08-12T19:55:18.0193826Z ##[debug]=> 'United-Airlines-Org/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.0195332Z ##[debug]Result: 'United-Airlines-Org/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.0197621Z ##[debug]Evaluating: github.token
+2026-08-12T19:55:18.0197853Z ##[debug]Evaluating Index:
+2026-08-12T19:55:18.0198051Z ##[debug]..Evaluating github:
+2026-08-12T19:55:18.0198257Z ##[debug]..=> Object
+2026-08-12T19:55:18.0198450Z ##[debug]..Evaluating String:
+2026-08-12T19:55:18.0198647Z ##[debug]..=> 'token'
+2026-08-12T19:55:18.0201056Z ##[debug]=> '***'
+2026-08-12T19:55:18.0202932Z ##[debug]Result: '***'
+2026-08-12T19:55:18.0214802Z ##[debug]Loading env
+2026-08-12T19:55:18.0227858Z ##[group]Run actions/checkout@v6
+2026-08-12T19:55:18.0228090Z with:
+2026-08-12T19:55:18.0228382Z   repository: United-Airlines-Org/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:18.0230402Z   token: ***
+2026-08-12T19:55:18.0230575Z   ssh-strict: true
+2026-08-12T19:55:18.0230745Z   ssh-user: git
+2026-08-12T19:55:18.0230915Z   persist-credentials: true
+2026-08-12T19:55:18.0231106Z   clean: true
+2026-08-12T19:55:18.0231329Z   sparse-checkout-cone-mode: true
+2026-08-12T19:55:18.0231635Z   fetch-depth: 1
+2026-08-12T19:55:18.0231897Z   fetch-tags: false
+2026-08-12T19:55:18.0232201Z   show-progress: true
+2026-08-12T19:55:18.0232468Z   lfs: false
+2026-08-12T19:55:18.0232716Z   submodules: false
+2026-08-12T19:55:18.0232976Z   set-safe-directory: true
+2026-08-12T19:55:18.0233284Z   allow-unsafe-pr-checkout: false
+2026-08-12T19:55:18.0233634Z env:
+2026-08-12T19:55:18.0233927Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:55:18.0234315Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:55:18.0234812Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:55:18.0235155Z   release-publish-folder-name: publish-release
+2026-08-12T19:55:18.0235502Z ##[endgroup]
+2026-08-12T19:55:18.0964238Z ##[debug]GITHUB_WORKSPACE = '/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.0966634Z ##[debug]qualified repository = 'United-Airlines-Org/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.0967935Z ##[debug]ref = 'refs/heads/dfs-9692-updating-veracode-action'
+2026-08-12T19:55:18.0968860Z ##[debug]commit = 'ab3ab708c7d79b4cd764cacdde99da9244128e05'
+2026-08-12T19:55:18.0969695Z ##[debug]clean = true
+2026-08-12T19:55:18.0970607Z ##[debug]filter = undefined
+2026-08-12T19:55:18.0971328Z ##[debug]fetch depth = 1
+2026-08-12T19:55:18.0972068Z ##[debug]fetch tags = false
+2026-08-12T19:55:18.0973123Z ##[debug]show progress = true
+2026-08-12T19:55:18.0974313Z ##[debug]lfs = false
+2026-08-12T19:55:18.0975307Z ##[debug]submodules = false
+2026-08-12T19:55:18.0975925Z ##[debug]recursive submodules = false
+2026-08-12T19:55:18.0976862Z ##[debug]GitHub Host URL = 
+2026-08-12T19:55:18.0977618Z ##[debug]allow unsafe PR checkout = false
+2026-08-12T19:55:18.0978960Z ::add-matcher::/home/runner/work/_actions/actions/checkout/v6/dist/problem-matcher.json
+2026-08-12T19:55:18.1075851Z ##[debug]Added matchers: 'checkout-git'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-08-12T19:55:18.1081019Z Syncing repository: United-Airlines-Org/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:18.1082373Z ::group::Getting Git version info
+2026-08-12T19:55:18.1083507Z ##[group]Getting Git version info
+2026-08-12T19:55:18.1127508Z Working directory is '/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.1128680Z ##[debug]Getting git version
+2026-08-12T19:55:18.1129033Z [command]/usr/bin/git version
+2026-08-12T19:55:18.1155185Z git version 2.54.0
+2026-08-12T19:55:18.1159244Z ##[debug]0
+2026-08-12T19:55:18.1159690Z ##[debug]git version 2.54.0
+2026-08-12T19:55:18.1160172Z ##[debug]
+2026-08-12T19:55:18.1161824Z ##[debug]Set git useragent to: git/2.54.0 (github-actions-checkout) actions_orchestration_id/4f44a60c-3167-49c7-b432-4ccdc4d58786.build-dotnet.FPS_AWS_Lambda_DmsEventPr
+2026-08-12T19:55:18.1163521Z ::endgroup::
+2026-08-12T19:55:18.1163847Z ##[endgroup]
+2026-08-12T19:55:18.1168978Z ::add-mask::***
+2026-08-12T19:55:18.1172520Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/e9695bab-efa1-46f8-9b68-4e55be2d30a1/.gitconfig'
+2026-08-12T19:55:18.1180906Z Temporarily overriding HOME='/home/runner/work/_temp/e9695bab-efa1-46f8-9b68-4e55be2d30a1' before making global git config changes
+2026-08-12T19:55:18.1182585Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-12T19:55:18.1187020Z [command]/usr/bin/git config --global --add https://urldefense.com/v3/__http://safe.directory__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWuT2aJIw$  /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:18.1215504Z ##[debug]0
+2026-08-12T19:55:18.1216329Z ##[debug]
+2026-08-12T19:55:18.1221042Z Deleting the contents of '/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability'
+2026-08-12T19:55:18.1224723Z ::group::Determining repository object format
+2026-08-12T19:55:18.1225212Z ##[group]Determining repository object format
+2026-08-12T19:55:18.1226571Z ::endgroup::
+2026-08-12T19:55:18.1226835Z ##[endgroup]
+2026-08-12T19:55:18.1227950Z ::group::Initializing the repository
+2026-08-12T19:55:18.1228313Z ##[group]Initializing the repository
+2026-08-12T19:55:18.1231454Z [command]/usr/bin/git init /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:18.4015730Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-08-12T19:55:18.4035570Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-08-12T19:55:18.4036398Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-08-12T19:55:18.4036918Z hint: call:
+2026-08-12T19:55:18.4037429Z hint:
+2026-08-12T19:55:18.4038117Z hint: 	git config --global init.defaultBranch <name>
+2026-08-12T19:55:18.4038605Z hint:
+2026-08-12T19:55:18.4039322Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-08-12T19:55:18.4040077Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-08-12T19:55:18.4040603Z hint:
+2026-08-12T19:55:18.4041136Z hint: 	git branch -m <name>
+2026-08-12T19:55:18.4041709Z hint:
+2026-08-12T19:55:18.4042568Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-08-12T19:55:18.4043698Z Initialized empty Git repository in /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/
+2026-08-12T19:55:18.4045170Z ##[debug]0
+2026-08-12T19:55:18.4046148Z ##[debug]Initialized empty Git repository in /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/
+2026-08-12T19:55:18.4046674Z ##[debug]
+2026-08-12T19:55:18.4047349Z [command]/usr/bin/git remote add origin https://urldefense.com/v3/__https://github.com/United-Airlines-Org/CorporateAccounting.FlightProfitability__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwVQTV0CPQ$ 
+2026-08-12T19:55:18.4048116Z ##[debug]0
+2026-08-12T19:55:18.4048574Z ##[debug]
+2026-08-12T19:55:18.4049014Z ::endgroup::
+2026-08-12T19:55:18.4049185Z ##[endgroup]
+2026-08-12T19:55:18.4049887Z ::group::Disabling automatic garbage collection
+2026-08-12T19:55:18.4050158Z ##[group]Disabling automatic garbage collection
+2026-08-12T19:55:18.4051051Z [command]/usr/bin/git config --local https://urldefense.com/v3/__http://gc.auto__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwVDfwGkjA$  0
+2026-08-12T19:55:18.4051663Z ##[debug]0
+2026-08-12T19:55:18.4052157Z ##[debug]
+2026-08-12T19:55:18.4052586Z ::endgroup::
+2026-08-12T19:55:18.4052813Z ##[endgroup]
+2026-08-12T19:55:18.4053282Z ::group::Setting up auth
+2026-08-12T19:55:18.4053549Z ##[group]Setting up auth
+2026-08-12T19:55:18.4053875Z Removing SSH command configuration
+2026-08-12T19:55:18.4054780Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-12T19:55:18.4055481Z ##[debug]1
+2026-08-12T19:55:18.4055946Z ##[debug]
+2026-08-12T19:55:18.4056723Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-12T19:55:18.5341387Z ##[debug]0
+2026-08-12T19:55:18.5342307Z ##[debug]
+2026-08-12T19:55:18.5343459Z Removing HTTP extra header
+2026-08-12T19:55:18.5344057Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-12T19:55:18.5364796Z ##[debug]1
+2026-08-12T19:55:18.5365306Z ##[debug]
+2026-08-12T19:55:18.5372083Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://urldefense.com/v3/__https://github.com/.extraheader__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXJxJDZIA$ ' || :"
+2026-08-12T19:55:18.5569536Z ##[debug]0
+2026-08-12T19:55:18.5570072Z ##[debug]
+2026-08-12T19:55:18.5570539Z Removing includeIf entries pointing to credentials config files
+2026-08-12T19:55:18.5571285Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-12T19:55:18.5594987Z ##[debug]1
+2026-08-12T19:55:18.5595813Z ##[debug]
+2026-08-12T19:55:18.5597187Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-12T19:55:18.5837606Z ##[debug]0
+2026-08-12T19:55:18.5942250Z ##[debug]
+2026-08-12T19:55:18.5943418Z ##[debug]Credentials config path: /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T19:55:18.5946802Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config http.https://urldefense.com/v3/__https://github.com/.extraheader__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXJxJDZIA$  AUTHORIZATION: basic ***
+2026-08-12T19:55:18.5948559Z ##[debug]0
+2026-08-12T19:55:18.5949592Z ##[debug]
+2026-08-12T19:55:18.5951277Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git.path /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T19:55:18.5953513Z ##[debug]0
+2026-08-12T19:55:18.5954206Z ##[debug]
+2026-08-12T19:55:18.5956437Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T19:55:18.5958559Z ##[debug]0
+2026-08-12T19:55:18.5959429Z ##[debug]
+2026-08-12T19:55:18.5960545Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T19:55:18.5977609Z ##[debug]0
+2026-08-12T19:55:18.5978405Z ##[debug]
+2026-08-12T19:55:18.5981151Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T19:55:18.6945569Z ##[debug]0
+2026-08-12T19:55:18.6948654Z ##[debug]
+2026-08-12T19:55:18.6968010Z ::endgroup::
+2026-08-12T19:55:18.6968295Z ##[endgroup]
+2026-08-12T19:55:18.6984343Z ::group::Fetching the repository
+2026-08-12T19:55:18.6984911Z ##[group]Fetching the repository
+2026-08-12T19:55:18.6986655Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ab3ab708c7d79b4cd764cacdde99da9244128e05:refs/remotes/origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6556686Z From https://urldefense.com/v3/__https://github.com/United-Airlines-Org/CorporateAccounting.FlightProfitability__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwVQTV0CPQ$ 
+2026-08-12T19:55:21.6577254Z  * [new ref]         ab3ab708c7d79b4cd764cacdde99da9244128e05 -> origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6585524Z ##[debug]0
+2026-08-12T19:55:21.6605459Z ##[debug]
+2026-08-12T19:55:21.6606101Z [command]/usr/bin/git branch --list --remote origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6606989Z   origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6607855Z ##[debug]0
+2026-08-12T19:55:21.6608739Z ##[debug]  origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6609122Z ##[debug]
+2026-08-12T19:55:21.6615720Z [command]/usr/bin/git rev-parse refs/remotes/origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:21.6635434Z ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:21.6642952Z ##[debug]0
+2026-08-12T19:55:21.6643723Z ##[debug]ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:21.6644099Z ##[debug]
+2026-08-12T19:55:21.6644942Z ::endgroup::
+2026-08-12T19:55:21.6645234Z ##[endgroup]
+2026-08-12T19:55:21.6645982Z ::group::Determining the checkout info
+2026-08-12T19:55:21.6646349Z ##[group]Determining the checkout info
+2026-08-12T19:55:21.6647062Z ::endgroup::
+2026-08-12T19:55:21.6647303Z ##[endgroup]
+2026-08-12T19:55:21.6647842Z [command]/usr/bin/git sparse-checkout disable
+2026-08-12T19:55:21.9593045Z ##[debug]0
+2026-08-12T19:55:21.9593725Z ##[debug]
+2026-08-12T19:55:21.9598848Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-08-12T19:55:22.1276072Z ##[debug]0
+2026-08-12T19:55:22.1276850Z ##[debug]
+2026-08-12T19:55:22.1277548Z ::group::Checking out the ref
+2026-08-12T19:55:22.1277863Z ##[group]Checking out the ref
+2026-08-12T19:55:22.1280002Z [command]/usr/bin/git checkout --progress --force -B dfs-9692-updating-veracode-action refs/remotes/origin/dfs-9692-updating-veracode-action
+2026-08-12T19:55:22.8257876Z Switched to a new branch 'dfs-9692-updating-veracode-action'
+2026-08-12T19:55:22.8275293Z branch 'dfs-9692-updating-veracode-action' set up to track 'origin/dfs-9692-updating-veracode-action'.
+2026-08-12T19:55:22.8307918Z ##[debug]0
+2026-08-12T19:55:22.8317375Z ##[debug]branch 'dfs-9692-updating-veracode-action' set up to track 'origin/dfs-9692-updating-veracode-action'.
+2026-08-12T19:55:22.8318061Z ##[debug]
+2026-08-12T19:55:22.8318781Z ::endgroup::
+2026-08-12T19:55:22.8319030Z ##[endgroup]
+2026-08-12T19:55:22.8341988Z ##[debug]0
+2026-08-12T19:55:22.8346937Z ##[debug]commit ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:22.8347403Z ##[debug]Author: Billy Bafia <billy.bafia@united.com>
+2026-08-12T19:55:22.8347841Z ##[debug]Date:   Wed Aug 12 13:56:24 2026 -0500
+2026-08-12T19:55:22.8348198Z ##[debug]
+2026-08-12T19:55:22.8348437Z ##[debug]    Adding debug flag.
+2026-08-12T19:55:22.8348751Z ##[debug]
+2026-08-12T19:55:22.8375130Z [command]/usr/bin/git log -1 --format=%H
+2026-08-12T19:55:22.8385580Z ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:22.8386389Z ##[debug]0
+2026-08-12T19:55:22.8387130Z ##[debug]ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:22.8387502Z ##[debug]
+2026-08-12T19:55:22.8388269Z ##[debug]Unsetting HOME override
+2026-08-12T19:55:22.8390891Z ::remove-matcher owner=checkout-git::
+2026-08-12T19:55:22.8402647Z ##[debug]Removed matchers: 'checkout-git'
+2026-08-12T19:55:22.8463188Z ##[debug]Node Action run completed with exit code 0
+2026-08-12T19:55:22.8466449Z ##[debug]Save intra-action state isPost = true
+2026-08-12T19:55:22.8466806Z ##[debug]Save intra-action state setSafeDirectory = true
+2026-08-12T19:55:22.8467416Z ##[debug]Save intra-action state repositoryPath = /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability
+2026-08-12T19:55:22.8469264Z ##[debug]Set output commit = ab3ab708c7d79b4cd764cacdde99da9244128e05
+2026-08-12T19:55:22.8469729Z ##[debug]Set output ref = refs/heads/dfs-9692-updating-veracode-action
+2026-08-12T19:55:22.8470799Z ##[debug]Finishing: Check out code
+2026-08-12T19:55:22.8479286Z ##[debug]Evaluating condition for step: 'Setup dotnet'
+2026-08-12T19:55:22.8481781Z ##[debug]Evaluating: success()
+2026-08-12T19:55:22.8482094Z ##[debug]Evaluating success:
+2026-08-12T19:55:22.8482594Z ##[debug]=> true
+2026-08-12T19:55:22.8482956Z ##[debug]Result: true
+2026-08-12T19:55:22.8483536Z ##[debug]Starting: Setup dotnet
+2026-08-12T19:55:22.8504675Z ##[debug]Register post job cleanup for action: actions/setup-dotnet@v5
+2026-08-12T19:55:22.8516022Z ##[debug]Loading inputs
+2026-08-12T19:55:22.8520495Z ##[debug]Loading env
+2026-08-12T19:55:22.8524290Z ##[group]Run actions/setup-dotnet@v5
+2026-08-12T19:55:22.8524661Z with:
+2026-08-12T19:55:22.8524823Z   dotnet-quality: ga
+2026-08-12T19:55:22.8525011Z   dotnet-version: 10.0.x
+2026-08-12T19:55:22.8525202Z   cache: false
+2026-08-12T19:55:22.8525379Z env:
+2026-08-12T19:55:22.8525594Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:55:22.8525892Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:55:22.8526201Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:55:22.8526451Z   release-publish-folder-name: publish-release
+2026-08-12T19:55:22.8526682Z ##[endgroup]
+2026-08-12T19:55:22.9646428Z [command]/home/runner/work/_actions/actions/setup-dotnet/v5/externals/https://urldefense.com/v3/__http://install-dotnet.sh__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwUFwVQu6g$  --skip-non-versioned-files --runtime dotnet --channel LTS
+2026-08-12T19:55:23.4326087Z dotnet-install: Attempting to download using https://urldefense.com/v3/__http://aka.ms__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXVKQ9s8g$  link https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.11/dotnet-runtime-10.0.11-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWH3ad8Tw$ 
+2026-08-12T19:55:24.7732176Z dotnet-install: Remote file https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.11/dotnet-runtime-10.0.11-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWH3ad8Tw$  size is 36639275 bytes.
+2026-08-12T19:55:24.7736455Z dotnet-install: Extracting archive from https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.11/dotnet-runtime-10.0.11-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWH3ad8Tw$ 
+2026-08-12T19:55:25.3638108Z dotnet-install: Downloaded file size is 36639275 bytes.
+2026-08-12T19:55:25.3655485Z dotnet-install: The remote and local file sizes are equal.
+2026-08-12T19:55:25.3880241Z dotnet-install: Installed version is 10.0.11
+2026-08-12T19:55:25.3931195Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+2026-08-12T19:55:25.3949059Z dotnet-install: Note that the script does not resolve dependencies during installation.
+2026-08-12T19:55:25.3953577Z dotnet-install: To check the list of dependencies, go to https://urldefense.com/v3/__https://learn.microsoft.com/dotnet/core/install__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXP5Xh3zQ$ , select your operating system and check the "Dependencies" section.
+2026-08-12T19:55:25.3955833Z dotnet-install: Installation finished successfully.
+2026-08-12T19:55:25.3956964Z [command]/home/runner/work/_actions/actions/setup-dotnet/v5/externals/https://urldefense.com/v3/__http://install-dotnet.sh__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwUFwVQu6g$  --skip-non-versioned-files --channel 10.0 --quality ga
+2026-08-12T19:55:25.7128346Z dotnet-install: Attempting to download using https://urldefense.com/v3/__http://aka.ms__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXVKQ9s8g$  link https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.400/dotnet-sdk-10.0.400-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXrinoYxQ$ 
+2026-08-12T19:55:29.5709720Z dotnet-install: Remote file https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.400/dotnet-sdk-10.0.400-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXrinoYxQ$  size is 240133692 bytes.
+2026-08-12T19:55:29.5713347Z dotnet-install: Extracting archive from https://urldefense.com/v3/__https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.400/dotnet-sdk-10.0.400-linux-x64.tar.gz__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXrinoYxQ$ 
+2026-08-12T19:55:35.7669510Z dotnet-install: Downloaded file size is 240133692 bytes.
+2026-08-12T19:55:35.7670801Z dotnet-install: The remote and local file sizes are equal.
+2026-08-12T19:55:39.3304539Z dotnet-install: Installed version is 10.0.400
+2026-08-12T19:55:39.3353273Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+2026-08-12T19:55:39.3367377Z dotnet-install: Note that the script does not resolve dependencies during installation.
+2026-08-12T19:55:39.3368857Z dotnet-install: To check the list of dependencies, go to https://urldefense.com/v3/__https://learn.microsoft.com/dotnet/core/install__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXP5Xh3zQ$ , select your operating system and check the "Dependencies" section.
+2026-08-12T19:55:39.3369886Z dotnet-install: Installation finished successfully.
+2026-08-12T19:55:39.3382898Z ##[add-matcher]/home/runner/work/_actions/actions/setup-dotnet/v5/.github/csc.json
+2026-08-12T19:55:39.3409071Z ##[debug]Added matchers: 'csc'. Problem matchers scan action output for known warning or error strings and report these inline.
+2026-08-12T19:55:39.3454859Z ##[debug]Node Action run completed with exit code 0
+2026-08-12T19:55:39.3458120Z ##[debug]DOTNET_ROOT='/usr/share/dotnet'
+2026-08-12T19:55:39.3459367Z ##[debug]Set output dotnet-version = 10.0.400
+2026-08-12T19:55:39.3460185Z ##[debug]Finishing: Setup dotnet
+2026-08-12T19:55:39.3467184Z ##[debug]Evaluating condition for step: 'Restore nuget packages'
+2026-08-12T19:55:39.3468661Z ##[debug]Evaluating: success()
+2026-08-12T19:55:39.3468970Z ##[debug]Evaluating success:
+2026-08-12T19:55:39.3469326Z ##[debug]=> true
+2026-08-12T19:55:39.3469627Z ##[debug]Result: true
+2026-08-12T19:55:39.3470144Z ##[debug]Starting: Restore nuget packages
+2026-08-12T19:55:39.3478231Z ##[debug]Loading inputs
+2026-08-12T19:55:39.3484102Z ##[debug]Evaluating: format('dotnet restore --runtime {0}', matrix.runtime)
+2026-08-12T19:55:39.3484666Z ##[debug]Evaluating format:
+2026-08-12T19:55:39.3487810Z ##[debug]..Evaluating String:
+2026-08-12T19:55:39.3488087Z ##[debug]..=> 'dotnet restore --runtime {0}'
+2026-08-12T19:55:39.3497639Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:39.3497877Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:39.3498110Z ##[debug]....=> Object
+2026-08-12T19:55:39.3498326Z ##[debug]....Evaluating String:
+2026-08-12T19:55:39.3498529Z ##[debug]....=> 'runtime'
+2026-08-12T19:55:39.3498853Z ##[debug]..=> 'linux-x64'
+2026-08-12T19:55:39.3499498Z ##[debug]=> 'dotnet restore --runtime linux-x64'
+2026-08-12T19:55:39.3499793Z ##[debug]Result: 'dotnet restore --runtime linux-x64'
+2026-08-12T19:55:39.3500750Z ##[debug]Evaluating: format('{0}/{1}/{2}', matrix.app-folder-name, matrix.project-name, matrix.project-name)
+2026-08-12T19:55:39.3501139Z ##[debug]Evaluating format:
+2026-08-12T19:55:39.3501343Z ##[debug]..Evaluating String:
+2026-08-12T19:55:39.3501549Z ##[debug]..=> '{0}/{1}/{2}'
+2026-08-12T19:55:39.3501800Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:39.3501996Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:39.3502230Z ##[debug]....=> Object
+2026-08-12T19:55:39.3502424Z ##[debug]....Evaluating String:
+2026-08-12T19:55:39.3502652Z ##[debug]....=> 'app-folder-name'
+2026-08-12T19:55:39.3502900Z ##[debug]..=> 'FPS.Framework/FPS.AWS.Lambda'
+2026-08-12T19:55:39.3503150Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:39.3503356Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:39.3503557Z ##[debug]....=> Object
+2026-08-12T19:55:39.3503755Z ##[debug]....Evaluating String:
+2026-08-12T19:55:39.3503950Z ##[debug]....=> 'project-name'
+2026-08-12T19:55:39.3504193Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:39.3505212Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:39.3505439Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:39.3505647Z ##[debug]....=> Object
+2026-08-12T19:55:39.3505839Z ##[debug]....Evaluating String:
+2026-08-12T19:55:39.3506055Z ##[debug]....=> 'project-name'
+2026-08-12T19:55:39.3506304Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:39.3506917Z ##[debug]=> 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:39.3507498Z ##[debug]Result: 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:39.3508024Z ##[debug]Loading env
+2026-08-12T19:55:39.3511756Z ##[group]Run dotnet restore --runtime linux-x64
+2026-08-12T19:55:39.3512033Z [36;1mdotnet restore --runtime linux-x64[0m
+2026-08-12T19:55:39.3549731Z shell: /usr/bin/bash -e {0}
+2026-08-12T19:55:39.3549933Z env:
+2026-08-12T19:55:39.3550151Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:55:39.3550451Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:55:39.3550727Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:55:39.3550973Z   release-publish-folder-name: publish-release
+2026-08-12T19:55:39.3551207Z   DOTNET_ROOT: /usr/share/dotnet
+2026-08-12T19:55:39.3551400Z ##[endgroup]
+2026-08-12T19:55:39.4643128Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/https://urldefense.com/v3/__http://fdbfec1f-c491-4e77-9e12-4398bc31e164.sh__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwV7cepEAg$ 
+2026-08-12T19:55:40.7417371Z   Determining projects to restore...
+2026-08-12T19:55:49.1069699Z   Restored /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FinSys.Framework/FinSys.Framework.DatabaseConnector/FinSys.Framework.DatabaseConnector.csproj (in 7.43 sec).
+2026-08-12T19:55:49.1086726Z   Restored /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor.csproj (in 7.42 sec).
+2026-08-12T19:55:49.2479705Z   Restored /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FPS.Framework/FPS.AWS.Common/FPS.AWS.Common/FPS.AWS.Common.csproj (in 131 ms).
+2026-08-12T19:55:49.2884896Z ##[debug]Finishing: Restore nuget packages
+2026-08-12T19:55:49.2895299Z ##[debug]Evaluating condition for step: 'Build debug and package'
+2026-08-12T19:55:49.2897255Z ##[debug]Evaluating: success()
+2026-08-12T19:55:49.2897603Z ##[debug]Evaluating success:
+2026-08-12T19:55:49.2897983Z ##[debug]=> true
+2026-08-12T19:55:49.2898275Z ##[debug]Result: true
+2026-08-12T19:55:49.2898805Z ##[debug]Starting: Build debug and package
+2026-08-12T19:55:49.2906472Z ##[debug]Loading inputs
+2026-08-12T19:55:49.2908293Z ##[debug]Evaluating: format('dotnet publish --configuration Debug --no-restore --runtime {0} --self-contained false --output {1}
+2026-08-12T19:55:49.2908824Z ##[debug]Compress-Archive -Path "{2}/*" -DestinationPath ./{3}.zip
+2026-08-12T19:55:49.2909351Z ##[debug]', matrix.runtime, env.debug-publish-folder-name, env.debug-publish-folder-name, env.debug-publish-folder-name)
+2026-08-12T19:55:49.2909794Z ##[debug]Evaluating format:
+2026-08-12T19:55:49.2910001Z ##[debug]..Evaluating String:
+2026-08-12T19:55:49.2910447Z ##[debug]..=> 'dotnet publish --configuration Debug --no-restore --runtime {0} --self-contained false --output {1}
+2026-08-12T19:55:49.2910905Z ##[debug]Compress-Archive -Path "{2}/*" -DestinationPath ./{3}.zip
+2026-08-12T19:55:49.2911174Z ##[debug]'
+2026-08-12T19:55:49.2911475Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2911683Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:49.2911890Z ##[debug]....=> Object
+2026-08-12T19:55:49.2912095Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2912319Z ##[debug]....=> 'runtime'
+2026-08-12T19:55:49.2912544Z ##[debug]..=> 'linux-x64'
+2026-08-12T19:55:49.2912767Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2912961Z ##[debug]....Evaluating env:
+2026-08-12T19:55:49.2913151Z ##[debug]....=> Object
+2026-08-12T19:55:49.2913333Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2913564Z ##[debug]....=> 'debug-publish-folder-name'
+2026-08-12T19:55:49.2915533Z ##[debug]..=> 'publish-debug'
+2026-08-12T19:55:49.2915810Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2916022Z ##[debug]....Evaluating env:
+2026-08-12T19:55:49.2916232Z ##[debug]....=> Object
+2026-08-12T19:55:49.2916623Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2916853Z ##[debug]....=> 'debug-publish-folder-name'
+2026-08-12T19:55:49.2917156Z ##[debug]..=> 'publish-debug'
+2026-08-12T19:55:49.2917381Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2917577Z ##[debug]....Evaluating env:
+2026-08-12T19:55:49.2917784Z ##[debug]....=> Object
+2026-08-12T19:55:49.2917976Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2918204Z ##[debug]....=> 'debug-publish-folder-name'
+2026-08-12T19:55:49.2918443Z ##[debug]..=> 'publish-debug'
+2026-08-12T19:55:49.2918914Z ##[debug]=> 'dotnet publish --configuration Debug --no-restore --runtime linux-x64 --self-contained false --output publish-debug
+2026-08-12T19:55:49.2919481Z ##[debug]Compress-Archive -Path "publish-debug/*" -DestinationPath ./https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ 
+2026-08-12T19:55:49.2919813Z ##[debug]'
+2026-08-12T19:55:49.2920225Z ##[debug]Result: 'dotnet publish --configuration Debug --no-restore --runtime linux-x64 --self-contained false --output publish-debug
+2026-08-12T19:55:49.2933365Z ##[debug]Compress-Archive -Path "publish-debug/*" -DestinationPath ./https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ 
+2026-08-12T19:55:49.2933846Z ##[debug]'
+2026-08-12T19:55:49.2936002Z ##[debug]Evaluating: format('{0}/{1}/{2}', matrix.app-folder-name, matrix.project-name, matrix.project-name)
+2026-08-12T19:55:49.2936643Z ##[debug]Evaluating format:
+2026-08-12T19:55:49.2936977Z ##[debug]..Evaluating String:
+2026-08-12T19:55:49.2937306Z ##[debug]..=> '{0}/{1}/{2}'
+2026-08-12T19:55:49.2937719Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2938033Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:49.2938360Z ##[debug]....=> Object
+2026-08-12T19:55:49.2938649Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2938976Z ##[debug]....=> 'app-folder-name'
+2026-08-12T19:55:49.2939352Z ##[debug]..=> 'FPS.Framework/FPS.AWS.Lambda'
+2026-08-12T19:55:49.2939742Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2940057Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:49.2940605Z ##[debug]....=> Object
+2026-08-12T19:55:49.2940902Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2941208Z ##[debug]....=> 'project-name'
+2026-08-12T19:55:49.2941582Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:49.2941996Z ##[debug]..Evaluating Index:
+2026-08-12T19:55:49.2942294Z ##[debug]....Evaluating matrix:
+2026-08-12T19:55:49.2942595Z ##[debug]....=> Object
+2026-08-12T19:55:49.2942868Z ##[debug]....Evaluating String:
+2026-08-12T19:55:49.2943221Z ##[debug]....=> 'project-name'
+2026-08-12T19:55:49.2943605Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:49.2944309Z ##[debug]=> 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:49.2945198Z ##[debug]Result: 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:55:49.2945821Z ##[debug]Loading env
+2026-08-12T19:55:49.2949305Z ##[group]Run dotnet publish --configuration Debug --no-restore --runtime linux-x64 --self-contained false --output publish-debug
+2026-08-12T19:55:49.2949994Z [36;1mdotnet publish --configuration Debug --no-restore --runtime linux-x64 --self-contained false --output publish-debug[0m
+2026-08-12T19:55:49.2950568Z [36;1mCompress-Archive -Path "publish-debug/*" -DestinationPath ./publish-debug.zip[0m
+2026-08-12T19:55:49.2990866Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-08-12T19:55:49.2991094Z env:
+2026-08-12T19:55:49.2991317Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:55:49.2991625Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:55:49.2991894Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:55:49.2992143Z   release-publish-folder-name: publish-release
+2026-08-12T19:55:49.2992380Z   DOTNET_ROOT: /usr/share/dotnet
+2026-08-12T19:55:49.2992575Z ##[endgroup]
+2026-08-12T19:55:49.4242666Z ##[debug]/usr/bin/pwsh -command ". '/home/runner/work/_temp/b13bcd35-c171-43c2-a123-fb6e7e76b487.ps1'"
+2026-08-12T19:55:54.5380839Z   FPS.AWS.Common -> /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FPS.Framework/FPS.AWS.Common/FPS.AWS.Common/bin/Debug/netstandard2.0/FPS.AWS.Common.dll
+2026-08-12T19:55:55.1068795Z   FinSys.Framework.DatabaseConnector -> /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FinSys.Framework/FinSys.Framework.DatabaseConnector/bin/Debug/netstandard2.0/FinSys.Framework.DatabaseConnector.dll
+2026-08-12T19:55:57.0592229Z   FPS.AWS.Lambda.DmsEventProcessor -> /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/bin/Debug/net10.0/linux-x64/FPS.AWS.Lambda.DmsEventProcessor.dll
+2026-08-12T19:56:11.1823860Z   FPS.AWS.Lambda.DmsEventProcessor -> /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/publish-debug/
+2026-08-12T19:56:14.0430698Z ##[debug]Finishing: Build debug and package
+2026-08-12T19:56:14.0439676Z ##[debug]Evaluating condition for step: 'Run unit tests'
+2026-08-12T19:56:14.0442451Z ##[debug]Evaluating: success()
+2026-08-12T19:56:14.0442940Z ##[debug]Evaluating success:
+2026-08-12T19:56:14.0443591Z ##[debug]=> true
+2026-08-12T19:56:14.0444040Z ##[debug]Result: true
+2026-08-12T19:56:14.0445060Z ##[debug]Starting: Run unit tests
+2026-08-12T19:56:14.0455527Z ##[debug]Loading inputs
+2026-08-12T19:56:14.0457871Z ##[debug]Evaluating: format('if (Test-Path -Path "{0}.Tests") {{ cd "{1}.Tests"; dotnet restore --runtime {2}; dotnet test --no-restore --configuration Debug; }}
+2026-08-12T19:56:14.0458839Z ##[debug]', matrix.project-name, matrix.project-name, matrix.runtime)
+2026-08-12T19:56:14.0459336Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.0459697Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.0460416Z ##[debug]..=> 'if (Test-Path -Path "{0}.Tests") {{ cd "{1}.Tests"; dotnet restore --runtime {2}; dotnet test --no-restore --configuration Debug; }}
+2026-08-12T19:56:14.0461191Z ##[debug]'
+2026-08-12T19:56:14.0461657Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.0461965Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.0462298Z ##[debug]....=> Object
+2026-08-12T19:56:14.0462629Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.0462957Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.0463435Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.0463871Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.0464189Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.0464987Z ##[debug]....=> Object
+2026-08-12T19:56:14.0465303Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.0465634Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.0466037Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.0466472Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.0466781Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.0467128Z ##[debug]....=> Object
+2026-08-12T19:56:14.0467423Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.0467727Z ##[debug]....=> 'runtime'
+2026-08-12T19:56:14.0468061Z ##[debug]..=> 'linux-x64'
+2026-08-12T19:56:14.0469074Z ##[debug]=> 'if (Test-Path -Path "FPS.AWS.Lambda.DmsEventProcessor.Tests") { cd "FPS.AWS.Lambda.DmsEventProcessor.Tests"; dotnet restore --runtime linux-x64; dotnet test --no-restore --configuration Debug; }
+2026-08-12T19:56:14.0470068Z ##[debug]'
+2026-08-12T19:56:14.0471022Z ##[debug]Result: 'if (Test-Path -Path "FPS.AWS.Lambda.DmsEventProcessor.Tests") { cd "FPS.AWS.Lambda.DmsEventProcessor.Tests"; dotnet restore --runtime linux-x64; dotnet test --no-restore --configuration Debug; }
+2026-08-12T19:56:14.0472041Z ##[debug]'
+2026-08-12T19:56:14.0472993Z ##[debug]Evaluating: format('{0}/{1}', matrix.app-folder-name, matrix.project-name)
+2026-08-12T19:56:14.0473523Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.0473838Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.0474161Z ##[debug]..=> '{0}/{1}'
+2026-08-12T19:56:14.0476230Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.0476570Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.0476899Z ##[debug]....=> Object
+2026-08-12T19:56:14.0477191Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.0477517Z ##[debug]....=> 'app-folder-name'
+2026-08-12T19:56:14.0477944Z ##[debug]..=> 'FPS.Framework/FPS.AWS.Lambda'
+2026-08-12T19:56:14.0478324Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.0478640Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.0478938Z ##[debug]....=> Object
+2026-08-12T19:56:14.0479203Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.0479520Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.0479909Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.0480440Z ##[debug]=> 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.0481104Z ##[debug]Result: 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.0481807Z ##[debug]Loading env
+2026-08-12T19:56:14.0487876Z ##[group]Run if (Test-Path -Path "FPS.AWS.Lambda.DmsEventProcessor.Tests") { cd "FPS.AWS.Lambda.DmsEventProcessor.Tests"; dotnet restore --runtime linux-x64; dotnet test --no-restore --configuration Debug; }
+2026-08-12T19:56:14.0489726Z [36;1mif (Test-Path -Path "FPS.AWS.Lambda.DmsEventProcessor.Tests") { cd "FPS.AWS.Lambda.DmsEventProcessor.Tests"; dotnet restore --runtime linux-x64; dotnet test --no-restore --configuration Debug; }[0m
+2026-08-12T19:56:14.0547508Z shell: /usr/bin/pwsh -command ". '{0}'"
+2026-08-12T19:56:14.0547866Z env:
+2026-08-12T19:56:14.0548208Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:56:14.0548690Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:56:14.0549127Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:56:14.0549544Z   release-publish-folder-name: publish-release
+2026-08-12T19:56:14.0549943Z   DOTNET_ROOT: /usr/share/dotnet
+2026-08-12T19:56:14.0550260Z ##[endgroup]
+2026-08-12T19:56:14.0593340Z ##[debug]/usr/bin/pwsh -command ". '/home/runner/work/_temp/d662fffd-6ab0-4454-abe6-f63d0a5e3e0a.ps1'"
+2026-08-12T19:56:14.6895939Z ##[debug]Finishing: Run unit tests
+2026-08-12T19:56:14.6904622Z ##[debug]Evaluating condition for step: 'Set sandbox instance number'
+2026-08-12T19:56:14.6908042Z ##[debug]Evaluating: success()
+2026-08-12T19:56:14.6908535Z ##[debug]Evaluating success:
+2026-08-12T19:56:14.6909067Z ##[debug]=> true
+2026-08-12T19:56:14.6909550Z ##[debug]Result: true
+2026-08-12T19:56:14.6910274Z ##[debug]Starting: Set sandbox instance number
+2026-08-12T19:56:14.6920445Z ##[debug]Loading inputs
+2026-08-12T19:56:14.6922359Z ##[debug]Evaluating: format('runNumber={0}
+2026-08-12T19:56:14.6922760Z ##[debug]sandboxNumber=$((runNumber%20))
+2026-08-12T19:56:14.6923181Z ##[debug]echo "RUN_NUMBER_END=$sandboxNumber" >> $GITHUB_ENV
+2026-08-12T19:56:14.6923600Z ##[debug]', github.run_number)
+2026-08-12T19:56:14.6923932Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.6924249Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.6925969Z ##[debug]..=> 'runNumber={0}
+2026-08-12T19:56:14.6926327Z ##[debug]sandboxNumber=$((runNumber%20))
+2026-08-12T19:56:14.6926797Z ##[debug]echo "RUN_NUMBER_END=$sandboxNumber" >> $GITHUB_ENV
+2026-08-12T19:56:14.6927197Z ##[debug]'
+2026-08-12T19:56:14.6927585Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.6927901Z ##[debug]....Evaluating github:
+2026-08-12T19:56:14.6928231Z ##[debug]....=> Object
+2026-08-12T19:56:14.6928542Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.6928862Z ##[debug]....=> 'run_number'
+2026-08-12T19:56:14.6929228Z ##[debug]..=> '6228'
+2026-08-12T19:56:14.6929559Z ##[debug]=> 'runNumber=6228
+2026-08-12T19:56:14.6929861Z ##[debug]sandboxNumber=$((runNumber%20))
+2026-08-12T19:56:14.6930278Z ##[debug]echo "RUN_NUMBER_END=$sandboxNumber" >> $GITHUB_ENV
+2026-08-12T19:56:14.6930682Z ##[debug]'
+2026-08-12T19:56:14.6930969Z ##[debug]Result: 'runNumber=6228
+2026-08-12T19:56:14.6931304Z ##[debug]sandboxNumber=$((runNumber%20))
+2026-08-12T19:56:14.6931722Z ##[debug]echo "RUN_NUMBER_END=$sandboxNumber" >> $GITHUB_ENV
+2026-08-12T19:56:14.6932297Z ##[debug]'
+2026-08-12T19:56:14.6932635Z ##[debug]Loading env
+2026-08-12T19:56:14.6936025Z ##[group]Run runNumber=6228
+2026-08-12T19:56:14.6936255Z [36;1mrunNumber=6228[0m
+2026-08-12T19:56:14.6936457Z [36;1msandboxNumber=$((runNumber%20))[0m
+2026-08-12T19:56:14.6936726Z [36;1mecho "RUN_NUMBER_END=$sandboxNumber" >> $GITHUB_ENV[0m
+2026-08-12T19:56:14.6974029Z shell: /usr/bin/bash -e {0}
+2026-08-12T19:56:14.6974236Z env:
+2026-08-12T19:56:14.6974573Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:56:14.6974875Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:56:14.6975139Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:56:14.6975390Z   release-publish-folder-name: publish-release
+2026-08-12T19:56:14.6975626Z   DOTNET_ROOT: /usr/share/dotnet
+2026-08-12T19:56:14.6975821Z ##[endgroup]
+2026-08-12T19:56:14.7010998Z ##[debug]/usr/bin/bash -e /home/runner/work/_temp/https://urldefense.com/v3/__http://f0e7ef51-9f01-4b09-9e1e-9c8df77119d9.sh__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwUeACu0iA$ 
+2026-08-12T19:56:14.7035235Z ##[debug]RUN_NUMBER_END='8'
+2026-08-12T19:56:14.7036747Z ##[debug]Finishing: Set sandbox instance number
+2026-08-12T19:56:14.7042022Z ##[debug]Evaluating condition for step: 'Submit sandbox scan'
+2026-08-12T19:56:14.7043051Z ##[debug]Evaluating: success()
+2026-08-12T19:56:14.7043347Z ##[debug]Evaluating success:
+2026-08-12T19:56:14.7043655Z ##[debug]=> true
+2026-08-12T19:56:14.7043930Z ##[debug]Result: true
+2026-08-12T19:56:14.7044326Z ##[debug]Starting: Submit sandbox scan
+2026-08-12T19:56:14.7080061Z ##[debug]Loading inputs
+2026-08-12T19:56:14.7081276Z ##[debug]Evaluating: format('{0}{1}', env.veracode-prefix, matrix.veracode-name)
+2026-08-12T19:56:14.7081598Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.7081811Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7082026Z ##[debug]..=> '{0}{1}'
+2026-08-12T19:56:14.7082292Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7082481Z ##[debug]....Evaluating env:
+2026-08-12T19:56:14.7082689Z ##[debug]....=> Object
+2026-08-12T19:56:14.7082888Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7083154Z ##[debug]....=> 'veracode-prefix'
+2026-08-12T19:56:14.7083452Z ##[debug]..=> 'DVA FLIGHT PROFITABILITY UA - '
+2026-08-12T19:56:14.7083720Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7083975Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.7084176Z ##[debug]....=> Object
+2026-08-12T19:56:14.7084356Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7084861Z ##[debug]....=> 'veracode-name'
+2026-08-12T19:56:14.7085088Z ##[debug]..=> 'Lambda DMS Event Processor'
+2026-08-12T19:56:14.7085404Z ##[debug]=> 'DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor'
+2026-08-12T19:56:14.7085776Z ##[debug]Result: 'DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor'
+2026-08-12T19:56:14.7086702Z ##[debug]Evaluating: format('{0}/{1}/{2}/{3}.zip', matrix.app-folder-name, matrix.project-name, matrix.project-name, env.debug-publish-folder-name)
+2026-08-12T19:56:14.7087182Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.7087380Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7087599Z ##[debug]..=> '{0}/{1}/{2}/{3}.zip'
+2026-08-12T19:56:14.7087841Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7088038Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.7088243Z ##[debug]....=> Object
+2026-08-12T19:56:14.7088431Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7088645Z ##[debug]....=> 'app-folder-name'
+2026-08-12T19:56:14.7088898Z ##[debug]..=> 'FPS.Framework/FPS.AWS.Lambda'
+2026-08-12T19:56:14.7089145Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7089356Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.7089551Z ##[debug]....=> Object
+2026-08-12T19:56:14.7089734Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7089938Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.7090182Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.7090447Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7090636Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.7090823Z ##[debug]....=> Object
+2026-08-12T19:56:14.7091002Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7091370Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.7091602Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.7091841Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7092025Z ##[debug]....Evaluating env:
+2026-08-12T19:56:14.7092212Z ##[debug]....=> Object
+2026-08-12T19:56:14.7092388Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7092601Z ##[debug]....=> 'debug-publish-folder-name'
+2026-08-12T19:56:14.7092840Z ##[debug]..=> 'publish-debug'
+2026-08-12T19:56:14.7093306Z ##[debug]=> 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ '
+2026-08-12T19:56:14.7094000Z ##[debug]Result: 'FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ '
+2026-08-12T19:56:14.7095031Z ##[debug]Evaluating: format('GitHub Apps Branch {0}-{1}', github.run_number, github.run_attempt)
+2026-08-12T19:56:14.7095401Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.7095619Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7096017Z ##[debug]..=> 'GitHub Apps Branch {0}-{1}'
+2026-08-12T19:56:14.7096277Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7096473Z ##[debug]....Evaluating github:
+2026-08-12T19:56:14.7096679Z ##[debug]....=> Object
+2026-08-12T19:56:14.7096864Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7097062Z ##[debug]....=> 'run_number'
+2026-08-12T19:56:14.7097260Z ##[debug]..=> '6228'
+2026-08-12T19:56:14.7097448Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7097636Z ##[debug]....Evaluating github:
+2026-08-12T19:56:14.7097826Z ##[debug]....=> Object
+2026-08-12T19:56:14.7097999Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7098202Z ##[debug]....=> 'run_attempt'
+2026-08-12T19:56:14.7098399Z ##[debug]..=> '2'
+2026-08-12T19:56:14.7098595Z ##[debug]=> 'GitHub Apps Branch 6228-2'
+2026-08-12T19:56:14.7098849Z ##[debug]Result: 'GitHub Apps Branch 6228-2'
+2026-08-12T19:56:14.7099355Z ##[debug]Evaluating: secrets.ORG_VERACODE_API_ID
+2026-08-12T19:56:14.7099598Z ##[debug]Evaluating Index:
+2026-08-12T19:56:14.7099783Z ##[debug]..Evaluating secrets:
+2026-08-12T19:56:14.7099988Z ##[debug]..=> Object
+2026-08-12T19:56:14.7100165Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7100363Z ##[debug]..=> 'ORG_VERACODE_API_ID'
+2026-08-12T19:56:14.7100689Z ##[debug]=> '***'
+2026-08-12T19:56:14.7100899Z ##[debug]Result: '***'
+2026-08-12T19:56:14.7101250Z ##[debug]Evaluating: secrets.ORG_VERACODE_API_KEY
+2026-08-12T19:56:14.7101508Z ##[debug]Evaluating Index:
+2026-08-12T19:56:14.7101698Z ##[debug]..Evaluating secrets:
+2026-08-12T19:56:14.7101899Z ##[debug]..=> Object
+2026-08-12T19:56:14.7102078Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7102279Z ##[debug]..=> 'ORG_VERACODE_API_KEY'
+2026-08-12T19:56:14.7102814Z ##[debug]=> '***'
+2026-08-12T19:56:14.7103306Z ##[debug]Result: '***'
+2026-08-12T19:56:14.7103694Z ##[debug]Evaluating: format('Apps Branch {0}', env.RUN_NUMBER_END)
+2026-08-12T19:56:14.7103969Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.7104161Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7104370Z ##[debug]..=> 'Apps Branch {0}'
+2026-08-12T19:56:14.7104861Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7105055Z ##[debug]....Evaluating env:
+2026-08-12T19:56:14.7105245Z ##[debug]....=> Object
+2026-08-12T19:56:14.7105437Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7105631Z ##[debug]....=> 'RUN_NUMBER_END'
+2026-08-12T19:56:14.7105868Z ##[debug]..=> '8'
+2026-08-12T19:56:14.7106070Z ##[debug]=> 'Apps Branch 8'
+2026-08-12T19:56:14.7106269Z ##[debug]Result: 'Apps Branch 8'
+2026-08-12T19:56:14.7106707Z ##[debug]Evaluating: format('{0}.dll', matrix.project-name)
+2026-08-12T19:56:14.7106970Z ##[debug]Evaluating format:
+2026-08-12T19:56:14.7107165Z ##[debug]..Evaluating String:
+2026-08-12T19:56:14.7107363Z ##[debug]..=> '{0}.dll'
+2026-08-12T19:56:14.7107557Z ##[debug]..Evaluating Index:
+2026-08-12T19:56:14.7107748Z ##[debug]....Evaluating matrix:
+2026-08-12T19:56:14.7107945Z ##[debug]....=> Object
+2026-08-12T19:56:14.7108129Z ##[debug]....Evaluating String:
+2026-08-12T19:56:14.7108517Z ##[debug]....=> 'project-name'
+2026-08-12T19:56:14.7108765Z ##[debug]..=> 'FPS.AWS.Lambda.DmsEventProcessor'
+2026-08-12T19:56:14.7109062Z ##[debug]=> 'FPS.AWS.Lambda.DmsEventProcessor.dll'
+2026-08-12T19:56:14.7109351Z ##[debug]Result: 'FPS.AWS.Lambda.DmsEventProcessor.dll'
+2026-08-12T19:56:14.7112934Z ##[debug]Loading env
+2026-08-12T19:56:14.7116731Z ##[group]Run veracode/uploadandscan-action@v0.2.3
+2026-08-12T19:56:14.7116967Z with:
+2026-08-12T19:56:14.7117194Z   appname: DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor
+2026-08-12T19:56:14.7117474Z   createprofile: false
+2026-08-12T19:56:14.7117882Z   filepath: FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ 
+2026-08-12T19:56:14.7118326Z   version: GitHub Apps Branch 6228-2
+2026-08-12T19:56:14.7118589Z   vid: ***
+2026-08-12T19:56:14.7119047Z   vkey: ***
+2026-08-12T19:56:14.7119205Z   scantimeout: 30
+2026-08-12T19:56:14.7119384Z   sandboxname: Apps Branch 8
+2026-08-12T19:56:14.7119619Z   include: FPS.AWS.Lambda.DmsEventProcessor.dll
+2026-08-12T19:56:14.7119987Z   deleteincompletescan: true
+2026-08-12T19:56:14.7120176Z   debug: true
+2026-08-12T19:56:14.7120335Z   failbuild: true
+2026-08-12T19:56:14.7120503Z   createsandbox: false
+2026-08-12T19:56:14.7120680Z   platformType: CLOUD
+2026-08-12T19:56:14.7120854Z   workflowApp: false
+2026-08-12T19:56:14.7121023Z env:
+2026-08-12T19:56:14.7121231Z   artifactory-url: https://urldefense.com/v3/__https://artifactorycloud.ual.com__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWC_nUCHg$ 
+2026-08-12T19:56:14.7121521Z   veracode-prefix: DVA FLIGHT PROFITABILITY UA - 
+2026-08-12T19:56:14.7121788Z   debug-publish-folder-name: publish-debug
+2026-08-12T19:56:14.7122051Z   release-publish-folder-name: publish-release
+2026-08-12T19:56:14.7122295Z   DOTNET_ROOT: /usr/share/dotnet
+2026-08-12T19:56:14.7122493Z   RUN_NUMBER_END: 8
+2026-08-12T19:56:14.7122662Z ##[endgroup]
+2026-08-12T19:56:14.8539172Z ##[debug]--  setGlobalProxy() - START  --
+2026-08-12T19:56:14.8540134Z ##[debug]--  setGlobalProxy() - END  --
+2026-08-12T19:56:14.8541168Z ##[debug]Getting Veracode Application for Policy Scan: DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor
+2026-08-12T19:56:14.8542581Z ##[debug]Module: application-service, function: getApplicationByName. Application: DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor
+2026-08-12T19:56:14.8544186Z ##[debug]{"resourceUri":"/appsec/v1/applications","queryAttribute":"name","queryValue":"DVA%20FLIGHT%20PROFITABILITY%20UA%20-%20Lambda%20DMS%20Event%20Processor"}
+2026-08-12T19:56:14.8561084Z [object Object]
+2026-08-12T19:56:15.2791445Z ##[debug]Module: application-service, function: getVeracodeApplicationForPolicyScan. Application: DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor
+2026-08-12T19:56:15.2793052Z ##[debug]Check if DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor is found via Application API
+2026-08-12T19:56:15.2808916Z ##[debug]{"_embedded":{"applications":[{"id":2232205,"oid":62308,"last_completed_scan_date":"2026-08-10T21:32:23.000Z","guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","created":"2024-07-31T16:48:30.000Z","modified":"2026-08-12T19:03:10.000Z","alt_org_id":62308,"app_profile_url":"HomeAppProfile:62308:2232205","scans":[{"scan_type":"STATIC","status":"PUBLISHED","modified_date":"2026-08-10T21:32:23.000Z","scan_url":"StaticOverview:62308:2232205:73265601:73222190:73237839","internal_status":"resultsready"}],"last_policy_compliance_check_date":"2026-08-10T21:36:05.000Z","profile":{"name":"DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor","tags":null,"business_unit":{"id":101404,"name":"Melanie Harris - MD - IT Emp and Ent Systems","guid":"697b74db-453e-4fc5-93db-aa37e5e063d4"},"business_owners":[],"archer_app_name":null,"enterprise_id":0,"policies":[{"guid":"e0216d6d-3c69-4e70-b571-077684c8e284","name":"United Regulatory Application 2026","is_default":true,"policy_compliance_status":"PASSED"}],"teams":[{"team_id":202491,"team_name":"Everyone","guid":"f333a68e-75e7-470d-a997-8abc9a9d1f50"}],"custom_fields":[{"name":"Application Key","value":"DVA"},{"name":"Code Repository Name","value":"https://urldefense.com/v3/__https://github.com/United-Airlines-Org/CorporateAccounting.FlightProfitability/tree/main/FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor*22*7D,*7B*22name*22:*22Retired*22,*22value*22:*22N*22*7D,*7B*22name*22:*22PCI*22,*22value*22:*22N*22*7D,*7B*22name*22:*22PII*22,*22value*22:*22Y*22*7D,*7B*22name*22:*22SOX*22,*22value*22:*22Y*22*7D,*7B*22name*22:*22DFARS*22,*22value*22:*22N*22*7D,*7B*22name*22:*22PHI*22,*22value*22:*22N*22*7D,*7B*22name*22:*22Network__;JSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUl!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWdvuF5qA$  Exposure","value":"intranet"},{"name":"Source Code Owner","value":"Unknown"},{"name":"Regulatory","value":"Y"},{"name":"VP","value":"Grant Milstead"},{"name":"BusinessPortfolio","value":"CCCTO"},{"name":"Owned By","value":"Rama Rachappa"},{"name":"Operational Status","value":"In Production"},{"name":"Hosting Type","value":"Public Cloud"},{"name":"FAA","value":"N"},{"name":"Inherent Risk","value":"HIGH"}],"description":null,"settings":{"nextday_consultation_allowed":false,"static_scan_dependencies_allowed":false,"static_scan_xpa_or_dpa":true,"dynamic_scan_approval_not_required":false,"sca_enabled":false,"static_scan_xpp_enabled":false,"pin_static_engine_version":false},"git_repo_url":"","vendor_rescan":false,"upload_and_scan_sca_enabled":true,"business_criticality":"MEDIUM"},"results_url":"ViewReportsResultSummary:62308:2232205:73265601","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332"},"sandboxes":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes{?page,size}","templated":true},"policy":{"href":"https://api.veracode.com/appsec/v1/policies/e0216d6d-3c69-4e70-b571-077684c8e284"}}}]},"_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications?name=DVA%20FLIGHT%20PROFITABILITY%20UA%20-%20Lambda%20DMS%20Event%20Processor&published_scans_only=false{&page,size,org,policy_id,policy_guid,legacy_id,business_unit,tag,policy,policy_compliance,scan_status,scan_type,modified_after,policy_compliance_checked_after,team,git_repo_url,custom_field_names,custom_field_values,sort_by_custom_field_name}","templated":true}},"fallback_type":null,"full_type":null,"page":{"size":20,"total_elements":1,"total_pages":1,"number":0}}
+2026-08-12T19:56:15.2825604Z ##[debug]Module: application-service, function: profileExists. Application: DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor
+2026-08-12T19:56:15.2827056Z ##[debug]Check if DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor has a Veracode application profile
+2026-08-12T19:56:15.2827868Z Veracode App Id: 2232205
+2026-08-12T19:56:15.2828392Z Veracode App Guid: 745b7bd1-2e2e-42d6-9c64-c79d35776332
+2026-08-12T19:56:15.4269776Z Latest version of Veracode Java wrapper: https://urldefense.com/v3/__http://26.3.19.0__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwX0LUDQmg$ 
+2026-08-12T19:56:15.8110725Z Veracode Java wrapper downloaded: vosp-api-wrappers-java-26.3.19.0.jar
+2026-08-12T19:56:15.8111699Z Running a Sandbox Scan: 'Apps Branch 8' on applicaiton: 'DVA FLIGHT PROFITABILITY UA - Lambda DMS Event Processor'
+2026-08-12T19:56:15.8113098Z ##[debug]Module: application-service, function: getSandboxIDfromProfile. Application: 745b7bd1-2e2e-42d6-9c64-c79d35776332
+2026-08-12T19:56:16.0208096Z ##[debug]{"_embedded":{"sandboxes":[{"id":7590873,"guid":"66a4b6b0-3bb6-47b3-af6c-463de3c25ec7","name":"Apps Branch 15","created":"2025-06-25T18:41:00.000Z","modified":"2026-08-10T22:08:29.000Z","owner_username":"u420331-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/66a4b6b0-3bb6-47b3-af6c-463de3c25ec7"}}},{"id":8626187,"guid":"a1c17806-b77c-4310-983d-b92ab467e651","name":"Apps Branch 0","created":"2026-04-08T01:50:41.000Z","modified":"2026-08-12T01:18:56.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/a1c17806-b77c-4310-983d-b92ab467e651"}}},{"id":8626191,"guid":"ad8b6dea-b70c-4f38-94ea-5e0bdc895853","name":"Apps Branch 1","created":"2026-04-08T01:53:43.000Z","modified":"2026-08-12T02:08:03.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/ad8b6dea-b70c-4f38-94ea-5e0bdc895853"}}},{"id":8626194,"guid":"e95eb11b-dcb6-4b03-a554-cb67f9ad9d41","name":"Apps Branch 2","created":"2026-04-08T01:54:15.000Z","modified":"2026-08-12T02:32:06.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/e95eb11b-dcb6-4b03-a554-cb67f9ad9d41"}}},{"id":8626196,"guid":"e98e8a0c-ebdf-449e-8e88-1ebc58cb60cd","name":"Apps Branch 3","created":"2026-04-08T01:54:34.000Z","modified":"2026-08-12T03:36:15.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/e98e8a0c-ebdf-449e-8e88-1ebc58cb60cd"}}},{"id":8626198,"guid":"d6726255-8915-4104-a9f8-f7c1332f0314","name":"Apps Branch 4","created":"2026-04-08T01:54:57.000Z","modified":"2026-08-12T04:38:44.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/d6726255-8915-4104-a9f8-f7c1332f0314"}}},{"id":8626200,"guid":"e70245b1-56e1-46c4-b8a7-749f3723075c","name":"Apps Branch 5","created":"2026-04-08T01:55:18.000Z","modified":"2026-08-12T04:49:39.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/e70245b1-56e1-46c4-b8a7-749f3723075c"}}},{"id":8626202,"guid":"ee48aa1b-f90e-4d60-a955-ed4691e50359","name":"Apps Branch 6","created":"2026-04-08T01:55:41.000Z","modified":"2026-08-12T05:02:36.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/ee48aa1b-f90e-4d60-a955-ed4691e50359"}}},{"id":8626203,"guid":"a675146d-5ef1-4680-8762-09f63ae7a748","name":"Apps Branch 7","created":"2026-04-08T01:56:08.000Z","modified":"2026-08-12T18:26:28.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/a675146d-5ef1-4680-8762-09f63ae7a748"}}},{"id":8626205,"guid":"9ee5aa35-a3b0-4c3d-a1a5-b8372e0ffa9c","name":"Apps Branch 8","created":"2026-04-08T01:56:53.000Z","modified":"2026-08-12T19:03:10.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/9ee5aa35-a3b0-4c3d-a1a5-b8372e0ffa9c"}}},{"id":8626208,"guid":"bbb6d267-3521-4915-8553-e46775951829","name":"Apps Branch 9","created":"2026-04-08T01:57:21.000Z","modified":"2026-08-07T05:07:09.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/bbb6d267-3521-4915-8553-e46775951829"}}},{"id":8626220,"guid":"a76631b6-6377-40ae-81fd-bb4676cb75b4","name":"Apps Branch 10","created":"2026-04-08T02:01:51.000Z","modified":"2026-08-07T09:54:39.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/a76631b6-6377-40ae-81fd-bb4676cb75b4"}}},{"id":8626222,"guid":"2eec7113-1271-45f2-8b47-c5e1eb5c5836","name":"Apps Branch 11","created":"2026-04-08T02:02:42.000Z","modified":"2026-08-07T17:03:06.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/2eec7113-1271-45f2-8b47-c5e1eb5c5836"}}},{"id":8626225,"guid":"d3e88967-ad98-4d80-8d02-4008ebd59b56","name":"Apps Branch 12","created":"2026-04-08T02:03:58.000Z","modified":"2026-08-10T19:21:48.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/d3e88967-ad98-4d80-8d02-4008ebd59b56"}}},{"id":8626234,"guid":"e469de09-8a3a-4ac6-9ff3-715d3dde672e","name":"Apps Branch 13","created":"2026-04-08T02:05:55.000Z","modified":"2026-08-10T19:38:14.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/e469de09-8a3a-4ac6-9ff3-715d3dde672e"}}},{"id":8626239,"guid":"ae478efd-650d-4d8c-a237-77e98d1f282e","name":"Apps Branch 14","created":"2026-04-08T02:07:22.000Z","modified":"2026-08-10T20:34:48.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/ae478efd-650d-4d8c-a237-77e98d1f282e"}}},{"id":8626245,"guid":"946bebef-a825-4ba8-b7be-5fa800c86291","name":"Apps Branch 16","created":"2026-04-08T02:09:57.000Z","modified":"2026-08-10T23:00:11.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/946bebef-a825-4ba8-b7be-5fa800c86291"}}},{"id":8626250,"guid":"45efe537-b073-4e6f-8595-2e62c4d48e44","name":"Apps Branch 17","created":"2026-04-08T02:10:56.000Z","modified":"2026-08-11T00:01:51.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/45efe537-b073-4e6f-8595-2e62c4d48e44"}}},{"id":8626251,"guid":"5d37b769-12dd-4a48-9006-a102829db6ae","name":"Apps Branch 18","created":"2026-04-08T02:11:40.000Z","modified":"2026-08-11T17:25:14.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/5d37b769-12dd-4a48-9006-a102829db6ae"}}},{"id":8626253,"guid":"ffb0578c-b791-4060-be5e-637b8cfbd6b9","name":"Apps Branch 19","created":"2026-04-08T02:12:37.000Z","modified":"2026-08-12T01:10:16.000Z","owner_username":"u388151-ddfb6943a2508c8f","organization_id":62308,"custom_fields":null,"auto_recreate":false,"application_guid":"745b7bd1-2e2e-42d6-9c64-c79d35776332","_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes/ffb0578c-b791-4060-be5e-637b8cfbd6b9"}}}]},"_links":{"self":{"href":"https://api.veracode.com/appsec/v1/applications/745b7bd1-2e2e-42d6-9c64-c79d35776332/sandboxes?page=0&size=20"}},"fallback_type":null,"full_type":null,"page":{"size":20,"total_elements":20,"total_pages":1,"number":0}}
+2026-08-12T19:56:16.0247594Z Finding Sandbox ID & GUID
+2026-08-12T19:56:16.0248081Z Not the sandbox (Apps Branch 15) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0248725Z Not the sandbox (Apps Branch 0) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0249562Z Not the sandbox (Apps Branch 1) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0250136Z Not the sandbox (Apps Branch 2) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0250730Z Not the sandbox (Apps Branch 3) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0251308Z Not the sandbox (Apps Branch 4) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0251864Z Not the sandbox (Apps Branch 5) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0252413Z Not the sandbox (Apps Branch 6) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0252951Z Not the sandbox (Apps Branch 7) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0253499Z Not the sandbox (Apps Branch 9) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0254066Z Not the sandbox (Apps Branch 10) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0255009Z Not the sandbox (Apps Branch 11) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0255629Z Not the sandbox (Apps Branch 12) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0256215Z Not the sandbox (Apps Branch 13) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0256785Z Not the sandbox (Apps Branch 14) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0257343Z Not the sandbox (Apps Branch 16) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0257903Z Not the sandbox (Apps Branch 17) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0258479Z Not the sandbox (Apps Branch 18) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0259047Z Not the sandbox (Apps Branch 19) we are looking for (Apps Branch 8)
+2026-08-12T19:56:16.0259604Z Sandbox Found: 8626205 - 9ee5aa35-a3b0-4c3d-a1a5-b8372e0ffa9c
+2026-08-12T19:56:16.0260530Z ##[debug]Module: scan-service, function: createSandboxBuild. Action:CreateBuild  Application: 2232205
+2026-08-12T19:56:19.0925504Z [2026.08.12 19:56:19.020] 
+2026-08-12T19:56:19.0926169Z ##[debug]failed
+2026-08-12T19:56:19.0927082Z [2026.08.12 19:56:19.020] * Action "CreateBuild" returned the following message:
+2026-08-12T19:56:19.0927985Z ##[debug]Module: scan-service, function: createSandboxBuild. Action:DeleteBuild Application: 2232205
+2026-08-12T19:56:19.0929630Z [2026.08.12 19:56:19.020] * App not in state where new builds are allowed.
+2026-08-12T19:56:19.0930314Z [2026.08.12 19:56:19.020] 
+2026-08-12T19:56:19.0935621Z Command failed: java -jar vosp-api-wrappers-java-26.3.19.0.jar -vid *** -vkey *** -action CreateBuild -sandboxid 8626205 -appid 2232205 -version GitHub Apps Branch 6228-2 -debug
+2026-08-12T19:56:19.0938505Z [2026.08.12 19:56:19.020] 
+2026-08-12T19:56:19.0939147Z [2026.08.12 19:56:19.020] * Action "CreateBuild" returned the following message:
+2026-08-12T19:56:19.0939912Z [2026.08.12 19:56:19.020] * App not in state where new builds are allowed.
+2026-08-12T19:56:19.0940479Z [2026.08.12 19:56:19.020] 
+2026-08-12T19:56:19.0940767Z 
+2026-08-12T19:56:21.0994089Z ##[debug]{"type":"Buffer","data":[91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,50,50,51,93,32,86,101,114,97,99,111,100,101,74,97,118,97,65,80,73,32,118,50,54,46,51,46,49,57,46,48,32,99,85,110,107,110,111,119,110,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,50,50,51,93,32,87,114,97,112,112,101,114,32,97,99,116,105,111,110,58,32,68,101,108,101,116,101,66,117,105,108,100,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,52,51,55,93,32,73,110,118,111,107,105,110,103,32,65,80,73,32,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,97,112,105,47,53,46,48,47,100,101,108,101,116,101,98,117,105,108,100,46,100,111,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,52,51,55,93,32,81,117,101,114,121,32,115,116,114,105,110,103,58,32,115,97,110,100,98,111,120,95,105,100,61,56,54,50,54,50,48,53,38,97,112,112,95,105,100,61,50,50,51,50,50,48,53,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,52,51,55,93,32,67,111,110,110,101,99,116,105,110,103,32,116,111,32,104,111,115,116,58,32,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,54,52,54,93,32,87,114,105,116,105,110,103,32,116,111,32,114,101,113,117,101,115,116,32,111,117,116,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,54,52,54,93,32,67,108,111,115,101,32,114,101,113,117,101,115,116,32,111,117,116,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,49,57,46,54,52,55,93,32,71,101,116,116,105,110,103,32,114,101,115,112,111,110,115,101,32,115,116,97,116,117,115,32,99,111,100,101,32,102,114,111,109,32,72,84,84,80,32,114,101,115,112,111,110,115,101,32,109,101,115,115,97,103,101,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,48,46,56,56,57,93,32,83,101,114,118,101,114,32,114,101,116,117,114,110,101,100,32,72,84,84,80,32,114,101,115,112,111,110,115,101,32,99,111,100,101,58,32,50,48,48,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,48,46,56,56,57,93,32,67,111,110,110,101,99,116,105,110,103,32,116,111,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,48,46,56,56,57,93,32,82,101,97,100,105,110,103,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,48,46,56,57,48,93,32,67,108,111,115,101,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,60,63,120,109,108,32,118,101,114,115,105,111,110,61,34,49,46,48,34,32,101,110,99,111,100,105,110,103,61,34,85,84,70,45,56,34,32,115,116,97,110,100,97,108,111,110,101,61,34,110,111,34,63,62,10,60,100,101,108,101,116,101,98,117,105,108,100,114,101,115,117,108,116,32,120,109,108,110,115,61,34,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,115,99,104,101,109,97,47,100,101,108,101,116,101,98,117,105,108,100,114,101,115,117,108,116,34,32,120,109,108,110,115,58,120,115,105,61,34,104,116,116,112,58,47,47,119,119,119,46,119,51,46,111,114,103,47,50,48,48,49,47,88,77,76,83,99,104,101,109,97,45,105,110,115,116,97,110,99,101,34,32,97,99,99,111,117,110,116,95,105,100,61,34,54,50,51,48,56,34,32,97,112,112,95,105,100,61,34,50,50,51,50,50,48,53,34,32,120,115,105,58,115,99,104,101,109,97,76,111,99,97,116,105,111,110,61,34,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,115,99,104,101,109,97,47,100,101,108,101,116,101,98,117,105,108,100,114,101,115,117,108,116,32,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,114,101,115,111,117,114,99,101,47,100,101,108,101,116,101,98,117,105,108,100,114,101,115,117,108,116,46,120,115,100,34,62,10,32,32,60,114,101,115,117,108,116,62,115,117,99,99,101,115,115,60,47,114,101,115,117,108,116,62,10,60,47,100,101,108,101,116,101,98,117,105,108,100,114,101,115,117,108,116,62,10,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,48,46,57,54,52,93,32,87,114,97,112,112,101,114,32,114,101,116,117,114,110,32,99,111,100,101,32,48,32,61,32,83,117,99,99,101,115,115,10]}
+2026-08-12T19:56:21.1005876Z ##[debug]Module: scan-service, function: createSandboxBuild. Action:CreateBuild Retry  Application: 2232205
+2026-08-12T19:56:23.0299724Z ##[debug]{"type":"Buffer","data":[91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,50,50,54,93,32,86,101,114,97,99,111,100,101,74,97,118,97,65,80,73,32,118,50,54,46,51,46,49,57,46,48,32,99,85,110,107,110,111,119,110,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,50,50,55,93,32,87,114,97,112,112,101,114,32,97,99,116,105,111,110,58,32,67,114,101,97,116,101,66,117,105,108,100,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,52,52,54,93,32,73,110,118,111,107,105,110,103,32,65,80,73,32,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,97,112,105,47,53,46,48,47,99,114,101,97,116,101,98,117,105,108,100,46,100,111,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,52,52,54,93,32,81,117,101,114,121,32,115,116,114,105,110,103,58,32,115,97,110,100,98,111,120,95,105,100,61,56,54,50,54,50,48,53,38,97,112,112,95,105,100,61,50,50,51,50,50,48,53,38,118,101,114,115,105,111,110,61,71,105,116,72,117,98,43,65,112,112,115,43,66,114,97,110,99,104,43,54,50,50,56,45,50,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,52,52,55,93,32,67,111,110,110,101,99,116,105,110,103,32,116,111,32,104,111,115,116,58,32,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,54,52,55,93,32,87,114,105,116,105,110,103,32,116,111,32,114,101,113,117,101,115,116,32,111,117,116,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,54,52,55,93,32,67,108,111,115,101,32,114,101,113,117,101,115,116,32,111,117,116,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,49,46,54,52,55,93,32,71,101,116,116,105,110,103,32,114,101,115,112,111,110,115,101,32,115,116,97,116,117,115,32,99,111,100,101,32,102,114,111,109,32,72,84,84,80,32,114,101,115,112,111,110,115,101,32,109,101,115,115,97,103,101,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,50,46,56,48,53,93,32,83,101,114,118,101,114,32,114,101,116,117,114,110,101,100,32,72,84,84,80,32,114,101,115,112,111,110,115,101,32,99,111,100,101,58,32,50,48,48,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,50,46,56,48,53,93,32,67,111,110,110,101,99,116,105,110,103,32,116,111,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,50,46,56,48,53,93,32,82,101,97,100,105,110,103,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,50,46,56,48,54,93,32,67,108,111,115,101,32,114,101,115,112,111,110,115,101,32,105,110,112,117,116,32,115,116,114,101,97,109,10,60,63,120,109,108,32,118,101,114,115,105,111,110,61,34,49,46,48,34,32,101,110,99,111,100,105,110,103,61,34,85,84,70,45,56,34,32,115,116,97,110,100,97,108,111,110,101,61,34,110,111,34,63,62,10,60,98,117,105,108,100,105,110,102,111,32,120,109,108,110,115,61,34,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,115,99,104,101,109,97,47,52,46,48,47,98,117,105,108,100,105,110,102,111,34,32,120,109,108,110,115,58,120,115,105,61,34,104,116,116,112,58,47,47,119,119,119,46,119,51,46,111,114,103,47,50,48,48,49,47,88,77,76,83,99,104,101,109,97,45,105,110,115,116,97,110,99,101,34,32,97,99,99,111,117,110,116,95,105,100,61,34,54,50,51,48,56,34,32,97,112,112,95,105,100,61,34,50,50,51,50,50,48,53,34,32,98,117,105,108,100,95,105,100,61,34,55,51,52,50,51,49,56,53,34,32,98,117,105,108,100,105,110,102,111,95,118,101,114,115,105,111,110,61,34,49,46,53,34,32,115,97,110,100,98,111,120,95,105,100,61,34,56,54,50,54,50,48,53,34,32,120,115,105,58,115,99,104,101,109,97,76,111,99,97,116,105,111,110,61,34,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,115,99,104,101,109,97,47,52,46,48,47,98,117,105,108,100,105,110,102,111,32,104,116,116,112,115,58,47,47,97,110,97,108,121,115,105,115,99,101,110,116,101,114,46,118,101,114,97,99,111,100,101,46,99,111,109,47,114,101,115,111,117,114,99,101,47,52,46,48,47,98,117,105,108,100,105,110,102,111,46,120,115,100,34,62,10,32,32,60,98,117,105,108,100,32,98,117,105,108,100,95,105,100,61,34,55,51,52,50,51,49,56,53,34,32,103,114,97,99,101,95,112,101,114,105,111,100,95,101,120,112,105,114,101,100,61,34,102,97,108,115,101,34,32,108,101,103,97,99,121,95,115,99,97,110,95,101,110,103,105,110,101,61,34,102,97,108,115,101,34,32,108,105,102,101,99,121,99,108,101,95,115,116,97,103,101,61,34,78,111,116,32,83,112,101,99,105,102,105,101,100,34,32,112,108,97,116,102,111,114,109,61,34,78,111,116,32,83,112,101,99,105,102,105,101,100,34,32,112,111,108,105,99,121,95,99,111,109,112,108,105,97,110,99,101,95,115,116,97,116,117,115,61,34,78,111,116,32,65,115,115,101,115,115,101,100,34,32,112,111,108,105,99,121,95,110,97,109,101,61,34,85,110,105,116,101,100,32,82,101,103,117,108,97,116,111,114,121,32,65,112,112,108,105,99,97,116,105,111,110,32,50,48,50,54,34,32,112,111,108,105,99,121,95,118,101,114,115,105,111,110,61,34,49,34,32,114,101,115,117,108,116,115,95,114,101,97,100,121,61,34,102,97,108,115,101,34,32,114,117,108,101,115,95,115,116,97,116,117,115,61,34,78,111,116,32,65,115,115,101,115,115,101,100,34,32,115,99,97,110,95,111,118,101,114,100,117,101,61,34,102,97,108,115,101,34,32,115,117,98,109,105,116,116,101,114,61,34,71,105,116,104,117,98,32,83,101,114,118,105,99,101,32,65,99,99,111,117,110,116,34,32,118,101,114,115,105,111,110,61,34,71,105,116,72,117,98,32,65,112,112,115,32,66,114,97,110,99,104,32,54,50,50,56,45,50,34,62,10,32,32,32,32,60,97,110,97,108,121,115,105,115,95,117,110,105,116,32,97,110,97,108,121,115,105,115,95,116,121,112,101,61,34,83,116,97,116,105,99,34,32,115,116,97,116,117,115,61,34,73,110,99,111,109,112,108,101,116,101,34,47,62,10,32,32,60,47,98,117,105,108,100,62,10,60,47,98,117,105,108,100,105,110,102,111,62,10,10,91,50,48,50,54,46,48,56,46,49,50,32,49,57,58,53,54,58,50,50,46,56,55,52,93,32,87,114,97,112,112,101,114,32,114,101,116,117,114,110,32,99,111,100,101,32,48,32,61,32,83,117,99,99,101,115,115,10]}
+2026-08-12T19:56:23.0319338Z Veracode Sandbox Scan Created, Build Id: 73423185
+2026-08-12T19:56:23.0371366Z FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$  is a file.
+2026-08-12T19:56:23.0373016Z Uploading artifact (FPS.Framework/FPS.AWS.Lambda/FPS.AWS.Lambda.DmsEventProcessor/FPS.AWS.Lambda.DmsEventProcessor/https://urldefense.com/v3/__http://publish-debug.zip__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXU-WI1JA$ ) to Sandbox: 8626205
+2026-08-12T19:57:21.6655781Z 3092
+2026-08-12T19:57:21.6656423Z Artifact(s) uploaded: 1
+2026-08-12T19:57:21.6656990Z scantimeout: 30
+2026-08-12T19:57:21.6657454Z include: FPS.AWS.Lambda.DmsEventProcessor.dll
+2026-08-12T19:57:21.6658521Z ##[debug]Module: scan-service, function: beginPreScan. Action:BeginPrescan Application: 2232205
+2026-08-12T19:57:23.3752524Z ##[debug][2026.08.12 19:57:21.794] VeracodeJavaAPI v26.3.19.0 cUnknown
+2026-08-12T19:57:23.3753052Z ##[debug][2026.08.12 19:57:21.794] Wrapper action: BeginPreScan
+2026-08-12T19:57:23.3753642Z ##[debug][2026.08.12 19:57:22.015] Invoking API https://analysiscenter.veracode.com/api/5.0/beginprescan.do 
+2026-08-12T19:57:23.3754365Z ##[debug][2026.08.12 19:57:22.015] Query string: sandbox_id=8626205&auto_scan=False&app_id=2232205
+2026-08-12T19:57:23.3755154Z ##[debug][2026.08.12 19:57:22.015] Connecting to host: http://analysiscenter.veracode.com 
+2026-08-12T19:57:23.3755675Z ##[debug][2026.08.12 19:57:22.227] Writing to request output stream
+2026-08-12T19:57:23.3756515Z ##[debug][2026.08.12 19:57:22.227] Close request output stream
+2026-08-12T19:57:23.3757029Z ##[debug][2026.08.12 19:57:22.227] Getting response status code from HTTP response message
+2026-08-12T19:57:23.3757398Z ##[debug][2026.08.12 19:57:23.294] Server returned HTTP response code: 200
+2026-08-12T19:57:23.3757721Z ##[debug][2026.08.12 19:57:23.294] Connecting to response input stream
+2026-08-12T19:57:23.3758040Z ##[debug][2026.08.12 19:57:23.294] Reading response input stream
+2026-08-12T19:57:23.3758324Z ##[debug][2026.08.12 19:57:23.295] Close response input stream
+2026-08-12T19:57:23.3758653Z ##[debug]<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+2026-08-12T19:57:23.3759940Z ##[debug]<buildinfo xmlns="https://analysiscenter.veracode.com/schema/4.0/buildinfo " xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" account_id="62308" app_id="2232205" build_id="73423185" buildinfo_version="1.5" sandbox_id="8626205" xsi:schemaLocation="https://analysiscenter.veracode.com/schema/4.0/buildinfo https://analysiscenter.veracode.com/resource/4.0/buildinfo.xsd ">
+2026-08-12T19:57:23.3761886Z ##[debug]  <build build_id="73423185" grace_period_expired="false" legacy_scan_engine="false" lifecycle_stage="Not Specified" platform="Not Specified" policy_compliance_status="Not Assessed" policy_name="United Regulatory Application 2026" policy_version="1" results_ready="false" rules_status="Not Assessed" scan_overdue="false" submitter="Github Service Account" version="GitHub Apps Branch 6228-2">
+2026-08-12T19:57:23.3763042Z ##[debug]    <analysis_unit analysis_type="Static" status="Pre-Scan Submitted"/>
+2026-08-12T19:57:23.3763346Z ##[debug]  </build>
+2026-08-12T19:57:23.3763514Z ##[debug]</buildinfo>
+2026-08-12T19:57:23.3763681Z ##[debug]
+2026-08-12T19:57:23.3763884Z ##[debug][2026.08.12 19:57:23.356] Wrapper return code 0 = Success
+2026-08-12T19:57:23.3764131Z ##[debug]
+2026-08-12T19:57:23.3764948Z Pre-Scan Submitted: true
+2026-08-12T19:57:53.3767812Z Checking for Pre-Scan Results...
+2026-08-12T19:58:24.9398315Z Checking for Pre-Scan Results...
+2026-08-12T19:58:56.4605784Z Checking for Pre-Scan Results...
+2026-08-12T19:59:27.7840582Z Checking for Pre-Scan Results...
+2026-08-12T19:59:59.1246479Z Checking for Pre-Scan Results...
+2026-08-12T20:00:30.5887687Z Checking for Pre-Scan Results...
+2026-08-12T20:01:02.1128105Z Checking for Pre-Scan Results...
+2026-08-12T20:01:33.4308995Z Checking for Pre-Scan Results...
+2026-08-12T20:02:04.9145843Z Checking for Pre-Scan Results...
+2026-08-12T20:02:36.3525659Z Checking for Pre-Scan Results...
+2026-08-12T20:02:37.6455681Z Pre-Scan Success!
+2026-08-12T20:02:37.6458313Z ##[debug]Module: scan-service, function: getModules. Action:GetPreScanResults Application: 2232205
+2026-08-12T20:02:38.9621819Z /home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:53899
+2026-08-12T20:02:38.9622786Z     er = new Error(er)
+2026-08-12T20:02:38.9655409Z          ^
+2026-08-12T20:02:38.9655736Z 
+2026-08-12T20:02:38.9656231Z Error: Non-whitespace before first tag.
+2026-08-12T20:02:38.9656679Z Line: 0
+2026-08-12T20:02:38.9657072Z Column: 1
+2026-08-12T20:02:38.9657396Z Char: [
+2026-08-12T20:02:38.9658048Z     at error (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:53899:10)
+2026-08-12T20:02:38.9659044Z     at strictFail (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:53925:7)
+2026-08-12T20:02:38.9660074Z     at beginWhiteSpace (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:54199:7)
+2026-08-12T20:02:38.9661123Z     at SAXParser.write (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:54254:11)
+2026-08-12T20:02:38.9662590Z     at __webpack_modules__.54344.exports.Parser.Parser.parseString (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:88602:31)
+2026-08-12T20:02:38.9663957Z     at Parser.parseString (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:88270:59)
+2026-08-12T20:02:38.9666278Z     at /home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:88617:24
+2026-08-12T20:02:38.9667025Z     at new Promise (<anonymous>)
+2026-08-12T20:02:38.9668072Z     at __webpack_modules__.54344.exports.Parser.Parser.parseStringPromise (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:88615:14)
+2026-08-12T20:02:38.9669569Z     at Parser.parseStringPromise (/home/runner/work/_actions/veracode/uploadandscan-action/v0.2.3/dist/index.js:88270:59)
+2026-08-12T20:02:38.9670313Z 
+2026-08-12T20:02:38.9670555Z Node.js v24.18.0
+2026-08-12T20:02:38.9695874Z ##[debug]Node Action run completed with exit code 1
+2026-08-12T20:02:38.9701383Z ##[debug]Finishing: Submit sandbox scan
+2026-08-12T20:02:38.9709818Z ##[debug]Evaluating condition for step: 'Build release'
+2026-08-12T20:02:38.9711355Z ##[debug]Evaluating: success()
+2026-08-12T20:02:38.9711665Z ##[debug]Evaluating success:
+2026-08-12T20:02:38.9711971Z ##[debug]=> false
+2026-08-12T20:02:38.9712257Z ##[debug]Result: false
+2026-08-12T20:02:38.9733834Z ##[debug]Evaluating condition for step: 'Post Setup dotnet'
+2026-08-12T20:02:38.9735127Z ##[debug]Evaluating: success()
+2026-08-12T20:02:38.9735522Z ##[debug]Evaluating success:
+2026-08-12T20:02:38.9735911Z ##[debug]=> false
+2026-08-12T20:02:38.9736207Z ##[debug]Result: false
+2026-08-12T20:02:38.9740014Z ##[debug]Evaluating condition for step: 'Post Check out code'
+2026-08-12T20:02:38.9741564Z ##[debug]Evaluating: always()
+2026-08-12T20:02:38.9741847Z ##[debug]Evaluating always:
+2026-08-12T20:02:38.9742386Z ##[debug]=> true
+2026-08-12T20:02:38.9742671Z ##[debug]Result: true
+2026-08-12T20:02:38.9743066Z ##[debug]Starting: Post Check out code
+2026-08-12T20:02:38.9770057Z ##[debug]Loading inputs
+2026-08-12T20:02:38.9771017Z ##[debug]Evaluating: github.repository
+2026-08-12T20:02:38.9771266Z ##[debug]Evaluating Index:
+2026-08-12T20:02:38.9771463Z ##[debug]..Evaluating github:
+2026-08-12T20:02:38.9771663Z ##[debug]..=> Object
+2026-08-12T20:02:38.9771864Z ##[debug]..Evaluating String:
+2026-08-12T20:02:38.9772048Z ##[debug]..=> 'repository'
+2026-08-12T20:02:38.9772396Z ##[debug]=> 'United-Airlines-Org/CorporateAccounting.FlightProfitability'
+2026-08-12T20:02:38.9772813Z ##[debug]Result: 'United-Airlines-Org/CorporateAccounting.FlightProfitability'
+2026-08-12T20:02:38.9774191Z ##[debug]Evaluating: github.token
+2026-08-12T20:02:38.9774627Z ##[debug]Evaluating Index:
+2026-08-12T20:02:38.9774868Z ##[debug]..Evaluating github:
+2026-08-12T20:02:38.9775064Z ##[debug]..=> Object
+2026-08-12T20:02:38.9775237Z ##[debug]..Evaluating String:
+2026-08-12T20:02:38.9775425Z ##[debug]..=> 'token'
+2026-08-12T20:02:38.9777377Z ##[debug]=> '***'
+2026-08-12T20:02:38.9779217Z ##[debug]Result: '***'
+2026-08-12T20:02:38.9789538Z ##[debug]Loading env
+2026-08-12T20:02:38.9792973Z Post job cleanup.
+2026-08-12T20:02:39.0509352Z ##[debug]Getting git version
+2026-08-12T20:02:39.0521460Z [command]/usr/bin/git version
+2026-08-12T20:02:39.0555070Z git version 2.54.0
+2026-08-12T20:02:39.0569499Z ##[debug]0
+2026-08-12T20:02:39.0570181Z ##[debug]git version 2.54.0
+2026-08-12T20:02:39.0570444Z ##[debug]
+2026-08-12T20:02:39.0573241Z ##[debug]Set git useragent to: git/2.54.0 (github-actions-checkout) actions_orchestration_id/4f44a60c-3167-49c7-b432-4ccdc4d58786.build-dotnet.FPS_AWS_Lambda_DmsEventPr
+2026-08-12T20:02:39.0575361Z ::add-mask::***
+2026-08-12T20:02:39.0583186Z Copying '/home/runner/.gitconfig' to '/home/runner/work/_temp/22d8e843-aa6a-4e93-8bf7-ae967412184e/.gitconfig'
+2026-08-12T20:02:39.0592452Z Temporarily overriding HOME='/home/runner/work/_temp/22d8e843-aa6a-4e93-8bf7-ae967412184e' before making global git config changes
+2026-08-12T20:02:39.0593944Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-12T20:02:39.0596911Z [command]/usr/bin/git config --global --add https://urldefense.com/v3/__http://safe.directory__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwWuT2aJIw$  /home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability
+2026-08-12T20:02:39.0624245Z ##[debug]0
+2026-08-12T20:02:39.0625330Z ##[debug]
+2026-08-12T20:02:39.0625920Z Removing SSH command configuration
+2026-08-12T20:02:39.0631404Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-08-12T20:02:39.0659032Z ##[debug]1
+2026-08-12T20:02:39.0659785Z ##[debug]
+2026-08-12T20:02:39.0664866Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-08-12T20:02:39.0875637Z ##[debug]0
+2026-08-12T20:02:39.0876245Z ##[debug]
+2026-08-12T20:02:39.0877202Z Removing HTTP extra header
+2026-08-12T20:02:39.0882152Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-12T20:02:39.0914084Z ##[debug]1
+2026-08-12T20:02:39.0915025Z ##[debug]
+2026-08-12T20:02:39.0918055Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://urldefense.com/v3/__https://github.com/.extraheader__;!!Oanq3NtaGQ!JgQSZaFdvfEy8DbWwB9ZpqqPvbKJ0isR-LKK46Q0zs9rq5Kjabxi4XuU8KFeJ8enPukpldk1WeXZIwXJxJDZIA$ ' || :"
+2026-08-12T20:02:39.1116900Z ##[debug]0
+2026-08-12T20:02:39.1117506Z ##[debug]
+2026-08-12T20:02:39.1118286Z Removing includeIf entries pointing to credentials config files
+2026-08-12T20:02:39.1124859Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-12T20:02:39.1145245Z includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git.path
+2026-08-12T20:02:39.1146691Z includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/worktrees/*.path
+2026-08-12T20:02:39.1153442Z includeif.gitdir:/github/workspace/.git.path
+2026-08-12T20:02:39.1155129Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-12T20:02:39.1156001Z ##[debug]0
+2026-08-12T20:02:39.1157081Z ##[debug]includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git.path
+2026-08-12T20:02:39.1158494Z ##[debug]includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/worktrees/*.path
+2026-08-12T20:02:39.1159560Z ##[debug]includeif.gitdir:/github/workspace/.git.path
+2026-08-12T20:02:39.1160035Z ##[debug]includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-12T20:02:39.1160446Z ##[debug]
+2026-08-12T20:02:39.1161663Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git.path
+2026-08-12T20:02:39.1177367Z /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1179000Z ##[debug]0
+2026-08-12T20:02:39.1179884Z ##[debug]/home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1180456Z ##[debug]
+2026-08-12T20:02:39.1187177Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git.path /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1214049Z ##[debug]0
+2026-08-12T20:02:39.1215471Z ##[debug]
+2026-08-12T20:02:39.1225320Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/worktrees/*.path
+2026-08-12T20:02:39.1238648Z /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1242452Z ##[debug]0
+2026-08-12T20:02:39.1243375Z ##[debug]/home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1243956Z ##[debug]
+2026-08-12T20:02:39.1248147Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/CorporateAccounting.FlightProfitability/CorporateAccounting.FlightProfitability/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1273318Z ##[debug]0
+2026-08-12T20:02:39.1273912Z ##[debug]
+2026-08-12T20:02:39.1277447Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-12T20:02:39.1299150Z /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1305374Z ##[debug]0
+2026-08-12T20:02:39.1311208Z ##[debug]/github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1311769Z ##[debug]
+2026-08-12T20:02:39.1313030Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1330904Z ##[debug]0
+2026-08-12T20:02:39.1331452Z ##[debug]
+2026-08-12T20:02:39.1335631Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-12T20:02:39.1353153Z /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1358163Z ##[debug]0
+2026-08-12T20:02:39.1359092Z ##[debug]/github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1359638Z ##[debug]
+2026-08-12T20:02:39.1363116Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config
+2026-08-12T20:02:39.1396493Z ##[debug]0
+2026-08-12T20:02:39.1926886Z ##[debug]
+2026-08-12T20:02:39.2602516Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-08-12T20:02:39.2603463Z ##[debug]0
+2026-08-12T20:02:39.2603849Z ##[debug]
+2026-08-12T20:02:39.2604645Z Removing credentials config '/home/runner/work/_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config'
+2026-08-12T20:02:39.2605972Z ##[debug]Skipping removal of credentials config '/github/runner_temp/git-credentials-ba818af5-ac30-496e-b3ee-c994e8981827.config' - not under RUNNER_TEMP
+2026-08-12T20:02:39.2606645Z ##[debug]Unsetting HOME override
+2026-08-12T20:02:39.2607435Z ##[debug]Node Action run completed with exit code 0
+2026-08-12T20:02:39.2609564Z ##[debug]Finishing: Post Check out code
+2026-08-12T20:02:39.2649105Z ##[debug]Starting: Complete job
+2026-08-12T20:02:39.2650595Z Uploading runner diagnostic logs
+2026-08-12T20:02:39.2660355Z ##[debug]Starting diagnostic file upload.
+2026-08-12T20:02:39.2660635Z ##[debug]Setting up diagnostic log folders.
+2026-08-12T20:02:39.2662125Z ##[debug]Creating diagnostic log files folder.
+2026-08-12T20:02:39.2690504Z ##[debug]Copying 1 worker diagnostic logs.
+2026-08-12T20:02:39.2697543Z ##[debug]Copying 1 runner diagnostic logs.
+2026-08-12T20:02:39.2698462Z ##[debug]Zipping diagnostic files.
+2026-08-12T20:02:39.2761453Z ##[debug]Uploading diagnostic metadata file.
+2026-08-12T20:02:39.2782454Z ##[debug]Diagnostic file upload complete.
+2026-08-12T20:02:39.2782883Z Completed runner diagnostic log upload
+2026-08-12T20:02:39.2783131Z Cleaning up orphan processes
+2026-08-12T20:02:39.3002995Z Terminate orphan process: pid (2542) (dotnet)
+2026-08-12T20:02:39.3031631Z Terminate orphan process: pid (2636) (VBCSCompiler)
+2026-08-12T20:02:39.3065774Z ##[debug]Finishing: Complete job
+2026-08-12T20:02:39.3119588Z ##[debug]Finishing: build-dotnet (FPS.AWS.Lambda.DmsEventProcessor, FPS.Framework/FPS.AWS.Lambda, linux-x64, Lambda D...

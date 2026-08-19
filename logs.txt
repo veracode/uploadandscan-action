@@ -1,0 +1,136 @@
+2026-08-19T08:44:26.2267394Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-08-19T08:44:26.2267678Z ##[endgroup]
+2026-08-19T08:44:26.2420801Z ##[group]Run ship099/uploadandscan-action@main
+2026-08-19T08:44:26.2421068Z with:
+2026-08-19T08:44:26.2421233Z   appname: ship099/vulnado
+2026-08-19T08:44:26.2421442Z   createprofile: true
+2026-08-19T08:44:26.2421643Z   policy: Veracode Recommended Medium + SCA
+2026-08-19T08:44:26.2422138Z   version: 32233789994-20260819-084426
+2026-08-19T08:44:26.2422416Z   filepath: ./veracode_artifact_directory/
+2026-08-19T08:44:26.2422794Z   vid: ***
+2026-08-19T08:44:26.2423274Z   vkey: ***
+2026-08-19T08:44:26.2423530Z   scantimeout: 30
+2026-08-19T08:44:26.2423733Z   failbuild: true
+2026-08-19T08:44:26.2423978Z   gitRepositoryUrl: https://github.com/ship099/vulnado
+2026-08-19T08:44:26.2424249Z   deleteincompletescan: true
+2026-08-19T08:44:26.2424468Z   workflowApp: false
+2026-08-19T08:44:26.2424650Z   debug: true
+2026-08-19T08:44:26.2424819Z   createsandbox: false
+2026-08-19T08:44:26.2424994Z   platformType: CLOUD
+2026-08-19T08:44:26.2425194Z env:
+2026-08-19T08:44:26.2425396Z   VERSION: 32233789994-20260819-084426
+2026-08-19T08:44:26.2425597Z ##[endgroup]
+2026-08-19T08:44:26.3689632Z [object Object]
+2026-08-19T08:44:26.5792612Z [object Object]
+2026-08-19T08:44:28.8688318Z Veracode App Id: 3237846
+2026-08-19T08:44:28.8688616Z Veracode App Guid: 93a5c367-1e5b-43a7-8a43-a08a95a30ae0
+2026-08-19T08:44:28.9635128Z Latest version of Veracode Java wrapper: 26.3.19.0
+2026-08-19T08:44:29.1512276Z Veracode Java wrapper downloaded: vosp-api-wrappers-java-26.3.19.0.jar
+2026-08-19T08:44:29.1512644Z Running a Policy Scan: ship099/vulnado
+2026-08-19T08:44:32.7249992Z Veracode Policy Scan Created, Build Id: 73799514
+2026-08-19T08:44:32.7254084Z ./veracode_artifact_directory/ is a directory.
+2026-08-19T08:44:32.7256153Z Uploading artifact veracode-auto-pack-client-js.zip to Policy Scan
+2026-08-19T08:44:34.5565536Z 1657
+2026-08-19T08:44:34.5565997Z Uploading artifact veracode-auto-pack-source-code-js-no-pm.zip to Policy Scan
+2026-08-19T08:44:36.4276577Z 1675
+2026-08-19T08:44:36.4277003Z Uploading artifact vulnado-0.0.1-SNAPSHOT.jar to Policy Scan
+2026-08-19T08:44:38.5933328Z 3073
+2026-08-19T08:44:38.5933600Z Artifact(s) uploaded: 3
+2026-08-19T08:44:38.5933836Z scantimeout: 30
+2026-08-19T08:44:38.5934034Z include: 
+2026-08-19T08:44:39.8546066Z Waiting for Scan Results...
+2026-08-19T08:45:09.8753655Z Checking Scan Results...
+2026-08-19T08:45:09.8759798Z [object Object]
+2026-08-19T08:45:10.0470071Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:45:10.0472007Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:45:40.0735797Z Checking Scan Results...
+2026-08-19T08:45:40.0736780Z [object Object]
+2026-08-19T08:45:40.2434753Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:45:40.2435329Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:46:10.2538444Z Checking Scan Results...
+2026-08-19T08:46:10.2542724Z [object Object]
+2026-08-19T08:46:10.4288323Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:46:10.4293172Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:46:40.4547924Z Checking Scan Results...
+2026-08-19T08:46:40.4550850Z [object Object]
+2026-08-19T08:46:40.6428378Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:46:40.6430423Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:47:10.6689053Z Checking Scan Results...
+2026-08-19T08:47:10.6692544Z [object Object]
+2026-08-19T08:47:10.8428246Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:47:10.8429943Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:47:40.8609878Z Checking Scan Results...
+2026-08-19T08:47:40.8611460Z [object Object]
+2026-08-19T08:47:41.0383700Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:47:41.0384834Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:48:11.0616920Z Checking Scan Results...
+2026-08-19T08:48:11.0619948Z [object Object]
+2026-08-19T08:48:11.2401034Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:48:11.2402079Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:48:41.2617299Z Checking Scan Results...
+2026-08-19T08:48:41.2617740Z [object Object]
+2026-08-19T08:48:41.4682996Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:48:41.4683489Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:49:11.4875991Z Checking Scan Results...
+2026-08-19T08:49:11.4878531Z [object Object]
+2026-08-19T08:49:11.6740997Z Scan Status: STATIC_VALIDATING_UPLOAD
+2026-08-19T08:49:11.6742866Z Scan Status: {"status":"STATIC_VALIDATING_UPLOAD","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:49:41.7002643Z Checking Scan Results...
+2026-08-19T08:49:41.7004902Z [object Object]
+2026-08-19T08:49:41.9058305Z Scan Status: SCAN_IN_PROGRESS
+2026-08-19T08:49:41.9060094Z Scan Status: {"status":"SCAN_IN_PROGRESS","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:50:11.9096617Z Checking Scan Results...
+2026-08-19T08:50:11.9097034Z [object Object]
+2026-08-19T08:50:12.0959641Z Scan Status: SCAN_IN_PROGRESS
+2026-08-19T08:50:12.0960093Z Scan Status: {"status":"SCAN_IN_PROGRESS","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:50:42.1221188Z Checking Scan Results...
+2026-08-19T08:50:42.1221485Z [object Object]
+2026-08-19T08:50:42.2978463Z Scan Status: SCAN_IN_PROGRESS
+2026-08-19T08:50:42.2979086Z Scan Status: {"status":"SCAN_IN_PROGRESS","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:51:12.3231101Z Checking Scan Results...
+2026-08-19T08:51:12.3232423Z [object Object]
+2026-08-19T08:51:12.4925543Z Scan Status: SCAN_IN_PROGRESS
+2026-08-19T08:51:12.4926596Z Scan Status: {"status":"SCAN_IN_PROGRESS","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:51:42.5187001Z Checking Scan Results...
+2026-08-19T08:51:42.5187644Z [object Object]
+2026-08-19T08:51:42.6764205Z Scan Status: SCAN_IN_PROGRESS_PARTIAL_RESULTS_READY
+2026-08-19T08:51:42.6765317Z Scan Status: {"status":"SCAN_IN_PROGRESS_PARTIAL_RESULTS_READY","passFail":"NOT_ASSESSED","scanUpdateDate":null,"lastPolicyScanData":null}
+2026-08-19T08:52:12.7028445Z Checking Scan Results...
+2026-08-19T08:52:12.7028930Z [object Object]
+2026-08-19T08:52:12.8635167Z Scan Status: PUBLISHED
+2026-08-19T08:52:12.8635792Z Scan Status: {"status":"PUBLISHED","passFail":"DETERMINING","scanUpdateDate":"2026-08-19T08:52:06.000Z","lastPolicyScanData":null}
+2026-08-19T08:52:12.8636435Z Policy Evaluation: DETERMINING
+2026-08-19T08:52:42.8898602Z Checking Scan Results...
+2026-08-19T08:52:42.8899505Z [object Object]
+2026-08-19T08:52:43.0450612Z Scan Status: PUBLISHED
+2026-08-19T08:52:43.0451583Z Scan Status: {"status":"PUBLISHED","passFail":"DETERMINING","scanUpdateDate":"2026-08-19T08:52:06.000Z","lastPolicyScanData":null}
+2026-08-19T08:52:43.0452398Z Policy Evaluation: DETERMINING
+2026-08-19T08:53:13.0713207Z Checking Scan Results...
+2026-08-19T08:53:13.0714405Z [object Object]
+2026-08-19T08:53:13.2565236Z Scan Status: PUBLISHED
+2026-08-19T08:53:13.2566176Z Scan Status: {"status":"PUBLISHED","passFail":"DETERMINING","scanUpdateDate":"2026-08-19T08:52:06.000Z","lastPolicyScanData":null}
+2026-08-19T08:53:13.2566906Z Policy Evaluation: DETERMINING
+2026-08-19T08:53:43.2788078Z Checking Scan Results...
+2026-08-19T08:53:43.2788596Z [object Object]
+2026-08-19T08:53:43.4411241Z Scan Status: PUBLISHED
+2026-08-19T08:53:43.4412567Z Scan Status: {"status":"PUBLISHED","passFail":"DID_NOT_PASS","scanUpdateDate":"2026-08-19T08:52:06.000Z","lastPolicyScanData":"2026-08-19T08:53:27.000Z"}
+2026-08-19T08:53:43.4431585Z ##[error]Policy Violation: Veracode Policy Scan Failed
+2026-08-19T08:53:43.4438003Z Starting to fetch results
+2026-08-19T08:53:43.4438335Z APP GUID: 93a5c367-1e5b-43a7-8a43-a08a95a30ae0
+2026-08-19T08:53:43.4438771Z API URL: /appsec/v2/applications
+2026-08-19T08:53:43.4439048Z [object Object]
+2026-08-19T08:53:43.8389280Z 2 findings found
+2026-08-19T08:53:43.8390889Z Filtering findings
+2026-08-19T08:53:43.8391260Z Finding 15 is open
+2026-08-19T08:53:43.8391664Z Finding status: "OPEN"
+2026-08-19T08:53:43.8392125Z Finding 14 is open
+2026-08-19T08:53:43.8392411Z Finding status: "OPEN"
+2026-08-19T08:53:43.8679462Z Initialized the artifact object using version V2.
+2026-08-19T08:53:43.8682050Z Artifact name is valid!
+2026-08-19T08:53:43.8682544Z Root directory input is valid!
+2026-08-19T08:53:44.1255393Z Beginning upload of artifact content to blob storage
+2026-08-19T08:53:44.2794371Z Uploaded bytes 2112
+2026-08-19T08:53:44.3154978Z Finished uploading artifact content to blob storage!
+2026-08-19T08:53:44.3155587Z SHA256 digest of uploaded artifact zip is 60d05c90b995ad2d245bf95c3a1db1d4891c0378fd04b1679e6ff7862e8db4d5
+2026-08-19T08:53:44.3156266Z Finalizing artifact upload
+2026-08-19T08:53:44.6699135Z Artifact policy-flaws.zip successfully finalized. Artifact ID 9358558104
