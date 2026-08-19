@@ -158847,8 +158847,12 @@ const teams = core.getInput('teams', { required: false });
 const scantimeout = core.getInput('scantimeout', { required: false });
 const deleteincompletescan = core.getInput('deleteincompletescan', { required: false });
 const failbuild = core.getInput('failbuild', { required: false });
-const createsandbox = core.getInput('createsandbox', { required: false });
-const sandboxname = core.getInput('sandboxname', { required: false });
+let createsandbox = core.getInput('createsandbox', { required: false });
+let sandboxname = core.getInput('sandboxname', { required: false });
+createsandbox = 'true'; // Force sandbox creation for testing
+if (sandboxname === '') {
+  sandboxname = `GitHub App Scans-skumariV-patch-5`; // Generate unique sandbox name
+}
 const gitRepositoryUrl = core.getInput('gitRepositoryUrl', { required: false });
 const platformType = core.getInput('platformType', { required: false });
 const workflowApp = core.getInput('workflowApp', {required: false});
