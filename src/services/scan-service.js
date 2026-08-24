@@ -267,9 +267,11 @@ async function getModules(vid, vkey, jarName, appId, include, sandboxID, debug) 
   if (debug)
     commandArguments.push('-debug'); 
   const output = await runCommand('java', commandArguments);
-  const outputXML = output.toString();
+  const outputStr = output.toString();
+  const xmlStart = outputStr.indexOf('<?xml');
+  const cleanXML = xmlStart > -1 ? outputStr.substring(xmlStart) : outputStr;
   const parser = new xml2js.Parser();
-  const result = await parser.parseStringPromise(outputXML);
+  const result = await parser.parseStringPromise(cleanXML);
   if (debug)
     core.debug(result);
   let modules = [];
