@@ -73,7 +73,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
     createBuildArguments.push('-debug');
   let output = await runCommand(createBuildCommand, createBuildArguments);
   if (debug)
-    core.debug(output);
+    core.debug(JSON.stringify(output));
   if (output === 'failed' && deleteincompletescan === 'false') {
     throw new Error(`Error creating build: ${output}`);
   } else if (output === 'failed' && deleteincompletescan === 'true') {
@@ -91,7 +91,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
       }
       const deleteOutput = await runCommand('java', deleteArgs);
       if (debug)
-        core.debug(deleteOutput);
+        core.debug(JSON.stringify(deleteOutput));
       if (deleteOutput === 'failed') {
         throw new Error(`Error deleting build: ${deleteOutput}`);
       } else {
@@ -99,7 +99,7 @@ async function createSandboxBuild(vid, vkey, jarName, appId, version, deleteinco
           core.debug(`Module: scan-service, function: createSandboxBuild. Action:CreateBuild Retry  Application: ${appId}`);
         output = await runCommand(createBuildCommand, createBuildArguments);
         if (debug)
-          core.debug(output);
+          core.debug(JSON.stringify(output));
         if (output === 'failed') {
           throw new Error(`Error creating build`);
         }
@@ -160,7 +160,7 @@ async function uploadFile(vid, vkey, jarName, appId, filepath, sandboxID, debug)
       const output = await runCommand('java', uploadArgs);
       const outputXML = output.toString();
       if (debug)
-        core.debug(`Upload response: ${outputXML}`);
+        core.debug(JSON.stringify({message: 'Upload response', data: outputXML}));
       console.log(outputXML.indexOf('Uploaded'));
       count++;
     }
@@ -227,11 +227,11 @@ async function beginPreScan(vid, vkey, jarName, appId, autoScan, sandboxID, debu
     commandArguments.push('-sandboxid', sandboxID);
   }
   if (debug)
-    commandArguments.push('-debug'); 
+    commandArguments.push('-debug');
   const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   if (debug)
-    core.debug(outputXML);
+    core.debug(JSON.stringify({message: 'BeginPrescan response', data: outputXML}));
   return outputXML.indexOf('Pre-Scan Submitted') > -1;
 }
 
@@ -273,7 +273,7 @@ async function getModules(vid, vkey, jarName, appId, include, sandboxID, debug) 
   const parser = new xml2js.Parser();
   const result = await parser.parseStringPromise(cleanXML);
   if (debug)
-    core.debug(result);
+    core.debug(JSON.stringify({message: 'GetPreScanResults parsed', data: result}));
   let modules = [];
   result.prescanresults.module.forEach(module => {
     modules.push({
@@ -318,7 +318,7 @@ async function beginScan(vid, vkey, jarName, appId, moduleIds, sandboxID, debug)
   const output = await runCommand('java', commandArguments);
   const outputXML = output.toString();
   if (debug)
-    core.debug(outputXML);
+    core.debug(JSON.stringify({message: 'BeginScan response', data: outputXML}));
   return outputXML.indexOf('Submitted to Engine') > -1;
 }
 

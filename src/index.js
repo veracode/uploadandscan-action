@@ -221,13 +221,17 @@ async function run() {
       const scanDate = new Date(statusUpdate.scanUpdateDate);
       const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
       if (!policyScanDate || scanDate < policyScanDate) {
-        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
-          core.setFailed('Policy Violation: Veracode Policy Scan Failed');
-          responseCode = POLICY_EVALUATION_FAILED;
+        if (statusUpdate.passFail === 'NOT_ASSESSED' || statusUpdate.passFail === 'DETERMINING') {
+          core.info(`Policy Evaluation: ${statusUpdate.passFail} - Waiting for policy evaluation...`);
+        } else {
+          if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
+            core.setFailed('Policy Violation: Veracode Policy Scan Failed');
+            responseCode = POLICY_EVALUATION_FAILED;
+          }
+          else
+            core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
+          break;
         }
-        else
-          core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
-        break;
       } else {
         core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
       }
