@@ -159082,7 +159082,6 @@ async function run() {
         break;
       } else {
         core.info(`Policy Evaluation: ${statusUpdate.passFail}`)
-        break;
       }
     }
     
