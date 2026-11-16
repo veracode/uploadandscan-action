@@ -52,8 +52,10 @@ async function createSandboxRequest(vid, vkey, appguid, sandboxname, debug) {
 
 function profileExists(responseData, applicationName) {
   core.debug(`Module: application-service, function: profileExists. Application: ${applicationName}`);
+
+  // Validate response data structure
   if (responseData == null || responseData.page == null ) {
-    core.warning("Invalid response data");
+    core.warning("Invalid response data when searching for application profile");
     try {
       core.info(JSON.stringify(responseData,null,2));
     } catch (stringifyError) {
@@ -63,19 +65,43 @@ function profileExists(responseData, applicationName) {
     return { exists: false, veracodeApp: null };
   }
 
+  // Handle missing total_elements field
+  if (typeof responseData.page.total_elements !== 'number') {
+    core.warning(`Invalid 'total_elements' field in response. Expected number, got: ${typeof responseData.page.total_elements}`);
+    return { exists: false, veracodeApp: null };
+  }
+
   if (responseData.page.total_elements === 0) {
     core.debug(`No Veracode application profile found for ${applicationName}`);
     return { exists: false, veracodeApp: null };
   }
   else {
+    // Validate _embedded.applications exists
+    if (!responseData._embedded || !Array.isArray(responseData._embedded.applications)) {
+      core.warning(`Invalid or missing '_embedded.applications' array in response`);
+      return { exists: false, veracodeApp: null };
+    }
+
     for(let i = 0; i < responseData._embedded.applications.length; i++) {
-      if (responseData._embedded.applications[i].profile.name.toLowerCase() 
-            === applicationName.toLowerCase()) {
+      const app = responseData._embedded.applications[i];
+
+      // Validate required fields in application object
+      if (!app.profile || !app.profile.name) {
+        core.debug(`Skipping application at index ${i}: missing profile or profile.name`);
+        continue;
+      }
+
+      if (!app.id || !app.guid) {
+        core.debug(`Skipping application ${app.profile.name}: missing id or guid`);
+        continue;
+      }
+
+      if (app.profile.name.toLowerCase() === applicationName.toLowerCase()) {
         return { exists: true, veracodeApp: {
-          'appId': responseData._embedded.applications[i].id,
-          'appGuid': responseData._embedded.applications[i].guid,
-          'oid': responseData._embedded.applications[i].oid,
-        } };;
+          'appId': app.id,
+          'appGuid': app.guid,
+          'oid': app.oid || app.guid, // Use guid as fallback if oid is missing
+        } };
       }
     }
     core.debug(`No Veracode application profile with exact the profile name: ${applicationName}`);
@@ -126,11 +152,49 @@ async function getVeracodeApplicationForPolicyScan(vid, vkey, applicationName, p
     const response = await createResource(vid, vkey, resource);
     if (debug)
       core.debug(`Veracode application profile created: ${JSON.stringify(response)}`);
+
+    // Validate response object
+    if (!response || typeof response !== 'object') {
+      throw new Error(`Invalid API response when creating application profile. Expected object, got: ${typeof response}. Response: ${JSON.stringify(response)}`);
+    }
+
+    // Extract and validate required fields
+    if (!response.id) {
+      core.warning(`Missing required field 'id' in API response. Response: ${JSON.stringify(response)}`);
+    }
+    if (!response.guid) {
+      throw new Error(`Missing required field 'guid' in API response. Cannot proceed without guid. Response: ${JSON.stringify(response)}`);
+    }
+
+    // Extract OID from app_profile_url or use guid as fallback
     const appProfile = response.app_profile_url;
+    let oid;
+
+    if (appProfile && typeof appProfile === 'string') {
+      const parts = appProfile.split(':');
+      if (parts.length > 1) {
+        oid = parts[1];
+        if (debug)
+          core.debug(`Extracted OID from app_profile_url: ${oid}`);
+      } else {
+        core.warning(`app_profile_url format unexpected (expected 'key:value' format). Could not extract OID. Using guid as fallback. app_profile_url: ${appProfile}`);
+        oid = response.guid;
+      }
+    } else {
+      core.warning(`app_profile_url not found or not a string in API response. Using guid as fallback. Expected app_profile_url to be a string, got: ${typeof appProfile}`);
+      oid = response.guid;
+    }
+
+    const appId = response.id || response.guid; // Fallback to guid if id is missing
+
+    if (debug) {
+      core.debug(`Application creation response validated. appId: ${appId}, appGuid: ${response.guid}, oid: ${oid}`);
+    }
+
     return {
-      'appId': response.id,
+      'appId': appId,
       'appGuid': response.guid,
-      'oid': appProfile.split(':')[1]
+      'oid': oid
     };
   } else return profile.veracodeApp;
 }
@@ -142,7 +206,7 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     const output = await runCommand(
       'java',
       [
-        '-jar', jarName, 
+        '-jar', jarName,
         '-vid', vid,
         '-vkey', vkey,
         '-action', 'GetBuildInfo',
@@ -151,19 +215,60 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
         '-buildid', buildId,
       ]
     );
+
     const outputXML = output.toString();
+
+    // Validate XML output before parsing
+    if (!outputXML || outputXML.trim().length === 0) {
+      throw new Error('Empty XML response from GetBuildInfo command');
+    }
+
     const parser = new xml2js.Parser({attrkey:'att'});
-    const result = await parser.parseStringPromise(outputXML);
-    core.info('Veracode Scan Status: '+result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase());
-    core.info('Veracode Policy Compliance Status: '+result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase());
-    core.info('Veracode Scan Date: '+result.buildinfo.build[0].analysis_unit[0].att.published_date);
+    let result;
+    try {
+      result = await parser.parseStringPromise(outputXML);
+    } catch (parseError) {
+      core.error(`Failed to parse XML response: ${parseError.message}`);
+      core.error(`Raw XML output: ${outputXML}`);
+      throw new Error(`XML parsing error when retrieving scan status: ${parseError.message}`);
+    }
+
+    // Validate parsed result structure
+    if (!result || !result.buildinfo || !result.buildinfo.build || !Array.isArray(result.buildinfo.build) || result.buildinfo.build.length === 0) {
+      throw new Error('Invalid XML structure: missing buildinfo.build array');
+    }
+
+    const build = result.buildinfo.build[0];
+    if (!build.analysis_unit || !Array.isArray(build.analysis_unit) || build.analysis_unit.length === 0) {
+      throw new Error('Invalid XML structure: missing build.analysis_unit array');
+    }
+
+    // Safely extract XML attributes with fallbacks
+    const statusAttr = build.analysis_unit[0].att && build.analysis_unit[0].att.status;
+    const complianceAttr = build.att && build.att.policy_compliance_status;
+    const dateAttr = build.analysis_unit[0].att && build.analysis_unit[0].att.published_date;
+
+    if (!statusAttr) {
+      throw new Error('Missing required XML attribute: buildinfo.build[0].analysis_unit[0].att.status');
+    }
+    if (!complianceAttr) {
+      throw new Error('Missing required XML attribute: buildinfo.build[0].att.policy_compliance_status');
+    }
+    if (!dateAttr) {
+      throw new Error('Missing required XML attribute: buildinfo.build[0].analysis_unit[0].att.published_date');
+    }
+
+    core.info('Veracode Scan Status: '+statusAttr.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Policy Compliance Status: '+complianceAttr.replace(/ /g,"_").toUpperCase());
+    core.info('Veracode Scan Date: '+dateAttr);
+
     return {
-      'status': result.buildinfo.build[0].analysis_unit[0].att.status.replace(/ /g,"_").toUpperCase(),
-      'passFail': result.buildinfo.build[0].att.policy_compliance_status.replace(/ /g,"_").toUpperCase(),
-      'lastPolicyScanData': result.buildinfo.build[0].analysis_unit[0].att.published_date,
+      'status': statusAttr.replace(/ /g,"_").toUpperCase(),
+      'passFail': complianceAttr.replace(/ /g,"_").toUpperCase(),
+      'lastPolicyScanData': dateAttr,
       'scanUpdateDate': launchDate
     }
-    
+
   }
   else {
     resource = {
@@ -172,22 +277,54 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
       queryValue: ''
     };
     const response = await getResourceByAttribute(vid, vkey, resource,isDebug);
-    const scans = response.scans;
-    for(let i = 0; i < scans.length; i++) {
-      const scanUrl = scans[i].scan_url;
-      const scanId = scanUrl.split(':')[3];
+
+    // Validate response structure
+    if (!response || !response.scans || !Array.isArray(response.scans)) {
+      core.warning('Invalid response structure: missing scans array');
+      return {
+        'status': 'not found',
+        'passFail': 'not found'
+      };
+    }
+
+    for(let i = 0; i < response.scans.length; i++) {
+      const scan = response.scans[i];
+
+      // Validate scan object
+      if (!scan.scan_url) {
+        core.debug(`Skipping scan at index ${i}: missing scan_url`);
+        continue;
+      }
+
+      const scanUrlParts = scan.scan_url.split(':');
+      const scanId = scanUrlParts.length > 3 ? scanUrlParts[3] : null;
+
       if (scanId === buildId) {
-        console.log(`Scan Status: ${scans[i].status}`);
+        console.log(`Scan Status: ${scan.status}`);
+
+        // Validate response.profile and policies exist
+        if (!response.profile || !Array.isArray(response.profile.policies) || response.profile.policies.length === 0) {
+          core.warning('Warning: Invalid profile structure in response. policies array not found.');
+          return {
+            'status': scan.status || 'unknown',
+            'passFail': 'unknown',
+            'scanUpdateDate': scan.modified_date || launchDate,
+            'lastPolicyScanData': response.last_policy_compliance_check_date || 'unknown'
+          };
+        }
+
         return {
-          'status': scans[i].status,
+          'status': scan.status,
           'passFail': response.profile.policies[0].policy_compliance_status,
-          'scanUpdateDate': scans[i].modified_date,
+          'scanUpdateDate': scan.modified_date,
           'lastPolicyScanData': response.last_policy_compliance_check_date
         };
       }
     }
-    return { 
-      'status': 'not found', 
+
+    core.warning(`No scan found with buildId: ${buildId}`);
+    return {
+      'status': 'not found',
       'passFail': 'not found'
     };
   }
@@ -218,45 +355,82 @@ async function getVeracodeApplicationFindings(vid, vkey, veracodeApp, buildId, s
   }
   
   const response = await getResourceByAttribute(vid, vkey, resource,isDebug);
+
+  // Validate response structure
+  if (!response || typeof response !== 'object') {
+    throw new Error(`Invalid API response when fetching findings. Expected object, got: ${typeof response}`);
+  }
+
+  if (!response.page || typeof response.page.total_elements !== 'number') {
+    throw new Error(`Invalid response structure: missing or invalid page.total_elements`);
+  }
+
   const resultsUrlBase = 'https://analysiscenter.veracode.com/auth/index.jsp#ViewReportsResultSummary';
   const resultsUrl = `${resultsUrlBase}:${veracodeApp.oid}:${veracodeApp.appId}:${buildId}`;
-  // save response to policy_flaws.json
-  // save resultsUrl to results_url.txt
+
   try {
     const jsonData = response;
-
     let newFindings = [];
-    if (jsonData.page.total_elements > 0) {
-      //filter the resutls to only include the flaws that violate the policy
-      const findings = jsonData._embedded.findings;
-      const fixedSearchTerm = "OPEN"; // Fixed search term
-      console.log(findings.length+" findings found");
 
-      console.log("Filtering findings");
-      for ( i=0 ; i <= findings.length-1 ; i++ ) {
-          if ( findings[i].finding_status.status != fixedSearchTerm ){
-              console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is not open and will be ignored");
-              console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
+    if (jsonData.page.total_elements > 0) {
+      // Validate _embedded.findings exists and is an array
+      if (!jsonData._embedded || !Array.isArray(jsonData._embedded.findings)) {
+        core.warning('Warning: Invalid or missing _embedded.findings array in response. No findings to process.');
+      } else {
+        const findings = jsonData._embedded.findings;
+        const fixedSearchTerm = "OPEN"; // Fixed search term
+        console.log(findings.length+" findings found");
+
+        console.log("Filtering findings");
+        for (let i = 0; i < findings.length; i++) {
+          const finding = findings[i];
+
+          // Validate finding object structure
+          if (!finding || !finding.finding_status || !finding.finding_status.status) {
+            core.debug(`Skipping finding at index ${i}: missing finding_status or finding_status.status`);
+            continue;
           }
-          else {
-              //adding finding to new array
-              console.log("Finding "+JSON.stringify(findings[i].issue_id)+" is open");
-              console.log("Finding status: "+JSON.stringify(findings[i].finding_status.status));
-              newFindings.push(findings[i]);
+
+          if (finding.finding_status.status != fixedSearchTerm) {
+            console.log("Finding "+JSON.stringify(finding.issue_id)+" is not open and will be ignored");
+            console.log("Finding status: "+JSON.stringify(finding.finding_status.status));
+          } else {
+            //adding finding to new array
+            console.log("Finding "+JSON.stringify(finding.issue_id)+" is open");
+            console.log("Finding status: "+JSON.stringify(finding.finding_status.status));
+            newFindings.push(finding);
           }
+        }
       }
     }
 
+    // Validate _links exists before accessing
+    const links = jsonData._links || {};
+    const page = jsonData.page || { total_elements: 0 };
+
     //recreate json output
-    const links = jsonData._links;
-    const page = jsonData.page;
     const filteredJsonData = "{\"_embedded\": {\"findings\": "+JSON.stringify(newFindings, null, 2)+"}, \"_links\": "+JSON.stringify(links, null, 2)+", \"page\": "+JSON.stringify(page, null, 2)+"}";
 
     //write to file
-    await fs.writeFile('policy_flaws.json', filteredJsonData);
-    await fs.writeFile('results_url.txt', resultsUrl);
+    try {
+      await fs.writeFile('policy_flaws.json', filteredJsonData);
+      core.debug(`Successfully wrote policy_flaws.json with ${newFindings.length} findings`);
+    } catch (fileWriteError) {
+      core.error(`Failed to write policy_flaws.json: ${fileWriteError.message}`);
+      throw fileWriteError;
+    }
+
+    try {
+      await fs.writeFile('results_url.txt', resultsUrl);
+      core.debug(`Successfully wrote results_url.txt`);
+    } catch (fileWriteError) {
+      core.error(`Failed to write results_url.txt: ${fileWriteError.message}`);
+      throw fileWriteError;
+    }
   } catch (err) {
+    core.error(`Error processing findings: ${err.message}`);
     console.log(err);
+    throw err;
   }
   
   //we dont need a proxy for the artifact upload
