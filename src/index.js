@@ -217,11 +217,15 @@ async function run() {
         return responseCode;
       }
     }
-    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status == 'RESULTS_READY') && statusUpdate.scanUpdateDate) {
-      const scanDate = new Date(statusUpdate.scanUpdateDate);
-      const policyScanDate = new Date(statusUpdate.lastPolicyScanData);
-      if (!policyScanDate || scanDate < policyScanDate) {
-        if ((statusUpdate.passFail === 'DID_NOT_PASS' || statusUpdate.passFail == 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
+    if ((statusUpdate.status === 'PUBLISHED' || statusUpdate.status == 'RESULTS_READY')) {
+      const scanDate = statusUpdate.scanUpdateDate ? new Date(statusUpdate.scanUpdateDate) : null;
+      const policyScanDate = statusUpdate.lastPolicyScanData ? new Date(statusUpdate.lastPolicyScanData) : null;
+      if (debug) {
+        core.debug(`Scan date: ${scanDate}, Policy scan date: ${policyScanDate}`);
+      }
+      if (!scanDate || !policyScanDate || scanDate.getTime() < policyScanDate.getTime()) {
+        const passFailStatus = statusUpdate.passFail ? statusUpdate.passFail.replace(/ /g,"_").toUpperCase() : '';
+        if ((passFailStatus === 'DID_NOT_PASS' || passFailStatus === 'CONDITIONAL_PASS') && failbuild.toLowerCase() === 'true'){
           core.setFailed('Policy Violation: Veracode Policy Scan Failed');
           responseCode = POLICY_EVALUATION_FAILED;
         }
