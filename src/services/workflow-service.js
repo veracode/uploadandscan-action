@@ -144,11 +144,8 @@ async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filep
     });
 
     child.on('close', async (code) => {
-      if (code !== 0) {
-        core.setFailed(`Jar execution failed with exit code ${code}`);
-        resolve(responseCode);
-        return;
-      }
+      if (debug)
+        core.debug(`Jar process closed with exit code: ${code}`);
 
       if (stdout) {
         try {
