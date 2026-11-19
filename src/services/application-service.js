@@ -224,49 +224,34 @@ async function getVeracodeApplicationScanStatus(vid, vkey, veracodeApp, buildId,
     }
 
     const parser = new xml2js.Parser({attrkey:'att'});
-    let result;
     try {
-      result = await parser.parseStringPromise(outputXML);
-    } catch (parseError) {
-      core.error(`Failed to parse XML response: ${parseError.message}`);
-      core.error(`Raw XML output: ${outputXML}`);
-      throw new Error(`XML parsing error when retrieving scan status: ${parseError.message}`);
-    }
-
-    // Validate parsed result structure
-    if (!result || !result.buildinfo || !result.buildinfo.build || !Array.isArray(result.buildinfo.build) || result.buildinfo.build.length === 0) {
-      throw new Error('Invalid XML structure: missing buildinfo.build array');
-    }
-
-    const build = result.buildinfo.build[0];
-    if (!build.analysis_unit || !Array.isArray(build.analysis_unit) || build.analysis_unit.length === 0) {
-      throw new Error('Invalid XML structure: missing build.analysis_unit array');
-    }
-
-    // Safely extract XML attributes with fallbacks
-    const statusAttr = build.analysis_unit[0].att && build.analysis_unit[0].att.status;
-    const complianceAttr = build.att && build.att.policy_compliance_status;
-    const dateAttr = build.analysis_unit[0].att && build.analysis_unit[0].att.published_date;
-
-    if (!statusAttr) {
-      throw new Error('Missing required XML attribute: buildinfo.build[0].analysis_unit[0].att.status');
-    }
-    if (!complianceAttr) {
-      throw new Error('Missing required XML attribute: buildinfo.build[0].att.policy_compliance_status');
-    }
-    if (!dateAttr) {
-      throw new Error('Missing required XML attribute: buildinfo.build[0].analysis_unit[0].att.published_date');
-    }
-
-    core.info('Veracode Scan Status: '+statusAttr.replace(/ /g,"_").toUpperCase());
-    core.info('Veracode Policy Compliance Status: '+complianceAttr.replace(/ /g,"_").toUpperCase());
-    core.info('Veracode Scan Date: '+dateAttr);
-
-    return {
-      'status': statusAttr.replace(/ /g,"_").toUpperCase(),
-      'passFail': complianceAttr.replace(/ /g,"_").toUpperCase(),
-      'lastPolicyScanData': dateAttr,
-      'scanUpdateDate': launchDate
+      const result = await parser.parseStringPromise(outputXML);
+      if (!result || !result.buildinfo || !result.buildinfo.build) {
+        throw new Error('Invalid XML response: Missing buildinfo or build element');
+      }
+      const build = Array.isArray(result.buildinfo.build) ? result.buildinfo.build[0] : result.buildinfo.build;
+      if (!build.att || !build.analysis_unit) {
+        throw new Error('Invalid XML response: Missing build attributes or analysis_unit');
+      }
+      const analysisUnit = Array.isArray(build.analysis_unit) ? build.analysis_unit[0] : build.analysis_unit;
+      const scanStatus = analysisUnit.att.status.replace(/ /g,"_").toUpperCase();
+      const policyScanStatus = build.att.policy_compliance_status.replace(/ /g,"_").toUpperCase();
+      const scanDate = analysisUnit.att.published_date;
+      core.info('Veracode Scan Status: '+scanStatus);
+      core.info('Veracode Policy Compliance Status: '+policyScanStatus);
+      core.info('Veracode Scan Date: '+scanDate);
+      return {
+        'status': scanStatus,
+        'passFail': policyScanStatus,
+        'lastPolicyScanData': scanDate,
+        'scanUpdateDate': launchDate
+      }
+    } catch (error) {
+      core.error(`Error parsing GetBuildInfo XML response: ${error.message}`);
+      if (debug) {
+        core.debug(`Raw XML output: ${outputXML}`);
+      }
+      throw error;
     }
 
   }
