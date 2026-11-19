@@ -1,11 +1,11 @@
 const util = require('util');
-const { exec, execFileSync } = require('child_process');
+const { exec, spawn } = require('child_process');
 const execPromise = util.promisify(exec);
 const core = require('@actions/core');
 
 const javaWrapperDownloadUrl 
   = 'https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java'
-
+//26.3.19.0
 async function downloadJar ()  {
   // get the latest version of the Veracode Java wrapper
   let latestVersion;
@@ -45,12 +45,38 @@ async function downloadJar ()  {
 }
 
 async function runCommand (command, args = []){
-  try {
-    return execFileSync(command, args);
-  } catch (error){
-    console.error(error.message);
-    return 'failed';
-  }
+  return new Promise((resolve) => {
+    let output = '';
+    let errorOutput = '';
+
+    const child = spawn(command, args);
+
+    child.stdout.on('data', (data) => {
+      const str = data.toString();
+      output += str;
+      core.info(str);
+    });
+
+    child.stderr.on('data', (data) => {
+      const str = data.toString();
+      errorOutput += str;
+      core.info(str);
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        core.setFailed(`Command failed with exit code ${code}`);
+        resolve('failed');
+        return;
+      }
+      resolve(output);
+    });
+
+    child.on('error', (err) => {
+      core.setFailed(`Command error: ${err.message}`);
+      resolve('failed');
+    });
+  });
 }
 
 module.exports = {

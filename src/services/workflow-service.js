@@ -98,57 +98,99 @@ async function executeStaticScans(vid, vkey, appname, policy, teams, createprofi
 }
 
 async function executePolicyScan(vid, vkey, veracodeApp, jarName, version, filepath, responseCode, failbuild, debug) {
-  const debugFlag = debug ? ' -debug' : '';
+  const debugFlag = debug ? '-debug' : '';
   if (debug)
     core.debug(`Module: workflow-service, function: executePolicyScan. Application: ${veracodeApp.appId}`);
-  const policyScanCommand = `java -jar ${jarName} -action UploadAndScanByAppId -vid ${vid} -vkey ${vkey} -appid ${veracodeApp.appId} -filepath ${filepath} -version ${version} -scanpollinginterval 30 -autoscan true -scanallnonfataltoplevelmodules true -includenewmodules true -scantimeout 6000 -deleteincompletescan 2${debugFlag}`;
-  let scan_id = "";
+
+  const args = [
+    '-jar', jarName,
+    '-action', 'UploadAndScanByAppId',
+    '-vid', vid,
+    '-vkey', vkey,
+    '-appid', veracodeApp.appId.toString(),
+    '-filepath', filepath,
+    '-version', version,
+    '-scanpollinginterval', '30',
+    '-autoscan', 'true',
+    '-scanallnonfataltoplevelmodules', 'true',
+    '-includenewmodules', 'true',
+    '-scantimeout', '6000',
+    '-deleteincompletescan', '2'
+  ];
+
+  if (debugFlag) args.push(debugFlag);
+
+  core.info(`Command to execute the policy scan : java ${args.join(' ')}`);
+
+  let stdout = '';
+  let stderr = '';
+  let scan_id = '';
   let sandboxID;
   let sandboxGUID;
-  let stdout;
-  let stderr;
-  try {
-    core.info(`Command to execute the policy scan : ${policyScanCommand}`);
-    stdout = execSync(policyScanCommand, { encoding: "utf-8" });
-  } catch (error) {
-    stdout = error.stdout?.toString();
-    stderr = error.stderr?.toString();
-  }
 
-  if (debug) {
-    core.debug(stdout);
-    core.debug(stderr);
-  }
-  if (stdout) {
-    scan_id = extractValue(
-        stdout,
-        'The analysis id of the new analysis is "',
-        '"'
-    );
-    core.info("Waiting for Scan Results...");
-    const output1 = await checkPolicyScanStatus(
-        vid,
-        vkey,
-        veracodeApp,
-        scan_id,
-        failbuild
-    );
+  return new Promise((resolve) => {
+    const child = spawn('java', args);
 
-    if (debug)
-      core.debug(`scan status: :${output1}`);
-  } else {
-    core.info("No information from Policy scan could be captured!");
-  }
+    child.stdout.on('data', (data) => {
+      const output = data.toString();
+      stdout += output;
+      core.info(output);
+    });
 
-  await getVeracodeApplicationFindings(
-      vid,
-      vkey,
-      veracodeApp,
-      version,
-      sandboxID,
-      sandboxGUID
-  );
-  return responseCode;
+    child.stderr.on('data', (data) => {
+      const output = data.toString();
+      stderr += output;
+      core.info(output);
+    });
+
+    child.on('close', async (code) => {
+      if (code !== 0) {
+        core.setFailed(`Jar execution failed with exit code ${code}`);
+        resolve(responseCode);
+        return;
+      }
+
+      if (stdout) {
+        try {
+          scan_id = extractValue(
+              stdout,
+              'The analysis id of the new analysis is "',
+              '"'
+          );
+          core.info("Waiting for Scan Results...");
+          const output1 = await checkPolicyScanStatus(
+              vid,
+              vkey,
+              veracodeApp,
+              scan_id,
+              failbuild
+          );
+
+          if (debug)
+            core.debug(`scan status: ${output1}`);
+        } catch (error) {
+          core.setFailed(`Error processing scan results: ${error.message}`);
+        }
+      } else {
+        core.info("No information from Policy scan could be captured!");
+      }
+
+      try {
+        await getVeracodeApplicationFindings(
+            vid,
+            vkey,
+            veracodeApp,
+            version,
+            sandboxID,
+            sandboxGUID
+        );
+      } catch (error) {
+        core.debug(`Error fetching findings: ${error.message}`);
+      }
+
+      resolve(responseCode);
+    });
+  });
 }
 
 
